@@ -1,12 +1,14 @@
 package org.example.GUI;
 
+import org.example.Controller.Controller;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Home
 {
-
+    private Controller controller=new Controller();
     private static JFrame frame;
     private JPanel mainPanel;
     private JButton accediButton;
@@ -21,18 +23,18 @@ public class Home
         frame.setResizable(false);
         frame.pack();
 
-
-        setAccediButton();
+        controller.addUtenteReg();
+        setAccediButton(controller);
         frame.setVisible(true);
 
     }
 
-    private void setAccediButton(){
+    private void setAccediButton(Controller c){
 
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AccediGUI(frame);
+                new AccediGUI(frame,c);
                 frame.setVisible(false);
             }
         });

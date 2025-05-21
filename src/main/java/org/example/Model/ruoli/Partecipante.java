@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Partecipante extends Utente_registrato {
 
     private static int n=0;  //Per la creazione di un codice ID del team nel caso venga creato
-
+    private boolean inAteam=false;
 
 
 /**
@@ -86,5 +86,9 @@ public class Partecipante extends Utente_registrato {
 
     }
 
+    public void setInAteam(boolean inAteam) {
+        this.inAteam = inAteam;
+    }
 
+    public boolean getInAteam(){return this.inAteam;}
 }
