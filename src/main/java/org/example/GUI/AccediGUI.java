@@ -1,9 +1,7 @@
 package org.example.GUI;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 
 public class AccediGUI
 {
@@ -34,6 +32,19 @@ public class AccediGUI
             }
         });
     }
+
+    private void setAccediButton(){
+
+        accediButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //controller.confrontaCredenziali(String utente,String password);
+            }
+        });
+    }
+
+
 
 
 }
