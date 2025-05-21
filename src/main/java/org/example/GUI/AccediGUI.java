@@ -1,4 +1,6 @@
 package org.example.GUI;
 
-public class AccediGUI {
+public class AccediGUI
+{
+
 }
