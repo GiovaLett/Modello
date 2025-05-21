@@ -1,6 +1,8 @@
 package org.example.GUI;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Home
 {
@@ -12,16 +14,28 @@ public class Home
 
     public Home() {
 
-        JFrame frame = new JFrame("Home");
+        frame = new JFrame("Home");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
         frame.pack();
+
+
+        setAccediButton();
         frame.setVisible(true);
 
     }
 
     private void setAccediButton(){
+
+        accediButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AccediGUI(frame);
+                frame.setVisible(false);
+            }
+        });
 
     }
 
