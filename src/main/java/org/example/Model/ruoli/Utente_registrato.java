@@ -1,4 +1,4 @@
-package org.example.ruoli;
+package org.example.Model.ruoli;
 
 public class Utente_registrato extends Utente {
     public String email;

@@ -1,9 +1,10 @@
-package org.example.ruoli;
-import org.example.*;
+package org.example.Model.ruoli;
+import org.example.Model.Piattaforma;
+
 public class Organizzatore extends Utente_registrato
 {
     public void apriIscrizioni(Piattaforma piattaforma){
-        piattaforma.vedi_problema=true;
+        piattaforma.open_iscr =true;
     }
 
 
@@ -13,7 +14,7 @@ public class Organizzatore extends Utente_registrato
         {
             if(uteReg.ID.equals(ID))
             {
-                System.out.println("Sei stato selezionato come giudice!: \n ACCETTA:1   DECLINA:0");
+                System.out.println("Sei stato selezionato come giudice!: \n ACCETTA:1   DECLINA:0");//Simbolico implementarla meglio poi con GUI ecc..
 
             }
         }

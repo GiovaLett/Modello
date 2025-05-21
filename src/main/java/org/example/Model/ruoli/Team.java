@@ -1,10 +1,12 @@
-package org.example.ruoli;
-import org.example.*;
+package org.example.Model.ruoli;
+import org.example.Model.Progresso;
+
 import java.util.ArrayList;
 
 
 
 public class Team {
+
     public float Voto=-1;
     public String Nome;
     String ID;
@@ -19,11 +21,11 @@ public class Team {
     /**
      * CARICAMENTO PROGRESSI
      */
-    public void caricamento_progressi(String codice)
+    public void caricamento_progressi(String cod_programma)
     {
 
         Progresso progress =new Progresso();
-        progress.lavoro=codice;
+        progress.lavoro= cod_programma;
         this.ArrayProgresso.add(progress);
     }
 

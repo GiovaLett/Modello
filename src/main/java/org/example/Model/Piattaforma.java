@@ -1,13 +1,13 @@
-package org.example;
-import org.example.ruoli.*;
+package org.example.Model;
+import org.example.Model.ruoli.*;
 
 import java.util.ArrayList;
 
 public class Piattaforma
 {
-    public boolean iscrizione=false;// indica la possibilità di iscriversi
-    public boolean vedi_problema=false;
-    public boolean Evento_Hackatlon =false;// indica se l'Hackaton verrà fatto in base al numero dei team
+    public boolean open_iscr =false;// indica la possibilità di iscriversi
+    public boolean view_problema =false;
+    public boolean team_suffic =false;// indica se l'Hackaton verrà fatto in base al numero dei team
     public int n_team;
 
     private class Classificato {
@@ -23,6 +23,7 @@ public class Piattaforma
     ArrayList<Classificato> Classifica=new ArrayList<>();
     public ArrayList<Utente_registrato> ArrayUtenReg =new ArrayList<>();
     public ArrayList<Team> ArrayTeam=new ArrayList<>();
+
 
     String problema="Descrizione Problema";
 
@@ -50,9 +51,9 @@ public class Piattaforma
             }
             ArrayTeam.add(ArrayTeam.get(k));
             Classificato classificato=new Classificato(ArrayTeam.get(k).Nome,ArrayTeam.get(k).Voto);
-
-            ArrayTeam.remove(k);
             Classifica.add(0,classificato);
+            ArrayTeam.remove(k);
+
         }
 
     }
@@ -76,7 +77,7 @@ public class Piattaforma
      */
     public String getProblema()
     {
-        if(this.vedi_problema)
+        if(this.view_problema)
             return this.problema;
         else
             return "Problema non disponibile";
@@ -85,11 +86,10 @@ public class Piattaforma
 
 
     //Se è presente un solo team l'hackaton non si fa
-
-    public void FareHackathon(){
+    public void FareHackathon(){        //In base al numero dei team che si sono creati
         if(n_team<2)
-            Evento_Hackatlon=false;
-        else Evento_Hackatlon=true;
+            team_suffic =false;
+        else team_suffic =true;
     }
 
 

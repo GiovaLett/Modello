@@ -1,5 +1,6 @@
-package org.example.ruoli;
-import org.example.*;
+package org.example.Model.ruoli;
+import org.example.Model.Hackathon;
+import org.example.Model.Piattaforma;
 
 import java.util.Scanner;
 
@@ -21,14 +22,21 @@ public class Utente
 
 
     private String Codice_ID(){
-    String ID_codice="ID_"+String.valueOf(n);
-    n++;
-    return ID_codice;
+        String ID_codice="-1";
+        if(n>=0 && n<10)  ID_codice="U00"+String.valueOf(n);
+
+        else if (n<100)   ID_codice="U0"+String.valueOf(n);
+
+        else if (n<1000)   ID_codice="U"+String.valueOf(n);
+
+        n++;
+
+        return ID_codice;
     }
 
     public void registrazione(Piattaforma piattaforma, Hackathon hackathon)
     {
-        if (piattaforma.iscrizione && hackathon.n_partec < hackathon.n_max_partec && hackathon.data-2>2)
+        if (piattaforma.open_iscr && hackathon.n_partec < hackathon.n_max_partec && hackathon.data.giorno-2>2)
         {
 
 
