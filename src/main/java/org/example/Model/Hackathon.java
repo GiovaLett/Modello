@@ -1,19 +1,26 @@
 package org.example.Model;
 
-import org.example.Model.ruoli.Team;
+import org.example.Model.ruoli.*;
+
 
 import java.util.ArrayList;
 
 public class Hackathon
 {
+    private static int n=0;
+
+
     public final int n_max_partec=500;
     public final int dim_max_team =5;
     int n_partec=0;
     ArrayList<Team> ListaTeam =new ArrayList<>();
+    ArrayList<Giudice> ListaGiudici=new ArrayList<>();
 
-    public String nome;
-    public int n_team;
+    String ID;
+     String nome;
 
+
+    int n_team;
     public boolean team_suffic =false;
 
     public String sede;
@@ -29,16 +36,36 @@ public class Hackathon
     String problema="Descrizione Problema";
 
 
-    Hackathon(){ this.data=new Data();} //Necessario il costruttore di data, altrimenti darà errore, PointerNull riferito a data
+    Hackathon(){ this.data=new Data(); ID=Codice_ID();} //Necessario il costruttore di data, altrimenti darà errore, PointerNull riferito a data
 
     public ArrayList<Team> getListaTeam() {return ListaTeam;}
+    public ArrayList<Giudice> getListaGiudici(){return ListaGiudici;}
     public int getNumeroPartec() {return n_partec;}
+    public String getID() {return ID;}
+    public String getNome(){return nome;}
 
+    public void incrementaNpartec(){n_partec++;}
+    public int getN_partec(){return n_partec;}
 
     //Se è presente un solo team l'hackaton non si fa
     public void FareHackathon(){        //In base al numero dei team che si sono creati
         if(n_team<2)
             team_suffic =false;
         else team_suffic =true;
+    }
+
+
+
+    private String Codice_ID(){
+        String ID_codice="-1";
+        if(n>=0 && n<10)  ID_codice="H00"+String.valueOf(n);
+
+        else if (n<100)   ID_codice="H0"+String.valueOf(n);
+
+        else if (n<1000)   ID_codice="H"+String.valueOf(n);
+
+        n++;
+
+        return ID_codice;
     }
 }

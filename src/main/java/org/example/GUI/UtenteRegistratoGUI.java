@@ -6,11 +6,12 @@ public class UtenteRegistratoGUI {
 
     private JFrame frame;
     private JPanel mainPanel;
-    private JTable table1;
+    private JTable hackathonTable;
 
 
     UtenteRegistratoGUI()
     {
+
         frame.setContentPane(mainPanel);
 
 

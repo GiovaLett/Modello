@@ -7,14 +7,18 @@ import java.util.Scanner;
 public class Utente
 {
     private static int n=0;
-    public String nome;
-    public String cognome;
+    String nome;
+    String cognome;
 
     Scanner scanner = new Scanner(System.in);
 
     public Utente(){}
 
-    public Utente(String nome,String cognome)
+    public String getNome() {return nome;}
+
+    public String getCognome() {return cognome;}
+
+    public Utente(String nome, String cognome)
     {
         this.nome=nome;
         this.cognome=cognome;

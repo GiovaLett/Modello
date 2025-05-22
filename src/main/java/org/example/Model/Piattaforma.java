@@ -18,6 +18,9 @@ public class Piattaforma
     public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
 
 
+    public void addUtenteReg(Utente_registrato nuovoUtente){ListaUtenReg.add(nuovoUtente);}
+
+
 
 
 
