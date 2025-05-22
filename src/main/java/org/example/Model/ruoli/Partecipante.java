@@ -64,8 +64,8 @@ public class Partecipante extends Utente_registrato {
             team.ArrayPartecipante.add(this);
             team.ID=CreaIDTeam();
 
-            piattaforma.ArrayTeam.add(team);// anche se termina la funzione e team(variabile locale ) viene eliminata, l'istanza creata di Team rimane per ArrayTeam che contiene ora un riferimento ad essa
-            piattaforma.n_team++;
+            hackathon.ArrayTeam.add(team);// anche se termina la funzione e team(variabile locale ) viene eliminata, l'istanza creata di Team rimane per ArrayTeam che contiene ora un riferimento ad essa
+            hackathon.n_team++;
         }
         else System.out.println("Iscrizioni chiuse");
     }

@@ -6,9 +6,30 @@ import java.util.ArrayList;
 public class Piattaforma
 {
     public boolean open_iscr =false;// indica la possibilità di iscriversi
-    public boolean view_problema =false;
-    public boolean team_suffic =false;// indica se l'Hackaton verrà fatto in base al numero dei team
-    public int n_team;
+    public boolean view_problema =false;// indica se l'Hackaton verrà fatto in base al numero dei team
+
+
+    ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
+    ArrayList<Hackathon> ListaHackathon=new ArrayList<>();
+
+
+
+    public ArrayList<Hackathon> getListaHackathon() {return ListaHackathon;}
+    public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
     private class Classificato {
         String nome;
@@ -21,23 +42,9 @@ public class Piattaforma
     }
 
     ArrayList<Classificato> Classifica=new ArrayList<>();
-    ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
-    ArrayList<Team> ListaTeam =new ArrayList<>();
-    ArrayList<Hackathon> ListaHackathon=new ArrayList<>();
-
-    String problema="Descrizione Problema";
-
-    public ArrayList<Hackathon> getListaHackathon() {return ListaHackathon;}
-
-    public ArrayList<Team> getListaTeam() {return ListaTeam;}
-
-    public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
-
     public ArrayList<Classificato> getClassifica() {return Classifica;}
+    //  CREA CLASSIFICA
 
-    /**
- * CREA CLASSIFICA
- */
     public void CreaClassifica(){
         float min;
 
@@ -66,9 +73,9 @@ public class Piattaforma
     }
 
 
-    /**
-     * STAMPA CLASSIFICA
-     */
+
+      STAMPA CLASSIFICA
+
     public void StampaClassifica(){
 
         System.out.println("CLASSIFICA:\n");
@@ -79,9 +86,9 @@ public class Piattaforma
         }
     }
 
-    /**
-     * MOSTRA PROBLEMA
-     */
+
+      MOSTRA PROBLEMA
+
     public String getProblema()
     {
         if(this.view_problema)
@@ -89,17 +96,7 @@ public class Piattaforma
         else
             return "Problema non disponibile";
 
-    }
-
-
-    //Se è presente un solo team l'hackaton non si fa
-    public void FareHackathon(){        //In base al numero dei team che si sono creati
-        if(n_team<2)
-            team_suffic =false;
-        else team_suffic =true;
-    }
-
-
+    }*/
 
 }
 

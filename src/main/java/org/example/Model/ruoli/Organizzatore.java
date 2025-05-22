@@ -1,4 +1,5 @@
 package org.example.Model.ruoli;
+import org.example.Model.Hackathon;
 import org.example.Model.Piattaforma;
 
 public class Organizzatore extends Utente_registrato
@@ -8,9 +9,9 @@ public class Organizzatore extends Utente_registrato
     }
 
 
-    public void SelezionaGiudice(String ID,Piattaforma piattaforma)
+    public void SelezionaGiudice(String ID, Piattaforma piattaforma)
     {
-        for(Utente_registrato uteReg: piattaforma.ArrayUtenReg )
+        for(Utente_registrato uteReg: piattaforma.getListaUtenReg())
         {
             if(uteReg.ID.equals(ID))
             {

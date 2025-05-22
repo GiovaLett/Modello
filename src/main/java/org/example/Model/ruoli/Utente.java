@@ -36,7 +36,7 @@ public class Utente
 
     public void registrazione(Piattaforma piattaforma, Hackathon hackathon)
     {
-        if (piattaforma.open_iscr && hackathon.n_partec < hackathon.n_max_partec && hackathon.data.giorno-2>2)
+        if (piattaforma.open_iscr && hackathon.getNumeroPartec() < hackathon.n_max_partec && hackathon.data.giorno-2>2)
         {
 
 
@@ -50,7 +50,7 @@ public class Utente
 
             Utente_registrato UteReg = new Utente_registrato(this.nome,this.cognome,email,password,this.Codice_ID());
 
-            piattaforma.ArrayUtenReg.add(UteReg);
+            piattaforma.getListaUtenReg().add(UteReg);
         }
 
     }
