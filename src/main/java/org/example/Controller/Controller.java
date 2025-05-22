@@ -9,6 +9,10 @@ public class Controller
     ArrayList<Utente_registrato>registroUtenti=new ArrayList<>();
 
 
+    public Controller(){
+        Utente_registrato amministratore=new Organizzatore();
+        registroUtenti.add(amministratore);
+    }
 
     public Utente_registrato findAccount(String email, String password) throws IllegalArgumentException{
 
