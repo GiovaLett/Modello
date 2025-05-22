@@ -23,7 +23,7 @@ public class Partecipante extends Utente_registrato {
 
         if(piattaforma.open_iscr && hackathon.data.giorno-2>2)//per il fatto che non si faccia a meno 2 giorni --> trovare modo per rappres. giorno attuale
         {
-            for(Team team:piattaforma.ArrayTeam)
+            for(Team team: hackathon.getListaTeam())
             {
                 if(team.codice_accesso.equals(codice))
                 {
@@ -64,7 +64,7 @@ public class Partecipante extends Utente_registrato {
             team.ArrayPartecipante.add(this);
             team.ID=CreaIDTeam();
 
-            hackathon.ArrayTeam.add(team);// anche se termina la funzione e team(variabile locale ) viene eliminata, l'istanza creata di Team rimane per ArrayTeam che contiene ora un riferimento ad essa
+            hackathon.getListaTeam().add(team);// anche se termina la funzione e team(variabile locale ) viene eliminata, l'istanza creata di Team rimane per ArrayTeam che contiene ora un riferimento ad essa
             hackathon.n_team++;
         }
         else System.out.println("Iscrizioni chiuse");
