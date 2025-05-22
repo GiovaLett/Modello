@@ -21,38 +21,45 @@ public class Piattaforma
     }
 
     ArrayList<Classificato> Classifica=new ArrayList<>();
-    public ArrayList<Utente_registrato> ArrayUtenReg =new ArrayList<>();
-    public ArrayList<Team> ArrayTeam=new ArrayList<>();
-
+    ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
+    ArrayList<Team> ListaTeam =new ArrayList<>();
+    ArrayList<Hackathon> ListaHackathon=new ArrayList<>();
 
     String problema="Descrizione Problema";
 
+    public ArrayList<Hackathon> getListaHackathon() {return ListaHackathon;}
 
-/**
+    public ArrayList<Team> getListaTeam() {return ListaTeam;}
+
+    public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
+
+    public ArrayList<Classificato> getClassifica() {return Classifica;}
+
+    /**
  * CREA CLASSIFICA
  */
     public void CreaClassifica(){
         float min;
 
         int k;
-        for(int i=0; i<this.ArrayTeam.size(); i++){
+        for(int i = 0; i<this.ListaTeam.size(); i++){
 
-            min=this.ArrayTeam.get(0).Voto;
+            min=this.ListaTeam.get(0).Voto;
             k=i;
 
-            for(int j=i; j<this.ArrayTeam.size()-i;j++)
+            for(int j = i; j<this.ListaTeam.size()-i; j++)
             {
-                if( this.ArrayTeam.get(j).Voto<min)
+                if( this.ListaTeam.get(j).Voto<min)
                 {
-                    min=this.ArrayTeam.get(j).Voto;
+                    min=this.ListaTeam.get(j).Voto;
                     k=j;
                 }
 
             }
-            ArrayTeam.add(ArrayTeam.get(k));
-            Classificato classificato=new Classificato(ArrayTeam.get(k).Nome,ArrayTeam.get(k).Voto);
+            ListaTeam.add(ListaTeam.get(k));
+            Classificato classificato=new Classificato(ListaTeam.get(k).Nome, ListaTeam.get(k).Voto);
             Classifica.add(0,classificato);
-            ArrayTeam.remove(k);
+            ListaTeam.remove(k);
 
         }
 
@@ -91,9 +98,6 @@ public class Piattaforma
             team_suffic =false;
         else team_suffic =true;
     }
-
-
-
 
 
 
