@@ -3,7 +3,7 @@ package org.example.Model.ruoli;
 public class Utente_registrato extends Utente {
     protected String email;
      protected String password;
-    public String ID;
+    protected String ID;
 
     public Utente_registrato(String nome, String cognome, String email, String password, String ID) {
         super(nome, cognome);

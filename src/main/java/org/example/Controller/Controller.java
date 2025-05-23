@@ -42,13 +42,52 @@ public class Controller
 
 
     public void addUtenteReg(){
-        piattaforma.addUtenteReg(new Utente_registrato("giovanni","lettieri","gio@email.it","password","ID"));
+        piattaforma.addUtenteReg(new Utente_registrato("Italo","Calvino","italo@email.it","password","U000"));
     }
 
+
+    public void addGiudiceHackaton(Hackathon hackathon,String utenteID) throws IllegalArgumentException{
+
+
+        if(utenteID.equals("0000"))
+            throw new IllegalArgumentException("L'amministratore non può essere un giudice");
+
+        for(Utente_registrato utente: piattaforma.getListaUtenReg())
+        {
+                    if(utente.getID().equals(utenteID)){
+
+                        if(utente instanceof Giudice)
+                        {throw new IllegalArgumentException("L'utente scelto è già giudice");}
+
+                        else {
+                            Giudice nuovoGiudice = new Giudice(utente.getNome(), utente.getCognome(), utente.getEmail(), utente.getPassword(), hackathon.getID());
+                            hackathon.addGiudice(nuovoGiudice);
+                            piattaforma.getListaUtenReg().remove(utente);
+                            piattaforma.getListaUtenReg().add(nuovoGiudice);
+
+                            return;
+                        }
+
+                    }
+        }
+        throw new IllegalArgumentException("ID Utente non trovato");
+
+
+
+    }
+
+
+
     public ArrayList<Utente_registrato> getListaUtenti(){return piattaforma.getListaUtenReg();}
+    public ArrayList<Giudice> getListaGiudici(String IDHack){
+        for(Hackathon hackathon: piattaforma.getListaHackathon())
+        {
+            if(hackathon.getID().equals(IDHack))
+                return hackathon.getListaGiudici();
+        }
+        return null;
+    }
     public ArrayList<Hackathon> getListaHackathon(){return piattaforma.getListaHackathon();}
-
     public Utente_registrato getAmministratore() {return amministratore;}
-
     public Piattaforma getPiattaforma() {return piattaforma;}
 }

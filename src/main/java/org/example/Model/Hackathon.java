@@ -57,6 +57,8 @@ public class Hackathon
     }
 
 
+    public void addGiudice(Giudice giudice){ListaGiudici.add(giudice);}
+    public void addTeam(Team team){ListaTeam.add(team);}
 
     private String Codice_ID(){
         String ID_codice="-1";

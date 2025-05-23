@@ -29,6 +29,7 @@ public class organizzatoreGUI {
         frame.pack();
         frame.setLocationRelativeTo(null);
 
+        setApriIsrizButton();
         setEntraButton(c);
         CloseOperation( origFrame);
         frame.setVisible(true);
@@ -56,7 +57,6 @@ public class organizzatoreGUI {
                 String idHack = idHackField.getText();
                 Hackathon hackathon;
 
-
                 try {
                     hackathon = c.findHackId(idHack);
                 } catch (IllegalArgumentException exception) {
@@ -64,7 +64,8 @@ public class organizzatoreGUI {
                     return;
                 }
 
-
+                new organTeamGUI( c, frame, hackathon);
+                frame.setVisible(false);
 
             }
 
@@ -81,6 +82,19 @@ public class organizzatoreGUI {
         });
 
    }
+
+    public void setApriIsrizButton() {
+        apriIsrizButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di aprire le iscrizioni\n(modifiche ai giudici non più disponibili)",
+                        "Conferma?",
+                        JOptionPane.YES_NO_OPTION);
+                if(risposta==JOptionPane.YES_OPTION);
+                if(risposta==JOptionPane.NO_OPTION);
+            }
+        });
+    }
 
     private void seeApriIscrizButton(){}
 }
