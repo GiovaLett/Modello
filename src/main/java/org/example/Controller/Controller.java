@@ -8,12 +8,14 @@ import java.util.ArrayList;
 
 public class Controller
 {
+    Utente_registrato amministratore=new Organizzatore("0000","Giovanni","Lettieri","gio@email.it","password");
+
     Piattaforma piattaforma=new Piattaforma();
 
 
 
     public Controller(){
-        Utente_registrato amministratore=new Organizzatore();
+
         piattaforma.addUtenteReg(amministratore);
     }
 
@@ -27,6 +29,16 @@ public class Controller
         throw new IllegalArgumentException("Credenziali errate");
     }
 
+    public Hackathon findHackId(String ID) throws IllegalArgumentException
+    {
+        for(Hackathon hackathon: piattaforma.getListaHackathon())
+        {
+            if(hackathon.getID().equals(ID))
+                return hackathon;
+        }
+        throw new IllegalArgumentException("ID non presente");
+    }
+
 
 
     public void addUtenteReg(){
@@ -35,4 +47,8 @@ public class Controller
 
     public ArrayList<Utente_registrato> getListaUtenti(){return piattaforma.getListaUtenReg();}
     public ArrayList<Hackathon> getListaHackathon(){return piattaforma.getListaHackathon();}
+
+    public Utente_registrato getAmministratore() {return amministratore;}
+
+    public Piattaforma getPiattaforma() {return piattaforma;}
 }

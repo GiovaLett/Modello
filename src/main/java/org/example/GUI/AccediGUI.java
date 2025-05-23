@@ -1,10 +1,8 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.ruoli.Giudice;
-import org.example.Model.ruoli.Organizzatore;
-import org.example.Model.ruoli.Partecipante;
-import org.example.Model.ruoli.Utente_registrato;
+import org.example.Model.ruoli.*;
+
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -59,8 +57,8 @@ public class AccediGUI
 
                 if(correct)
                 {
-                    if(utente instanceof Organizzatore);
-                        //organizzatoreGUI()
+                    if(utente instanceof Organizzatore) {new organizzatoreGUI(c,frame);frame.setVisible(false);}
+
                     else if(utente instanceof Giudice);
                         //giudiceGUI();
                     else if (utente instanceof Partecipante);

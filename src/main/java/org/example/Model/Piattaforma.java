@@ -21,6 +21,18 @@ public class Piattaforma
     public void addUtenteReg(Utente_registrato nuovoUtente){ListaUtenReg.add(nuovoUtente);}
 
 
+    public void addHackathon(Hackathon hackathon){ListaHackathon.add(hackathon);}
+
+    public void buildListaHackathon(int n)
+    {
+        for(int i=0; i<n ; i++)
+        {
+            Hackathon hackathon=new Hackathon();
+            hackathon.setNome("Hackathon"+i);
+            ListaHackathon.add(hackathon);
+        }
+    }
+
 
 
 

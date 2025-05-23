@@ -40,12 +40,14 @@ public class Hackathon
 
     public ArrayList<Team> getListaTeam() {return ListaTeam;}
     public ArrayList<Giudice> getListaGiudici(){return ListaGiudici;}
+
     public int getNumeroPartec() {return n_partec;}
     public String getID() {return ID;}
     public String getNome(){return nome;}
-
-    public void incrementaNpartec(){n_partec++;}
     public int getN_partec(){return n_partec;}
+    public void incrementaNpartec(){n_partec++;}
+
+    void setNome(String nome){this.nome=nome;}
 
     //Se è presente un solo team l'hackaton non si fa
     public void FareHackathon(){        //In base al numero dei team che si sono creati

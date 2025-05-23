@@ -4,6 +4,15 @@ import org.example.Model.Piattaforma;
 
 public class Organizzatore extends Utente_registrato
 {
+
+
+    public Organizzatore(){}
+    public Organizzatore(String ID,String nome,String cognome,String email,String password)
+    {
+        this.ID=ID;  this.nome=nome;  this.cognome=cognome;
+        this.email=email; this.password=password;
+    }
+
     public void apriIscrizioni(Piattaforma piattaforma){
         piattaforma.open_iscr =true;
     }

@@ -11,7 +11,7 @@ public class ModelloHackTab extends AbstractTableModel {
     String[] nomeColonne={"ID","Nome","Numero partecipanti"};
 
 
-    public void setListaHackathon(ArrayList<Hackathon> listaHackathon) {
+    ModelloHackTab(ArrayList<Hackathon> listaHackathon) {
         ListaHackathon = listaHackathon;
     }
 

@@ -1,8 +1,8 @@
 package org.example.Model.ruoli;
 
 public class Utente_registrato extends Utente {
-    private String email;
-    private String password;
+    protected String email;
+     protected String password;
     public String ID;
 
     public Utente_registrato(String nome, String cognome, String email, String password, String ID) {

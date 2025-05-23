@@ -23,6 +23,7 @@ public class Home
         frame.setResizable(false);
         frame.pack();
 
+        controller.getPiattaforma().buildListaHackathon(5);
         controller.addUtenteReg();
         setAccediButton(controller);
         frame.setVisible(true);

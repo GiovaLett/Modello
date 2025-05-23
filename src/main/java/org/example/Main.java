@@ -9,7 +9,8 @@ import org.example.GUI.organizzatoreGUI;
 public class Main {
     public static void main(String[] args) {
 
-        new organizzatoreGUI(new Controller());
+        new Home();
+        //new organizzatoreGUI(new Controller());
 
 
     }
