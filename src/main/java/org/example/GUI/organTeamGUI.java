@@ -19,6 +19,7 @@ public class organTeamGUI {
     private JTextField idUtenteField;
     private JButton selezGiudButton;
     private JLabel IdLabel;
+    private JPanel utentiTabPanel;
 
     organTeamGUI(Controller c, JFrame origFrame, Hackathon hackathon){
 
@@ -29,10 +30,18 @@ public class organTeamGUI {
         frame.setSize(500,275);
         frame.setLocationRelativeTo(null);
 
+        if(c.isOpenIscri()){
+            selezGiudButton.setVisible(false);
+        }
+
+        else {
+
+            setUtentiTable(c);
+
+            setSelezGiudButton(c, hackathon);
+        }
+        setGiudiciTable(c, hackathon);
         closeOperation(origFrame);
-        setUtentiTable(c);
-        setGiudiciTable(c,hackathon);
-        setSelezGiudButton(c,hackathon);
         frame.setVisible(true);
 
 

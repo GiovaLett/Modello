@@ -76,6 +76,12 @@ public class Controller
 
     }
 
+    public void apriIscrizioni(){
+        piattaforma.setOpen_iscr(true);
+
+    }
+
+    public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
 
 
     public ArrayList<Utente_registrato> getListaUtenti(){return piattaforma.getListaUtenReg();}

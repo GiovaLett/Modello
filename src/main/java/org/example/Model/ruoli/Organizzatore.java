@@ -14,7 +14,7 @@ public class Organizzatore extends Utente_registrato
     }
 
     public void apriIscrizioni(Piattaforma piattaforma){
-        piattaforma.open_iscr =true;
+        piattaforma.setOpen_iscr(true);
     }
 
 

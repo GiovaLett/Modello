@@ -21,7 +21,7 @@ public class Partecipante extends Utente_registrato {
         System.out.print("Inserisci il codice del team: ");
         String codice = scanner.nextLine();
 
-        if(piattaforma.open_iscr && hackathon.data.giorno-2>2)//per il fatto che non si faccia a meno 2 giorni --> trovare modo per rappres. giorno attuale
+        if(piattaforma.isOpen_iscr() && hackathon.data.giorno-2>2)//per il fatto che non si faccia a meno 2 giorni --> trovare modo per rappres. giorno attuale
         {
             for(Team team: hackathon.getListaTeam())
             {
@@ -52,7 +52,7 @@ public class Partecipante extends Utente_registrato {
      */
     public void CreaTeam(Piattaforma piattaforma, Hackathon hackathon)
     {
-        if(piattaforma.open_iscr && hackathon.data.giorno-2>2)
+        if(piattaforma.isOpen_iscr() && hackathon.data.giorno-2>2)
         {
             Scanner scanner = new Scanner(System.in);
 

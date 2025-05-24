@@ -40,7 +40,7 @@ public class Utente
 
     public void registrazione(Piattaforma piattaforma, Hackathon hackathon)
     {
-        if (piattaforma.open_iscr && hackathon.getNumeroPartec() < hackathon.n_max_partec && hackathon.data.giorno-2>2)
+        if (piattaforma.isOpen_iscr() && hackathon.getNumeroPartec() < hackathon.n_max_partec && hackathon.data.giorno-2>2)
         {
 
 

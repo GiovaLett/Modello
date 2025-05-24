@@ -30,7 +30,7 @@ public class Giudice extends Utente_registrato
     }
 
     public void MostraProblema(Piattaforma piattaforma){
-        piattaforma.view_problema =true;
+        piattaforma.setView_problema(true);
     }
 
     public void ValutaTeam(Team team)
