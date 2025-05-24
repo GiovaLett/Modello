@@ -65,7 +65,7 @@ public class UtenteRegistrIscrOpenGUI {
                     return;
                 }
 
-                //new GUI per creare o accedere ad un team;
+                new UtenteToPartecipanteGUI( c,frame, hackathon);
             }
 
         });

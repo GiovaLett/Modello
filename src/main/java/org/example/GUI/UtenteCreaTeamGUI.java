@@ -18,10 +18,11 @@ public class UtenteCreaTeamGUI {
 
    public UtenteCreaTeamGUI(Controller c, Hackathon hackathon){
 
-       frame=new JDialog();
+       frame=new JDialog((JFrame)null,"Crea Team",true);
        frame.setContentPane(mainPanel);
        frame.pack();
 
+       frame.setLocationRelativeTo(null);
        setCreaButton(c,hackathon);
        frame.setVisible(true);
    }
@@ -30,17 +31,18 @@ public class UtenteCreaTeamGUI {
        creaButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-
-               int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di creare il team con nome:\n"+nomeTeamField,
+               String nomeTeam=nomeTeamField.getText();
+               int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di creare il team con nome:\n"+nomeTeam,
                        "Conferma",JOptionPane.YES_NO_OPTION);
 
                if(risposta==JOptionPane.YES_OPTION)
                {
-                   String nomeTeam=nomeTeamField.getText();
+
                    Team team=new Team(nomeTeam,hackathon);
 
                    c.addPartecToTeam(hackathon,team);
                    hackathon.addTeam(team);
+                   frame.dispose();
                }
 
            }

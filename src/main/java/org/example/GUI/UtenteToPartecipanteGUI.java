@@ -33,6 +33,8 @@ public class UtenteToPartecipanteGUI {
         setAccediButton(c,hackathon);
         setTeamTable(c,hackathon);
         setAccediButton(c,hackathon);
+        setCreaTeamButton(c,hackathon);
+
         frame.setVisible(true);
         frame.setContentPane(mainPanel);
     }
@@ -82,6 +84,8 @@ public class UtenteToPartecipanteGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                new UtenteCreaTeamGUI( c,  hackathon);
+                setTeamTable(c,hackathon);
             }
         });
     }
