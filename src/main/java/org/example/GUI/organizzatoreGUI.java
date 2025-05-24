@@ -92,7 +92,7 @@ public class organizzatoreGUI {
                 int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di aprire le iscrizioni\n(modifiche ai giudici non più disponibili)",
                         "Conferma?",
                         JOptionPane.YES_NO_OPTION);
-                if(risposta==JOptionPane.YES_OPTION) { c.apriIscrizioni(); }
+                if(risposta==JOptionPane.YES_OPTION) { c.apriIscrizioni(); apriIsrizButton.setVisible(false); }
                 if(risposta==JOptionPane.NO_OPTION);
             }
         });

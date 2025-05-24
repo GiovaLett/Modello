@@ -7,10 +7,16 @@ import java.util.Scanner;
 
 public class Partecipante extends Utente_registrato {
 
-    private static int n=0;  //Per la creazione di un codice ID del team nel caso venga creato
+    private static int np =0;  //Per la creazione di un codice ID del team nel caso venga creato
     private boolean inAteam=false;
+    private String IDTeam;
 
 
+    public Partecipante(String nome,String cognome,String email,String password,String IDTeam){
+        super(nome,cognome,email,password,"");
+        this.ID=CreaIDPartecip();
+        this.IDTeam=IDTeam;
+    }
 /**
  * ISCRIZIONE AL TEAM
  */
@@ -50,7 +56,7 @@ public class Partecipante extends Utente_registrato {
     /**
      * CREAZIONE DEL TEAM
      */
-    public void CreaTeam(Piattaforma piattaforma, Hackathon hackathon)
+    /*public void CreaTeam(Piattaforma piattaforma, Hackathon hackathon)
     {
         if(piattaforma.isOpen_iscr() && hackathon.data.giorno-2>2)
         {
@@ -68,23 +74,26 @@ public class Partecipante extends Utente_registrato {
             hackathon.incrementaNpartec();
         }
         else System.out.println("Iscrizioni chiuse");
+    }*/
+
+
+
+
+    private String CreaIDPartecip(){
+
+        String ID_codice="-1";
+        if(np >=0 && np <10)  ID_codice="P00"+String.valueOf(np);
+
+        else if (np <100)   ID_codice="P0"+String.valueOf(np);
+
+        else if (np <1000)   ID_codice="P"+String.valueOf(np);
+
+        np++;
+
+        return ID_codice;
+
     }
 
-
-    private String CreaIDTeam(){
-
-            String ID_codice="-1";
-            if(n>=0 && n<10)  ID_codice="T00"+String.valueOf(n);
-
-            else if (n<100)   ID_codice="T0"+String.valueOf(n);
-
-            else if (n<1000)   ID_codice="T"+String.valueOf(n);
-
-            n++;
-
-            return ID_codice;
-
-    }
 
     public void setInAteam(boolean inAteam) {
         this.inAteam = inAteam;

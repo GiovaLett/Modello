@@ -11,12 +11,16 @@ public class Controller
     Utente_registrato amministratore=new Organizzatore("0000","Giovanni","Lettieri","gio@email.it","password");
 
     Piattaforma piattaforma=new Piattaforma();
-
+    Utente_registrato utenteCorrente;
 
 
     public Controller(){
 
         piattaforma.addUtenteReg(amministratore);
+    }
+
+    public void setUtenteCorrente(Utente_registrato utenteCorrente) {
+        this.utenteCorrente = utenteCorrente;
     }
 
     public Utente_registrato findAccount(String email, String password) throws IllegalArgumentException{
@@ -75,6 +79,24 @@ public class Controller
 
 
     }
+    public Team findCodeAccessTeam(String codeAccess,Hackathon hackathon) throws IllegalArgumentException
+    {
+        for(Team team: hackathon.getListaTeam())
+        {
+            if(team.getCodiceAccesso().equals(codeAccess)) return team;
+        }
+
+        throw new IllegalArgumentException("Codice di accesso errato");
+    }
+
+    public void addPartecToTeam(Hackathon hackathon,Team team) throws IllegalArgumentException{
+
+        piattaforma.getListaUtenReg().remove(utenteCorrente);
+        Partecipante nuovoPartec=new Partecipante(utenteCorrente.getNome(), utenteCorrente.getCognome(), utenteCorrente.getEmail(), utenteCorrente.getPassword(), team.getID());
+        piattaforma.getListaUtenReg().add(nuovoPartec);
+        team.addPartecipante(nuovoPartec);
+    }
+
 
     public void apriIscrizioni(){
         piattaforma.setOpen_iscr(true);

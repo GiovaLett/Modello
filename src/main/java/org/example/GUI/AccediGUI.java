@@ -58,7 +58,7 @@ public class AccediGUI
                 if(correct)
                 {
 
-                    if(utente instanceof Organizzatore)       {new organizzatoreGUI(c,frame);}
+                    if(utente instanceof Organizzatore)     {new organizzatoreGUI(c,frame);}
 
                     else if (utente instanceof Partecipante)  {}
                     //partecipanteGUI();
@@ -68,11 +68,12 @@ public class AccediGUI
 
                     else if(utente instanceof Utente_registrato) {
 
-                        if(c.isOpenIscri()) new UtenteRegistrIscrOpenGUI(c,frame);
+                        if(c.isOpenIscri())     {new UtenteRegistrIscrOpenGUI(c,frame);}
 
                         else new UtenteRegistratoIscrCloseGUI(c,frame);
                     }
 
+                    c.setUtenteCorrente(utente);
                     frame.setVisible(false);
 
 
