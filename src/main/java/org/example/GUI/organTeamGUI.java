@@ -30,16 +30,9 @@ public class organTeamGUI {
         frame.setSize(500,275);
         frame.setLocationRelativeTo(null);
 
-        if(c.isOpenIscri()){
-            selezGiudButton.setVisible(false);
-        }
+        setUtentiTable(c);
+        setSelezGiudButton(c, hackathon);
 
-        else {
-
-            setUtentiTable(c);
-
-            setSelezGiudButton(c, hackathon);
-        }
         setGiudiciTable(c, hackathon);
         closeOperation(origFrame);
         frame.setVisible(true);

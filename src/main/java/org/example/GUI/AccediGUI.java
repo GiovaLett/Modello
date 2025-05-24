@@ -57,12 +57,24 @@ public class AccediGUI
 
                 if(correct)
                 {
-                    if(utente instanceof Organizzatore) {new organizzatoreGUI(c,frame);frame.setVisible(false);}
+
+                    if(utente instanceof Utente_registrato) {
+
+                        if(c.isOpenIscri());//GUI per quello
+
+                        else new UtenteRegistratoIscrCloseGUI(c);
+                    }
+
+                    else if (utente instanceof Partecipante)  {}
+                    //partecipanteGUI();
 
                     else if(utente instanceof Giudice);
-                        //giudiceGUI();
-                    else if (utente instanceof Partecipante);
-                        //partecipanteGUI();
+                    //giudiceGUI();
+
+                    if(utente instanceof Organizzatore) {new organizzatoreGUI(c,frame);frame.setVisible(false);}
+
+
+
                 }
             }
         });
