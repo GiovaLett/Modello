@@ -19,6 +19,12 @@ public class Controller
         piattaforma.addUtenteReg(amministratore);
     }
 
+    public Utente_registrato getUtenteCorrente() {return utenteCorrente;}
+
+
+
+
+
     public void setUtenteCorrente(Utente_registrato utenteCorrente) {
         this.utenteCorrente = utenteCorrente;
     }
@@ -79,6 +85,16 @@ public class Controller
 
 
     }
+
+    public Team findIDTeam(String ID,Hackathon hackathon)
+    {
+        for(Team team: hackathon.getListaTeam())
+        {
+            if(team.getID().equals(ID)) return team;
+        }
+        return null;
+    }
+
     public Team findCodeAccessTeam(String codeAccess,Hackathon hackathon) throws IllegalArgumentException
     {
         for(Team team: hackathon.getListaTeam())
@@ -93,6 +109,7 @@ public class Controller
 
         piattaforma.getListaUtenReg().remove(utenteCorrente);
         Partecipante nuovoPartec=new Partecipante(utenteCorrente.getNome(), utenteCorrente.getCognome(), utenteCorrente.getEmail(), utenteCorrente.getPassword(), team.getID());
+        utenteCorrente=nuovoPartec;
         piattaforma.getListaUtenReg().add(nuovoPartec);
         team.addPartecipante(nuovoPartec);
     }

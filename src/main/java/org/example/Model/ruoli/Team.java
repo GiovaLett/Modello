@@ -41,6 +41,8 @@ public class Team {
         this.ID=CreaIDTeam();  this.IDHackathon=hackathon.getID();  this.Nome=nome;
     }
 
+    public ArrayList<Partecipante> getArrayPartecipante() {return ArrayPartecipante;}
+
     public void addPartecipante(Partecipante partec) throws IllegalArgumentException{
 
         if(numero_membri<maxMembri)

@@ -43,6 +43,8 @@ public class UtenteCreaTeamGUI {
                    c.addPartecToTeam(hackathon,team);
                    hackathon.addTeam(team);
                    frame.dispose();
+                   JOptionPane.showMessageDialog(frame,"L'applicazione verrà chiusa, riaccedi per vedere i nuovi aggiornamenti al profilo!");
+                   System.exit(0);
                }
 
            }

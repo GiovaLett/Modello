@@ -1,27 +1,27 @@
 package org.example.GUI;
 
 import org.example.Model.ruoli.Giudice;
+import org.example.Model.ruoli.Partecipante;
 import org.example.Model.ruoli.Utente_registrato;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
-public class ModelloGiudiciTab extends AbstractTableModel {
-
-    private ArrayList<Giudice> ListaGiudici;
+public class ModelloPartecipantiTab extends AbstractTableModel {
+    private ArrayList<Partecipante> ListaPartecipanti;
     private String[] nomeColonne ={"ID","Nome","Cognome","Email"};
 
 
-    ModelloGiudiciTab(ArrayList<Giudice> ListaGiudici){
+    ModelloPartecipantiTab(ArrayList<Partecipante> ListaPartecipanti){
 
-        this.ListaGiudici = ListaGiudici;
+        this.ListaPartecipanti = ListaPartecipanti;
 
     }
 
 
     @Override
     public int getRowCount() {
-        return ListaGiudici.size();
+        return ListaPartecipanti.size();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ModelloGiudiciTab extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) //ID,nome,cognome,email;
     {
-        Utente_registrato utenteRow= ListaGiudici.get(rowIndex);
+        Utente_registrato utenteRow= ListaPartecipanti.get(rowIndex);
 
         if(columnIndex==0)  { return utenteRow.getID();}
         if(columnIndex==1)  {return utenteRow.getNome();}

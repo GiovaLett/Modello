@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Model.ruoli.Utente_registrato;
+import org.example.Model.ruoli.*;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -11,7 +11,11 @@ public class ModelloUtentiTabella extends AbstractTableModel {
     private String[] nomeColonne ={"ID","Nome","Cognome","Email"};
 
 
-    ModelloUtentiTabella(ArrayList<Utente_registrato> ListaUtenti){this.ListaUtenti=ListaUtenti;}
+    ModelloUtentiTabella(ArrayList<Utente_registrato> ListaUtenti){
+        this.ListaUtenti=ListaUtenti;
+    }
+
+
 
 
     @Override

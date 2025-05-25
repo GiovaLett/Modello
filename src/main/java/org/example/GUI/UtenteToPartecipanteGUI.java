@@ -71,7 +71,12 @@ public class UtenteToPartecipanteGUI {
                 catch (IllegalArgumentException exception)
                 {JOptionPane.showMessageDialog(frame,exception.getMessage(),"Team Pieno",JOptionPane.INFORMATION_MESSAGE);
                 return;}
+
+
                 JOptionPane.showMessageDialog(frame,"Ora sei membro");
+                JOptionPane.showMessageDialog(frame,"L'applicazione verrà chiusa, riaccedi per vedere i nuovi aggiornamenti al profilo!");
+                System.exit(0);
+
                 setTeamTable(c,hackathon);
 
 
@@ -81,6 +86,8 @@ public class UtenteToPartecipanteGUI {
 
     private void setCreaTeamButton(Controller c,Hackathon hackathon) {
         creaTeamButton.addActionListener(new ActionListener() {
+
+
             @Override
             public void actionPerformed(ActionEvent e) {
 

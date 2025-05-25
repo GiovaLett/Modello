@@ -100,4 +100,6 @@ public class Partecipante extends Utente_registrato {
     }
 
     public boolean getInAteam(){return this.inAteam;}
+
+    public String getIDTeam() {return IDTeam;}
 }
