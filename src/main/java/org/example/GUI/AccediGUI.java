@@ -21,6 +21,7 @@ public class AccediGUI
         frame.setResizable(false);
         frame.pack();
 
+
         setAccediButton(c);
         CloseOperation( origFrame);
         frame.setVisible(true);
@@ -60,8 +61,11 @@ public class AccediGUI
 
                     if(utente instanceof Organizzatore)     {new organizzatoreGUI(c,frame);}
 
-                    else if (utente instanceof Partecipante)  {}
-                    //partecipanteGUI();
+                    else if (utente instanceof Partecipante partecipante)  {
+
+                        new PartecipanteGUI(c,frame, c.findTeam(partecipante.getIDTeam()) );
+                    }
+
 
                     else if(utente instanceof Giudice);
                     //giudiceGUI();

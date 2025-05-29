@@ -18,16 +18,12 @@ public class Organizzatore extends Utente_registrato
     }
 
 
-    public void SelezionaGiudice(String ID, Piattaforma piattaforma)
+    public void SelezionaGiudice(Utente_registrato utente, Piattaforma piattaforma,Hackathon hackathon)
     {
-        for(Utente_registrato uteReg: piattaforma.getListaUtenReg())
-        {
-            if(uteReg.ID.equals(ID))
-            {
-                System.out.println("Sei stato selezionato come giudice!: \n ACCETTA:1   DECLINA:0");//Simbolico implementarla meglio poi con GUI ecc..
-
-            }
-        }
+        Giudice nuovoGiudice = new Giudice(utente.getNome(), utente.getCognome(), utente.getEmail(), utente.getPassword(), hackathon.getID());
+        hackathon.addGiudice(nuovoGiudice);
+        piattaforma.getListaUtenReg().remove(utente);
+        piattaforma.getListaUtenReg().add(nuovoGiudice);
 
     }
 }

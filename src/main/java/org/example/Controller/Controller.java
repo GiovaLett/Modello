@@ -21,13 +21,10 @@ public class Controller
 
     public Utente_registrato getUtenteCorrente() {return utenteCorrente;}
 
-
-
-
-
     public void setUtenteCorrente(Utente_registrato utenteCorrente) {
         this.utenteCorrente = utenteCorrente;
     }
+
 
     public Utente_registrato findAccount(String email, String password) throws IllegalArgumentException{
 
@@ -52,38 +49,20 @@ public class Controller
 
 
     public void addUtenteReg(){
-        piattaforma.addUtenteReg(new Utente_registrato("Italo","Calvino","italo@email.it","password","U000"));
+        piattaforma.addUtenteReg(new Utente_registrato("Italo","Calvino","italo@email.it","password"));
     }
 
 
-    public void addGiudiceHackaton(Hackathon hackathon,String utenteID) throws IllegalArgumentException{
+    public Team findTeam(String idTeam) throws IllegalArgumentException{
+        Team teamTrovato;
+        for(Hackathon hackathon: piattaforma.getListaHackathon()) {
+            teamTrovato = findIDTeam(idTeam, hackathon);
 
-
-        if(utenteID.equals("0000"))
-            throw new IllegalArgumentException("L'amministratore non può essere un giudice");
-
-        for(Utente_registrato utente: piattaforma.getListaUtenReg())
-        {
-                    if(utente.getID().equals(utenteID)){
-
-                        if(utente instanceof Giudice)
-                        {throw new IllegalArgumentException("L'utente scelto è già giudice");}
-
-                        else {
-                            Giudice nuovoGiudice = new Giudice(utente.getNome(), utente.getCognome(), utente.getEmail(), utente.getPassword(), hackathon.getID());
-                            hackathon.addGiudice(nuovoGiudice);
-                            piattaforma.getListaUtenReg().remove(utente);
-                            piattaforma.getListaUtenReg().add(nuovoGiudice);
-
-                            return;
-                        }
-
-                    }
+            if (teamTrovato != null) {
+                return teamTrovato;
+            }
         }
-        throw new IllegalArgumentException("ID Utente non trovato");
-
-
-
+        throw new IllegalArgumentException("ID Team del partecipante non trovato");
     }
 
     public Team findIDTeam(String ID,Hackathon hackathon)
@@ -105,22 +84,58 @@ public class Controller
         throw new IllegalArgumentException("Codice di accesso errato");
     }
 
-    public void addPartecToTeam(Hackathon hackathon,Team team) throws IllegalArgumentException{
-
-        piattaforma.getListaUtenReg().remove(utenteCorrente);
-        Partecipante nuovoPartec=new Partecipante(utenteCorrente.getNome(), utenteCorrente.getCognome(), utenteCorrente.getEmail(), utenteCorrente.getPassword(), team.getID());
-        utenteCorrente=nuovoPartec;
-        piattaforma.getListaUtenReg().add(nuovoPartec);
-        team.addPartecipante(nuovoPartec);
+    public void creaTeam(String nomeTeam,Hackathon hackathon){
+        utenteCorrente.creaTeam(piattaforma,hackathon,nomeTeam);
     }
 
+    public void addPartecToTeam(Team team) throws IllegalArgumentException{
 
-    public void apriIscrizioni(){
-        piattaforma.setOpen_iscr(true);
+        utenteCorrente.registratiInTeam(piattaforma, team);
 
     }
 
     public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
+
+
+    public void apriIscrizioni(){
+        if(utenteCorrente instanceof Organizzatore organizzatore)
+            organizzatore.apriIscrizioni(this.piattaforma);
+    }
+
+
+
+
+    public void addGiudiceHackaton(Hackathon hackathon,String utenteID) throws IllegalArgumentException{
+
+
+        if(utenteID.equals("0000"))
+            throw new IllegalArgumentException("L'amministratore non può essere un giudice");
+
+        for(Utente_registrato utente: piattaforma.getListaUtenReg())
+        {
+            if(utente.getID().equals(utenteID)){
+
+                if(utente instanceof Giudice)
+                {throw new IllegalArgumentException("L'utente scelto è già giudice");}
+
+                else
+                {
+                    if(utenteCorrente instanceof Organizzatore organizzatore)
+                     organizzatore.SelezionaGiudice( utente, piattaforma, hackathon);
+                    return;
+                }
+
+            }
+        }
+        throw new IllegalArgumentException("ID Utente non trovato");
+
+
+
+    }
+
+
+
+
 
 
     public ArrayList<Utente_registrato> getListaUtenti(){return piattaforma.getListaUtenReg();}

@@ -11,7 +11,7 @@ public class Giudice extends Utente_registrato
     private String IDHackatlon;
 
     public Giudice(String nome,String cognome,String email,String password,String IDHackatlon){
-        super(nome,cognome,email,password,"");
+        super(nome,cognome,email,password);
         this.IDHackatlon=IDHackatlon;
         this.ID=Codice_ID();}
 
@@ -20,12 +20,8 @@ public class Giudice extends Utente_registrato
 
     public void CommentaProgressi(Progresso progresso)
     {
-        String commento;
-        Scanner scanner=new Scanner(System.in);
-        System.out.println(progresso.lavoro); //Visualizza il lavoro
+        String commento="";
 
-        System.out.println("\n\n Commento:");//Commenta il lavoro
-        commento=scanner.next();
         progresso.commento=commento;//Carica il commento
     }
 

@@ -14,6 +14,8 @@ public class PartecipanteGUI {
     private JTable membriTable;
     private JLabel nomeTeamLabel;
     private JLabel IDTeamLabel;
+    private JTextArea textArea1;
+    private JButton caricaProgressiButton;
 
     public PartecipanteGUI(Controller c, JFrame origFrame, Team team){
 

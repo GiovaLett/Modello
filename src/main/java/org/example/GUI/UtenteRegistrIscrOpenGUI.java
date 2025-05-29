@@ -66,6 +66,7 @@ public class UtenteRegistrIscrOpenGUI {
                 }
 
                 new UtenteToPartecipanteGUI( c,frame, hackathon);
+                frame.setVisible(false);
             }
 
         });

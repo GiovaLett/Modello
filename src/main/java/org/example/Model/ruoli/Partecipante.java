@@ -13,68 +13,12 @@ public class Partecipante extends Utente_registrato {
 
 
     public Partecipante(String nome,String cognome,String email,String password,String IDTeam){
-        super(nome,cognome,email,password,"");
+        super(nome,cognome,email,password);
         this.ID=CreaIDPartecip();
         this.IDTeam=IDTeam;
-    }
-/**
- * ISCRIZIONE AL TEAM
- */
-    public void entraInTeam(Piattaforma piattaforma, Hackathon hackathon)
-    {
-        boolean trovato=false;
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci il codice del team: ");
-        String codice = scanner.nextLine();
 
-        if(piattaforma.isOpen_iscr() && hackathon.data.giorno-2>2)//per il fatto che non si faccia a meno 2 giorni --> trovare modo per rappres. giorno attuale
-        {
-            for(Team team: hackathon.getListaTeam())
-            {
-                if(team.codice_accesso.equals(codice))
-                {
-                    if(team.numero_membri < hackathon.dim_max_team)
-                    {
-                        trovato=true;
-                        team.ArrayPartecipante.add(this);
-                        team.numero_membri++;
-                        break;
-
-                    }
-                    else
-                        System.out.println("ERRORE: Numero membri massimo");
-                }
-            }
-            if(!trovato)
-                System.out.println("Codice inesistente");
-        }
-        else System.out.println("Iscrizioni chiuse");
     }
 
-
-
-    /**
-     * CREAZIONE DEL TEAM
-     */
-    /*public void CreaTeam(Piattaforma piattaforma, Hackathon hackathon)
-    {
-        if(piattaforma.isOpen_iscr() && hackathon.data.giorno-2>2)
-        {
-            Scanner scanner = new Scanner(System.in);
-
-            System.out.println("Inserisci nome del Team:");
-            String nome_team=scanner.nextLine();
-            Team team=new Team(nome_team);
-
-            team.numero_membri++;
-            team.ArrayPartecipante.add(this);
-            team.ID=CreaIDTeam();
-
-            hackathon.getListaTeam().add(team);// anche se termina la funzione e team(variabile locale ) viene eliminata, l'istanza creata di Team rimane per ArrayTeam che contiene ora un riferimento ad essa
-            hackathon.incrementaNpartec();
-        }
-        else System.out.println("Iscrizioni chiuse");
-    }*/
 
 
 

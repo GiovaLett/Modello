@@ -67,7 +67,7 @@ public class UtenteToPartecipanteGUI {
                     JOptionPane.showMessageDialog(frame,exception.getMessage(),"Not Found",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                try {c.addPartecToTeam(hackathon,team);}
+                try {c.addPartecToTeam(team);}
                 catch (IllegalArgumentException exception)
                 {JOptionPane.showMessageDialog(frame,exception.getMessage(),"Team Pieno",JOptionPane.INFORMATION_MESSAGE);
                 return;}
@@ -91,7 +91,7 @@ public class UtenteToPartecipanteGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new UtenteCreaTeamGUI( c,  hackathon);
+                new UtenteCreaTeamGUI( c,  hackathon, frame);
                 setTeamTable(c,hackathon);
             }
         });

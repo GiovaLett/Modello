@@ -16,18 +16,18 @@ public class UtenteCreaTeamGUI {
     private JTextField nomeTeamField;
     private JButton creaButton;
 
-   public UtenteCreaTeamGUI(Controller c, Hackathon hackathon){
+   public UtenteCreaTeamGUI(Controller c, Hackathon hackathon,JFrame origFrame){
 
        frame=new JDialog((JFrame)null,"Crea Team",true);
        frame.setContentPane(mainPanel);
        frame.pack();
 
        frame.setLocationRelativeTo(null);
-       setCreaButton(c,hackathon);
+       setCreaButton(c,hackathon,origFrame);
        frame.setVisible(true);
    }
 
-   private void setCreaButton(Controller c, Hackathon hackathon){
+   private void setCreaButton(Controller c, Hackathon hackathon,JFrame origFrame){
        creaButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
@@ -37,14 +37,15 @@ public class UtenteCreaTeamGUI {
 
                if(risposta==JOptionPane.YES_OPTION)
                {
+                    c.creaTeam(nomeTeam,hackathon);
+                   /*Team team=new Team(nomeTeam,hackathon);
 
-                   Team team=new Team(nomeTeam,hackathon);
-
-                   c.addPartecToTeam(hackathon,team);
-                   hackathon.addTeam(team);
+                   c.addPartecToTeam(team);
+                   hackathon.addTeam(team);*/
                    frame.dispose();
-                   JOptionPane.showMessageDialog(frame,"L'applicazione verrà chiusa, riaccedi per vedere i nuovi aggiornamenti al profilo!");
-                   System.exit(0);
+                   origFrame.dispose();
+                   JOptionPane.showMessageDialog(frame,"Sarai indirizzato alla Home, riaccedi per vedere i nuovi aggiornamenti al profilo!");
+                   new Home();
                }
 
            }

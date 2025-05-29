@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class Home
 {
-    private Controller controller=new Controller();
+    private static Controller controller=new Controller();
     private static JFrame frame;
     private JPanel mainPanel;
     private JButton accediButton;
