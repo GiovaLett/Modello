@@ -37,10 +37,10 @@ public class Utente_registrato extends Utente {
         return ID_codice;
     }
 
-    public void registratiInTeam(Piattaforma piattaforma, Team team) throws IllegalArgumentException
+    public void registratiInTeam(Piattaforma piattaforma,Hackathon hackathon, Team team) throws IllegalArgumentException
     {
         piattaforma.getListaUtenReg().remove(this);
-        Partecipante nuovoPartec=new Partecipante(this.getNome(), this.getCognome(), this.getEmail(), this.getPassword(), team.getID());
+        Partecipante nuovoPartec=new Partecipante(this.getNome(), this.getCognome(), this.getEmail(), this.getPassword(), team.getID(), hackathon.getID());
         piattaforma.getListaUtenReg().add(nuovoPartec);
         team.addPartecipante(nuovoPartec);
     }
@@ -48,7 +48,7 @@ public class Utente_registrato extends Utente {
     public void creaTeam(Piattaforma piattaforma, Hackathon hackathon, String nomeTeam){
         Team nuovoTeam=new Team(nomeTeam,hackathon);
         hackathon.addTeam(nuovoTeam);
-        registratiInTeam(piattaforma,nuovoTeam);
+        registratiInTeam(piattaforma,hackathon,nuovoTeam);
 
     }
 }

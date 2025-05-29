@@ -32,7 +32,7 @@ public class Hackathon
     public Data data;
 
     int durata=3;     //giorni
-
+    private boolean view_problema =false;// indica se l'Hackaton verrà fatto in base al numero dei team
     String problema="Descrizione Problema";
 
 
@@ -60,6 +60,8 @@ public class Hackathon
     public void addGiudice(Giudice giudice){ListaGiudici.add(giudice);}
     public void addTeam(Team team){ListaTeam.add(team);}
 
+    public boolean isView_problema() {return view_problema;}
+    public void setView_problema(boolean view_problema) {this.view_problema = view_problema;}
     private String Codice_ID(){
         String ID_codice="-1";
         if(n>=0 && n<10)  ID_codice="H00"+String.valueOf(n);

@@ -52,7 +52,9 @@ public class Controller
         piattaforma.addUtenteReg(new Utente_registrato("Italo","Calvino","italo@email.it","password"));
     }
 
-
+/**
+ * OPERAZIONI SUI TEAM
+ */
     public Team findTeam(String idTeam) throws IllegalArgumentException{
         Team teamTrovato;
         for(Hackathon hackathon: piattaforma.getListaHackathon()) {
@@ -88,11 +90,15 @@ public class Controller
         utenteCorrente.creaTeam(piattaforma,hackathon,nomeTeam);
     }
 
-    public void addPartecToTeam(Team team) throws IllegalArgumentException{
+    public void addPartecToTeam(Team team,Hackathon hackathon) throws IllegalArgumentException{
 
-        utenteCorrente.registratiInTeam(piattaforma, team);
+        utenteCorrente.registratiInTeam(piattaforma, hackathon,team);
 
     }
+
+
+
+
 
     public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
 

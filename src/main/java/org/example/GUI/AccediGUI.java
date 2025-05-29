@@ -1,6 +1,7 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
+import org.example.Model.Hackathon;
 import org.example.Model.ruoli.*;
 
 
@@ -63,7 +64,8 @@ public class AccediGUI
 
                     else if (utente instanceof Partecipante partecipante)  {
 
-                        new PartecipanteGUI(c,frame, c.findTeam(partecipante.getIDTeam()) );
+                        Hackathon partecHack=c.findHackId(partecipante.getIDHackathon());
+                        new PartecipanteGUI(c,frame,partecHack  ,c.findIDTeam(partecipante.getIDTeam(),partecHack));
                     }
 
 

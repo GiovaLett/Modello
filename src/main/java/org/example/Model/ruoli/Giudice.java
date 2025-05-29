@@ -1,4 +1,5 @@
 package org.example.Model.ruoli;
+import org.example.Model.Hackathon;
 import org.example.Model.Piattaforma;
 import org.example.Model.Progresso;
 
@@ -25,8 +26,8 @@ public class Giudice extends Utente_registrato
         progresso.commento=commento;//Carica il commento
     }
 
-    public void MostraProblema(Piattaforma piattaforma){
-        piattaforma.setView_problema(true);
+    public void MostraProblema(Hackathon hackathon){
+        hackathon.setView_problema(true);
     }
 
     public void ValutaTeam(Team team)

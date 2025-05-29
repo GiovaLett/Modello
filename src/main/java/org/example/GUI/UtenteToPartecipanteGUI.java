@@ -67,15 +67,15 @@ public class UtenteToPartecipanteGUI {
                     JOptionPane.showMessageDialog(frame,exception.getMessage(),"Not Found",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                try {c.addPartecToTeam(team);}
+                try {c.addPartecToTeam(team,hackathon);}
                 catch (IllegalArgumentException exception)
                 {JOptionPane.showMessageDialog(frame,exception.getMessage(),"Team Pieno",JOptionPane.INFORMATION_MESSAGE);
                 return;}
 
 
                 JOptionPane.showMessageDialog(frame,"Ora sei membro");
-                JOptionPane.showMessageDialog(frame,"L'applicazione verrà chiusa, riaccedi per vedere i nuovi aggiornamenti al profilo!");
-                System.exit(0);
+                JOptionPane.showMessageDialog(frame,"Sarai indirizzato alla Home, riaccedi per vedere i nuovi aggiornamenti al profilo!");
+                new Home();
 
                 setTeamTable(c,hackathon);
 

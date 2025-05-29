@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Piattaforma
 {
     private boolean open_iscr =false;// indica la possibilità di iscriversi
-    private boolean view_problema =false;// indica se l'Hackaton verrà fatto in base al numero dei team
+
 
 
     ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
@@ -16,8 +16,7 @@ public class Piattaforma
     public boolean isOpen_iscr() {return open_iscr;}
     public void setOpen_iscr(boolean open_iscr) {this.open_iscr = open_iscr;}
 
-    public boolean isView_problema() {return view_problema;}
-    public void setView_problema(boolean view_problema) {this.view_problema = view_problema;}
+
 
     public ArrayList<Hackathon> getListaHackathon() {return ListaHackathon;}
     public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}

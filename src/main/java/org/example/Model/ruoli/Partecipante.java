@@ -10,12 +10,13 @@ public class Partecipante extends Utente_registrato {
     private static int np =0;  //Per la creazione di un codice ID del team nel caso venga creato
     private boolean inAteam=false;
     private String IDTeam;
+    private String IDHackathon;
 
-
-    public Partecipante(String nome,String cognome,String email,String password,String IDTeam){
+    public Partecipante(String nome,String cognome,String email,String password,String IDTeam,String IDHackathon){
         super(nome,cognome,email,password);
         this.ID=CreaIDPartecip();
         this.IDTeam=IDTeam;
+        this.IDHackathon=IDHackathon;
 
     }
 
@@ -46,4 +47,6 @@ public class Partecipante extends Utente_registrato {
     public boolean getInAteam(){return this.inAteam;}
 
     public String getIDTeam() {return IDTeam;}
+
+    public String getIDHackathon() {return IDHackathon;}
 }
