@@ -3,7 +3,7 @@ import org.example.Model.Hackathon;
 import org.example.Model.Progresso;
 
 import java.util.ArrayList;
-
+import java.util.Random;
 
 
 public class Team {
@@ -11,25 +11,27 @@ public class Team {
     private static int nt=0;
     private final int maxMembri=5;
     float Voto=-1;
-    String Nome;
-    String ID;
-    String codice_accesso;
+    private String Nome;
+    private String ID;
+    private String codice_accesso;
     int numero_membri=0;
     ArrayList<Progresso> ArrayProgresso = new ArrayList<>();
     ArrayList<Partecipante> ArrayPartecipante = new ArrayList<>();
     String IDHackathon;
 
-    public String getID() {
-        return ID;
+
+
+    public Team(String nome, Hackathon hackathon){
+        this.codice_accesso=creaCodiceAccesso();   this.ID=CreaIDTeam();  this.IDHackathon=hackathon.getID();  this.Nome=nome;
     }
 
-    public String getNome() {
-        return Nome;
-    }
+    public String getID() {return ID;}
 
-    public int getNumero_membri() {
-        return numero_membri;
-    }
+
+
+    public String getNome() {return Nome;}
+
+    public int getNumero_membri() {return numero_membri;}
 
     public String getCodiceAccesso(){
         return this.codice_accesso;
@@ -37,9 +39,7 @@ public class Team {
 
     public String getIDHackathon() {return IDHackathon;}
 
-    public Team(String nome, Hackathon hackathon){
-        this.ID=CreaIDTeam();  this.IDHackathon=hackathon.getID();  this.Nome=nome;
-    }
+
 
     public ArrayList<Partecipante> getArrayPartecipante() {return ArrayPartecipante;}
 
@@ -80,6 +80,25 @@ public class Team {
 
         return ID_codice;
 
+    }
+
+    private String creaCodiceAccesso(){
+        char[] lettere={'A','B','C','D','E','F','G','H','I','L','J','K','M','N','0','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        char[] numeri={'0','1','2','3','4','5','6','7','8','9'};
+
+
+        StringBuilder codiceAccesso= new StringBuilder();
+        Random random=new Random();
+
+        for(int i=0;i<7;i++)
+        {
+            if(i<2 || i>4)
+                codiceAccesso.append(lettere[random.nextInt(0, lettere.length)]);
+            else
+                codiceAccesso.append(numeri[random.nextInt(0, numeri.length)]);
+        }
+
+        return codiceAccesso.toString();
     }
 
 

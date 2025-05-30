@@ -30,7 +30,7 @@ public class UtenteToPartecipanteGUI {
 
         CloseOperation(origFrame);
 
-        setAccediButton(c,hackathon);
+
         setTeamTable(c,hackathon);
         setAccediButton(c,hackathon);
         setCreaTeamButton(c,hackathon);
@@ -59,25 +59,29 @@ public class UtenteToPartecipanteGUI {
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 String codiceTeam= codiceAccessoField.getText();
                 Team team;
+
                 try {team=c.findCodeAccessTeam(codiceTeam,hackathon);}
                 catch(IllegalArgumentException exception)
                 {
                     JOptionPane.showMessageDialog(frame,exception.getMessage(),"Not Found",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                try {c.addPartecToTeam(team,hackathon);}
+
+                try { c.addPartecToTeam(team,hackathon); }
                 catch (IllegalArgumentException exception)
                 {JOptionPane.showMessageDialog(frame,exception.getMessage(),"Team Pieno",JOptionPane.INFORMATION_MESSAGE);
                 return;}
 
 
-                JOptionPane.showMessageDialog(frame,"Ora sei membro");
+                JOptionPane.showMessageDialog(frame,"Ora sei membro del team:\n"+team.getNome());
                 JOptionPane.showMessageDialog(frame,"Sarai indirizzato alla Home, riaccedi per vedere i nuovi aggiornamenti al profilo!");
+                frame.dispose();
                 new Home();
 
-                setTeamTable(c,hackathon);
+
 
 
             }
@@ -92,7 +96,7 @@ public class UtenteToPartecipanteGUI {
             public void actionPerformed(ActionEvent e) {
 
                 new UtenteCreaTeamGUI( c,  hackathon, frame);
-                setTeamTable(c,hackathon);
+
             }
         });
     }

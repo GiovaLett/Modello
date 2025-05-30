@@ -32,7 +32,7 @@
                   <text value="Nome:"/>
                 </properties>
               </component>
-              <component id="1d7b2" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+              <component id="1d7b2" class="javax.swing.JTextField" binding="nomeField">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -58,7 +58,7 @@
                   <text value="Cognome:"/>
                 </properties>
               </component>
-              <component id="17cf5" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+              <component id="17cf5" class="javax.swing.JTextField" binding="cognomeField">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -86,7 +86,7 @@
               <text value="Email:"/>
             </properties>
           </component>
-          <component id="deb1c" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+          <component id="deb1c" class="javax.swing.JTextField" binding="emailField">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -120,7 +120,7 @@
               <text value="Conferma password:"/>
             </properties>
           </component>
-          <component id="a772e" class="javax.swing.JTextField" binding="textField4" default-binding="true">
+          <component id="a772e" class="javax.swing.JTextField" binding="passwordField">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -128,7 +128,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="ca249" class="javax.swing.JTextField" binding="textField5" default-binding="true">
+          <component id="ca249" class="javax.swing.JTextField" binding="confPasswordField">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>

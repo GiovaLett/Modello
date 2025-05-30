@@ -8,24 +8,31 @@ import java.awt.event.ActionListener;
 
 public class Home
 {
+    private static int nApriHome=0;
     private static Controller controller=new Controller();
-    private static JFrame frame;
+    private static JFrame frame = new JFrame("Home");
     private JPanel mainPanel;
     private JButton accediButton;
     private JButton registratiButton;
 
     public Home() {
 
-        frame = new JFrame("Home");
+
+
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.pack();
 
-        controller.getPiattaforma().buildListaHackathon(5);
-        controller.addUtenteReg();
+        if(nApriHome==0){
+            controller.getPiattaforma().buildListaHackathon(5);
+            controller.addUtentiProva();
+            nApriHome++;
+        }
+
         setAccediButton(controller);
+        setRegistratiButton(controller );
         frame.setVisible(true);
 
     }
@@ -42,7 +49,14 @@ public class Home
 
     }
 
-    private void setRegistratiButton(){
+    private void setRegistratiButton(Controller c){
+        registratiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new registrazioneGUI( c,frame);
+                frame.setVisible(false);
+            }
+        });
 
     }
 

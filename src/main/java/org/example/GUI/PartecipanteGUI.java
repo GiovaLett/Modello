@@ -17,6 +17,7 @@ public class PartecipanteGUI {
     private JLabel IDTeamLabel;
     private JTextArea textArea1;
     private JButton caricaProgressiButton;
+    private JLabel codiceLabel;
 
     public PartecipanteGUI(Controller c, JFrame origFrame, Hackathon hackathon,Team team){
 
@@ -28,6 +29,7 @@ public class PartecipanteGUI {
         caricaProgressiButton.setVisible(false);
         nomeTeamLabel.setText(team.getNome());
         IDTeamLabel.setText(team.getID());
+        codiceLabel.setText(team.getCodiceAccesso());
 
         CloseOperation(origFrame);
         setMembriTable(team);

@@ -25,6 +25,20 @@ public class Controller
         this.utenteCorrente = utenteCorrente;
     }
 
+    public void addUtentiProva(){
+        piattaforma.addUtenteReg(new Utente_registrato("Italo","Calvino","italo@email.it","password"));
+        piattaforma.addUtenteReg(new Utente_registrato("Francesco","Torvo","fra@email.it","password"));
+        piattaforma.addUtenteReg(new Utente_registrato("Carlo","Magno","carlo@email.it","password"));
+        piattaforma.addUtenteReg(new Utente_registrato("Sara","Pace","sara@email.it","password"));
+        piattaforma.addUtenteReg(new Utente_registrato("Giulia","Casta","giulia@email.it","password"));
+        piattaforma.addUtenteReg(new Utente_registrato("Samuel","Triff","samuel@email.it","password"));
+    }
+
+    public void addUtenteRegistrato(String nome,String cognome,String email,String password)
+    {
+        piattaforma.addUtenteReg(new Utente_registrato(nome,cognome,email,password));
+    }
+
 
     public Utente_registrato findAccount(String email, String password) throws IllegalArgumentException{
 
@@ -48,9 +62,7 @@ public class Controller
 
 
 
-    public void addUtenteReg(){
-        piattaforma.addUtenteReg(new Utente_registrato("Italo","Calvino","italo@email.it","password"));
-    }
+
 
 /**
  * OPERAZIONI SUI TEAM
