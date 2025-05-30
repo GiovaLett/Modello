@@ -23,7 +23,7 @@ public class Giudice extends Utente_registrato
     {
         String commento="";
 
-        progresso.commento=commento;//Carica il commento
+        progresso.setCommento(commento);//Carica il commento
     }
 
     public void MostraProblema(Hackathon hackathon){

@@ -27,7 +27,7 @@ public class organTeamGUI {
         frame.setContentPane(mainPanel);
         nomeHackLabel.setText(hackathon.getNome());
         IdLabel.setText(hackathon.getID());
-        frame.setSize(500,275);
+        frame.pack();
         frame.setLocationRelativeTo(null);
 
         setUtentiTable(c);

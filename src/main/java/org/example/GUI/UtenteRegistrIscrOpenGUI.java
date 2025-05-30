@@ -29,7 +29,7 @@ public class UtenteRegistrIscrOpenGUI {
         frame.setLocationRelativeTo(null);
 
         nomeCognomLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
-        idLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
+        idLabel.setText(c.getUtenteCorrente().getID());
 
         CloseOperation(origFrame);
         setHackathonTable(c);

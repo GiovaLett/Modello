@@ -85,8 +85,15 @@ public class giudiceGUI {
                         return;
                     }
 
-                    JOptionPane.showMessageDialog(frame,"Problema pubblicato");
-                    hackathon.setView_problema(true);
+                    int risp=JOptionPane.showConfirmDialog(frame,"La traccia pubblicata sarà la seguente:\n"+problemaTextArea.getText()+"\n\nConfermare?\n",
+                            "Conferma", JOptionPane.YES_NO_OPTION);
+                    if(risp==0){
+                        hackathon.setView_problema(true);
+                        JOptionPane.showMessageDialog(frame,"Problema pubblicato");
+                    }
+
+
+
 
 
                 }

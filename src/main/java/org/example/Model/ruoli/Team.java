@@ -58,14 +58,16 @@ public class Team {
     /**
      * CARICAMENTO PROGRESSI
      */
-    public void caricamento_progressi(String cod_programma)
+    public void caricaProgresso(String nomeProgresso,String codiceProgresso)
     {
 
-        Progresso progress =new Progresso();
-        progress.lavoro= cod_programma;
-        this.ArrayProgresso.add(progress);
+        Progresso progresso =new Progresso();
+        progresso.setCodiceProgresso(codiceProgresso);
+        progresso.setNome(nomeProgresso);
+        this.ArrayProgresso.add(progresso);
     }
 
+    public ArrayList<Progresso> getArrayProgresso() {return ArrayProgresso;}
 
     private String CreaIDTeam(){
 
@@ -83,7 +85,7 @@ public class Team {
     }
 
     private String creaCodiceAccesso(){
-        char[] lettere={'A','B','C','D','E','F','G','H','I','L','J','K','M','N','0','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        char[] lettere={'A','B','C','D','E','F','G','H','I','L','J','K','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         char[] numeri={'0','1','2','3','4','5','6','7','8','9'};
 
 

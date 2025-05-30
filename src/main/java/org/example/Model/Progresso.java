@@ -1,6 +1,22 @@
 package org.example.Model;
 
 public class Progresso {
-    public String lavoro="Campo vuoto";
-    public String commento="Campo vuoto";
+
+    private String nome="";
+    private String codiceProgresso="";
+    private String commento="";
+
+    public void setNome(String nome) {this.nome = nome;}
+
+    public String getNome() {return nome;}
+
+    public String getCodiceProgresso() {return codiceProgresso;}
+
+    public void setCodiceProgresso(String codiceProgresso) {this.codiceProgresso = codiceProgresso;}
+
+    public String getCommento() {return commento;}
+
+    public void setCommento(String commento) {this.commento = commento;}
+
+
 }

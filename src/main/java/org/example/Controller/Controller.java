@@ -93,6 +93,8 @@ public class Controller
         throw new IllegalArgumentException("Codice di accesso errato");
     }
 
+    /* OPERAZIONE UTENTE REGISTRATO */
+
     public void creaTeam(String nomeTeam,Hackathon hackathon){
         utenteCorrente.creaTeam(piattaforma,hackathon,nomeTeam);
         hackathon.incrementaNpartec();
@@ -103,6 +105,13 @@ public class Controller
         utenteCorrente.registratiInTeam(piattaforma, hackathon,team);
         hackathon.incrementaNpartec();
 
+    }
+
+    /*OPERAZIONE PARTECIPANTE*/
+
+    public void caricaProgresso(String nomeProgresso,String progresso,Team team)
+    {
+        team.caricaProgresso(nomeProgresso,progresso);
     }
 
 
