@@ -16,6 +16,8 @@ public class UtenteRegistrIscrOpenGUI {
     private JTable hackathonTable;
     private JTextField idHackField;
     private JButton entraButton;
+    private JLabel nomeCognomLabel;
+    private JLabel idLabel;
 
     public UtenteRegistrIscrOpenGUI(Controller c,JFrame origFrame){
 
@@ -25,6 +27,9 @@ public class UtenteRegistrIscrOpenGUI {
 
         frame.setSize(500,275);
         frame.setLocationRelativeTo(null);
+
+        nomeCognomLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
+        idLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
 
         CloseOperation(origFrame);
         setHackathonTable(c);

@@ -4,6 +4,8 @@ import org.example.Controller.Controller;
 import org.example.Model.Hackathon;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,9 +18,13 @@ public class giudiceGUI {
     private JLabel nomeCognomeGiudice;
     private JLabel idGiudice;
     private JLabel nomeHackathoneLabel;
+    private JButton salvaProblemaButton;
+    private JTextArea problemaTextArea;
+    private JTextField idTeamField;
+    private JButton vediProgressiButton;
 
 
-   public giudiceGUI(Controller c, JFrame orifFrame,Hackathon hackathon){
+    public giudiceGUI(Controller c, JFrame orifFrame,Hackathon hackathon){
 
        frame=new JFrame("Giudice");
        frame.setContentPane(mainPanel);
@@ -30,7 +36,10 @@ public class giudiceGUI {
        idGiudice.setText(c.getUtenteCorrente().getID());
        nomeHackathoneLabel.setText(hackathon.getNome());
 
+       problemaTextArea.setText(hackathon.getProblema());
+        setSalvaProblemaButton(hackathon);
        setTeamTable(hackathon);
+        setMostraProblemaButton(hackathon);
        frame.setVisible(true);
 
     }
@@ -60,6 +69,31 @@ public class giudiceGUI {
         else
         {
             mostraProblemaButton.setVisible(true);
+            mostraProblemaButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    if(hackathon.getProblema().equals(""))
+                        JOptionPane.showMessageDialog(frame,"Nessun problema salvato\nScrivi-->Salva Problema-->Mostra Problema");
+
+                }
+            });
         }
+    }
+
+
+    public void setSalvaProblemaButton(Hackathon hackathon) {
+        salvaProblemaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String problema=problemaTextArea.getText();
+                int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di salvare la seguente traccia:\n"+problema+"\n","Salvataggio",JOptionPane.YES_NO_OPTION);
+
+                if(risp==0)
+                    hackathon.setProblema(problema);
+            }
+        });
+
+
     }
 }

@@ -95,11 +95,13 @@ public class Controller
 
     public void creaTeam(String nomeTeam,Hackathon hackathon){
         utenteCorrente.creaTeam(piattaforma,hackathon,nomeTeam);
+        hackathon.incrementaNpartec();
     }
 
     public void addPartecToTeam(Team team,Hackathon hackathon) throws IllegalArgumentException{
 
         utenteCorrente.registratiInTeam(piattaforma, hackathon,team);
+        hackathon.incrementaNpartec();
 
     }
 

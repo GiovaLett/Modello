@@ -15,9 +15,12 @@ public class PartecipanteGUI {
     private JTable membriTable;
     private JLabel nomeTeamLabel;
     private JLabel IDTeamLabel;
-    private JTextArea textArea1;
+    private JTextArea problemaTextArea;
     private JButton caricaProgressiButton;
     private JLabel codiceLabel;
+    private JLabel nomeCognomeLabel;
+    private JLabel nomeHackathon;
+    private JTable altriTeamsTable;
 
     public PartecipanteGUI(Controller c, JFrame origFrame, Hackathon hackathon,Team team){
 
@@ -30,9 +33,13 @@ public class PartecipanteGUI {
         nomeTeamLabel.setText(team.getNome());
         IDTeamLabel.setText(team.getID());
         codiceLabel.setText(team.getCodiceAccesso());
+        nomeCognomeLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
 
+        nomeHackathon.setText(hackathon.getNome());
         CloseOperation(origFrame);
         setMembriTable(team);
+        setAltriTeamsTable(hackathon);
+        setProblemaTextArea(hackathon);
 
         frame.setVisible(true);
 
@@ -56,5 +63,17 @@ public class PartecipanteGUI {
 
     }
 
+    public void setAltriTeamsTable(Hackathon hackathon) {
+        ModelloTeamsTab modello=new ModelloTeamsTab(hackathon.getListaTeam());
+        altriTeamsTable.setModel(modello);
+    }
 
+    public void setProblemaTextArea(Hackathon hackathon) {
+
+        if(hackathon.isView_problema())
+            problemaTextArea.setText(hackathon.getProblema());
+        else
+            problemaTextArea.setText(" Problema non disponibile");
+        problemaTextArea.setEditable(false);
+    }
 }
