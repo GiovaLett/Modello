@@ -12,7 +12,7 @@ public class Hackathon
 
     public final int n_max_partec=500;
     public final int dim_max_team =5;
-    int n_partec=0;
+    private int n_partec=0;
     ArrayList<Team> ListaTeam =new ArrayList<>();
     ArrayList<Giudice> ListaGiudici=new ArrayList<>();
 
@@ -20,8 +20,8 @@ public class Hackathon
     private String nome;
 
 
-    int n_team;
-    public boolean team_suffic =false;
+    private int n_team;
+    private boolean team_suffic =false;
 
     public String sede;
     public class Data {
@@ -38,18 +38,21 @@ public class Hackathon
 
     Hackathon(){ this.data=new Data(); ID=Codice_ID();} //Necessario il costruttore di data, altrimenti darà errore, PointerNull riferito a data
 
+    public String getID() {return ID;}
+
+    public String getNome(){return nome;}
+    void setNome(String nome){this.nome=nome;}
+
     public ArrayList<Team> getListaTeam() {return ListaTeam;}
     public ArrayList<Giudice> getListaGiudici(){return ListaGiudici;}
 
     public int getNumeroPartec() {return n_partec;}
-    public String getID() {return ID;}
-    public String getNome(){return nome;}
     public void incrementaNpartec(){n_partec++;}
 
-    void setNome(String nome){this.nome=nome;}
+
 
     //Se è presente un solo team l'hackaton non si fa
-    public void FareHackathon(){        //In base al numero dei team che si sono creati
+    public void fareHackathonFromNTeams(){        //In base al numero dei team che si sono creati
         if(n_team<2)
             team_suffic =false;
         else team_suffic =true;
@@ -60,7 +63,7 @@ public class Hackathon
     public String getProblema() {return problema;}
 
     public void addGiudice(Giudice giudice){ListaGiudici.add(giudice);}
-    public void addTeam(Team team){ListaTeam.add(team);}
+    public void addTeam(Team team){ListaTeam.add(team);n_team++;}
 
     public boolean isView_problema() {return view_problema;}
     public void setView_problema(boolean view_problema) {this.view_problema = view_problema;}

@@ -109,12 +109,26 @@ public class Controller
 
 
 
+    public void setEventoPronto(boolean isEventoPronto) { piattaforma.setEventoPronto(isEventoPronto);}
+    public boolean isEventoPronto() {return piattaforma.isEventoPronto();}
+
     public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
 
 
     public void apriIscrizioni(){
         if(utenteCorrente instanceof Organizzatore organizzatore)
             organizzatore.apriIscrizioni(this.piattaforma);
+    }
+
+    public void chiudiIscrizioni(){
+        if(utenteCorrente instanceof Organizzatore organizzatore){
+            organizzatore.chiudiIscrizioni(this.piattaforma);
+            setEventoPronto(true);
+        }
+
+
+        for(Hackathon hackathon: piattaforma.getListaHackathon())
+            hackathon.fareHackathonFromNTeams();
     }
 
 

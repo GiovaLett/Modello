@@ -18,6 +18,7 @@ public class organizzatoreGUI {
     private JTable hackathonTable;
     private JTextField idHackField;
     private JButton entraButton;
+    private JButton chiudiIscrizioniButton;
 
 
     public organizzatoreGUI(Controller c,JFrame origFrame){
@@ -30,6 +31,7 @@ public class organizzatoreGUI {
         frame.setLocationRelativeTo(null);
 
         setApriIsrizButton(c);
+        setChiudiIscrizioniButton(c);
         setEntraButton(c);
         CloseOperation( origFrame);
         frame.setVisible(true);
@@ -64,7 +66,7 @@ public class organizzatoreGUI {
                     return;
                 }
 
-                if(!c.isOpenIscri())  { new organTeamGUI( c, frame, hackathon); }
+                if(!c.isOpenIscri() && !c.isEventoPronto())  { new organTeamGUI( c, frame, hackathon); }
                 else    {new oraganTeamOpenIsrcGUI(c,frame,hackathon);}
 
                     frame.setVisible(false);
@@ -87,15 +89,30 @@ public class organizzatoreGUI {
 
     public void setApriIsrizButton(Controller c) {
 
-        apriIsrizButton.setVisible(!c.isOpenIscri());
+        apriIsrizButton.setVisible(!c.isOpenIscri() && !c.isEventoPronto());
         apriIsrizButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di aprire le iscrizioni\n(modifiche ai giudici non più disponibili)",
                         "Conferma?",
                         JOptionPane.YES_NO_OPTION);
-                if(risposta==JOptionPane.YES_OPTION) { c.apriIscrizioni(); apriIsrizButton.setVisible(false); }
-                if(risposta==JOptionPane.NO_OPTION);
+                if(risposta==JOptionPane.YES_OPTION) { c.apriIscrizioni();apriIsrizButton.setVisible(false); }
+
+            }
+        });
+    }
+
+    public void setChiudiIscrizioniButton(Controller c) {
+
+        chiudiIscrizioniButton.setVisible(c.isOpenIscri());
+
+        chiudiIscrizioniButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di chiudere le iscrizioni?", "Conferma?", JOptionPane.YES_NO_OPTION);
+
+                if(risposta==JOptionPane.YES_OPTION) { c.chiudiIscrizioni(); chiudiIscrizioniButton.setVisible(false);}
+
             }
         });
     }

@@ -13,7 +13,7 @@ public class giudiceGUI {
 
     private JFrame frame;
     private JPanel mainPanel;
-    private JButton mostraProblemaButton;
+    private JButton pubblicaProblemaButton;
     private JTable teamTable;
     private JLabel nomeCognomeGiudice;
     private JLabel idGiudice;
@@ -28,8 +28,9 @@ public class giudiceGUI {
 
        frame=new JFrame("Giudice");
        frame.setContentPane(mainPanel);
-       frame.setLocationRelativeTo(null);
+
        frame.pack();
+        frame.setLocationRelativeTo(null);
        closeOperation(orifFrame);
 
        nomeCognomeGiudice.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
@@ -37,9 +38,9 @@ public class giudiceGUI {
        nomeHackathoneLabel.setText(hackathon.getNome());
 
        problemaTextArea.setText(hackathon.getProblema());
-        setSalvaProblemaButton(hackathon);
+        setSalvaProblemaButton(c,hackathon);
        setTeamTable(hackathon);
-        setMostraProblemaButton(hackathon);
+        setPubblicaProblemaButton(c,hackathon);
        frame.setVisible(true);
 
     }
@@ -62,27 +63,39 @@ public class giudiceGUI {
         teamTable.setModel(modello);
     }
 
-    public void setMostraProblemaButton(Hackathon hackathon) {
+    public void setPubblicaProblemaButton(Controller c,Hackathon hackathon) {
 
-        if(hackathon.isView_problema() || !hackathon.isTeam_suffic())
-            mostraProblemaButton.setVisible(false);
-        else
-        {
-            mostraProblemaButton.setVisible(true);
-            mostraProblemaButton.addActionListener(new ActionListener() {
+            pubblicaProblemaButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    if(hackathon.getProblema().equals(""))
-                        JOptionPane.showMessageDialog(frame,"Nessun problema salvato\nScrivi-->Salva Problema-->Mostra Problema");
+                    if(!c.isEventoPronto()) {
+                        JOptionPane.showMessageDialog(frame,"Le iscrizioni sono ancora aperte, non puoi pubblicare il problema");
+                        return;
+                    }
+
+                    if(!hackathon.isTeam_suffic()){
+                        JOptionPane.showMessageDialog(frame,"Purtroppo non si sono formati abbastanza Team\nQuest'hackathon non verrà eseguito");
+                        return;
+                    }
+
+
+                    if(hackathon.getProblema().equals("")){
+                        JOptionPane.showMessageDialog(frame,"Nessun problema salvato\nScrivi-->Salva Problema-->Pubblica Problema ");
+                        return;
+                    }
+
+                    JOptionPane.showMessageDialog(frame,"Problema pubblicato");
+                    hackathon.setView_problema(true);
+
 
                 }
             });
-        }
+
     }
 
 
-    public void setSalvaProblemaButton(Hackathon hackathon) {
+    public void setSalvaProblemaButton(Controller c,Hackathon hackathon) {
         salvaProblemaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

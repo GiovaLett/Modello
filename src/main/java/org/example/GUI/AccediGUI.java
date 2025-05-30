@@ -79,10 +79,15 @@ public class AccediGUI
 
                     else if(utente instanceof Utente_registrato) {
                         c.setUtenteCorrente(utente);
-                        if(c.isOpenIscri())
-                            new UtenteRegistrIscrOpenGUI(c,frame);
-                        else
+                        if(!c.isOpenIscri())
                             new UtenteRegistratoIscrCloseGUI(c,frame);
+
+                        else
+                            new UtenteRegistrIscrOpenGUI(c,frame);
+
+
+
+
                     }
 
 

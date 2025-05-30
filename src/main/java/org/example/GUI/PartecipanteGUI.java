@@ -26,8 +26,9 @@ public class PartecipanteGUI {
 
         frame=new JFrame("Partecipante");
         frame.setContentPane(mainPanel);
+        //frame.setSize(500,275);
+        frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setSize(500,275);
 
         caricaProgressiButton.setVisible(false);
         nomeTeamLabel.setText(team.getNome());

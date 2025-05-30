@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class Piattaforma
 {
-    private boolean open_iscr =false;// indica la possibilità di iscriversi
-
-
+    private boolean open_iscr = false;// indica la possibilità di iscriversi
+    private boolean eventoPronto=false;
+    private boolean eventoFinito=false;
 
     ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
     ArrayList<Hackathon> ListaHackathon=new ArrayList<>();
@@ -16,7 +16,9 @@ public class Piattaforma
     public boolean isOpen_iscr() {return open_iscr;}
     public void setOpen_iscr(boolean open_iscr) {this.open_iscr = open_iscr;}
 
+    public boolean isEventoPronto() {return eventoPronto;}
 
+    public void setEventoPronto(boolean eventoPronto) {this.eventoPronto = eventoPronto;}
 
     public ArrayList<Hackathon> getListaHackathon() {return ListaHackathon;}
     public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
