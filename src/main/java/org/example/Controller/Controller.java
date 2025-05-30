@@ -19,6 +19,9 @@ public class Controller
         piattaforma.addUtenteReg(amministratore);
     }
 
+    /**
+     * SET UTENTI
+     */
     public Utente_registrato getUtenteCorrente() {return utenteCorrente;}
 
     public void setUtenteCorrente(Utente_registrato utenteCorrente) {
@@ -50,15 +53,7 @@ public class Controller
         throw new IllegalArgumentException("Credenziali errate");
     }
 
-    public Hackathon findHackId(String ID) throws IllegalArgumentException
-    {
-        for(Hackathon hackathon: piattaforma.getListaHackathon())
-        {
-            if(hackathon.getID().equals(ID))
-                return hackathon;
-        }
-        throw new IllegalArgumentException("ID non presente");
-    }
+
 
 
 
@@ -121,6 +116,18 @@ public class Controller
     }
 
 
+    /**
+     * OPERAZIONI HACKATHON
+     */
+    public Hackathon findHackId(String ID) throws IllegalArgumentException
+    {
+        for(Hackathon hackathon: piattaforma.getListaHackathon())
+        {
+            if(hackathon.getID().equals(ID))
+                return hackathon;
+        }
+        throw new IllegalArgumentException("ID non presente");
+    }
 
 
     public void addGiudiceHackaton(Hackathon hackathon,String utenteID) throws IllegalArgumentException{
@@ -146,10 +153,10 @@ public class Controller
             }
         }
         throw new IllegalArgumentException("ID Utente non trovato");
-
-
-
     }
+
+
+
 
 
 

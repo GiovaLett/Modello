@@ -60,27 +60,32 @@ public class AccediGUI
                 if(correct)
                 {
 
-                    if(utente instanceof Organizzatore)     {new organizzatoreGUI(c,frame);}
+                    if(utente instanceof Organizzatore)     {
+                        c.setUtenteCorrente(utente);
+                        new organizzatoreGUI(c,frame);
+                    }
 
                     else if (utente instanceof Partecipante partecipante)  {
-
+                        c.setUtenteCorrente(utente);
                         Hackathon partecHack=c.findHackId(partecipante.getIDHackathon());
                         new PartecipanteGUI(c,frame,partecHack  ,c.findIDTeam(partecipante.getIDTeam(),partecHack));
                     }
 
 
-                    else if(utente instanceof Giudice);
-                    //giudiceGUI();
+                    else if(utente instanceof Giudice giudice)
+                    {   c.setUtenteCorrente(utente);
+                        new giudiceGUI( c, frame, c.findHackId(giudice.getIDHackatlon() ) );
+                    }
 
                     else if(utente instanceof Utente_registrato) {
-
+                        c.setUtenteCorrente(utente);
                         if(c.isOpenIscri())
                             new UtenteRegistrIscrOpenGUI(c,frame);
                         else
                             new UtenteRegistratoIscrCloseGUI(c,frame);
                     }
 
-                    c.setUtenteCorrente(utente);
+
                     frame.setVisible(false);
 
 

@@ -26,5 +26,5 @@ public class Main {
 
 /*DA RISOLVERE
 * 1)  PARTECIPANTE,UTENTE: per il fatto che non si faccia a meno 2 giorni --> trovare modo per rappres. giorno attuale
-* 2)  in che modo utente registrato diventa poi un partecipante (senza ridondanze). Diciamo il discorso vale per tutte le classi da padre a figlio (forse il garbage collector fa in automatico dato che non viene più usato?)
-* 3)  Rifare la creazione di una classifica*/
+* 2)  Rifare la creazione di una classifica
+* 3) Migliorare alla fine le interfacce*/

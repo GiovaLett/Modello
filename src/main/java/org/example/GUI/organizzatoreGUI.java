@@ -86,6 +86,8 @@ public class organizzatoreGUI {
    }
 
     public void setApriIsrizButton(Controller c) {
+
+        apriIsrizButton.setVisible(!c.isOpenIscri());
         apriIsrizButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

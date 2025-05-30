@@ -62,6 +62,9 @@ public class Hackathon
 
     public boolean isView_problema() {return view_problema;}
     public void setView_problema(boolean view_problema) {this.view_problema = view_problema;}
+
+    public boolean isTeam_suffic() {return team_suffic;}
+
     private String Codice_ID(){
         String ID_codice="-1";
         if(n>=0 && n<10)  ID_codice="H00"+String.valueOf(n);
