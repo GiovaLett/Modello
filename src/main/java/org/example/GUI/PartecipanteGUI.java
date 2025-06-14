@@ -6,6 +6,8 @@ import org.example.Model.Progresso;
 import org.example.Model.ruoli.Team;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -25,12 +27,36 @@ public class PartecipanteGUI {
     private JLabel nomeHackathon;
     private JTable altriTeamsTable;
     private JList progressiList;
+    private JTextArea progressiTextArea;
+    private JPanel codicePanel;
+    private JPanel listPanel;
+    private JScrollPane progressListScroll;
+
+    public PartecipanteGUI(){
+        frame=new JFrame("Partecipante");
+        frame.setContentPane(mainPanel);
+        /*codicePanel.setSize(90,100);
+        progressiList.setFixedCellWidth(50);
+        progressListScroll.setSize(50,20);
+        listPanel.setSize(50,20);*/
+        frame.pack();
+       // frame.setSize(1200,600);
+
+
+
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+    }
 
     public PartecipanteGUI(Controller c, JFrame origFrame, Hackathon hackathon,Team team){
 
         frame=new JFrame("Partecipante");
         frame.setContentPane(mainPanel);
         //frame.setSize(500,275);
+
+
+
         frame.pack();
         frame.setLocationRelativeTo(null);
 
@@ -45,8 +71,13 @@ public class PartecipanteGUI {
         setMembriTable(team);
         setAltriTeamsTable(hackathon);
         setProblemaTextArea(hackathon);
+
         setProgressiList(team);
+        setSelectProgressList(team);
+
         setCaricaProgressiButton(c,hackathon,team);
+
+
         frame.setVisible(true);
 
     }
@@ -93,8 +124,8 @@ public class PartecipanteGUI {
             caricaProgressiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new partecipanteAddProgressiGUI(c,team,frame);
-                    frame.setVisible(false);
+                    new partecipanteAddProgressiGUI(c,team,PartecipanteGUI.this);
+                    setProgressiList(team);
                 }
             });
         }
@@ -107,5 +138,29 @@ public class PartecipanteGUI {
             modello.add(0,progresso.getNome());
         }
         progressiList.setModel(modello);
+
     }
+
+    public void setSelectProgressList(Team team){
+
+        progressiTextArea.setEditable(false);
+        progressiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        progressiList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String rigaSelezionata= (String) progressiList.getSelectedValue();
+                for(Progresso progresso : team.getArrayProgresso())
+                {
+                    if(rigaSelezionata.equals(progresso.getNome()))
+                    {
+                        progressiTextArea.setText(progresso.getCodiceProgresso());
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
 }

@@ -21,7 +21,7 @@ public class oraganTeamOpenIsrcGUI {
         frame.setContentPane(mainPanel);
         nomeHackLabel.setText(hackathon.getNome());
         IdLabel.setText(hackathon.getID());
-        frame.setSize(500,275);
+        frame.setSize(700,500);
         frame.setLocationRelativeTo(null);
 
         setTeamsTable(c,hackathon);

@@ -9,6 +9,7 @@ import java.util.Random;
 public class Team {
 
     private static int nt=0;
+
     private final int maxMembri=5;
     float Voto=-1;
     private String Nome;

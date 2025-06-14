@@ -2,7 +2,10 @@ package org.example;
 
 import org.example.Controller.Controller;
 import org.example.GUI.Home;
+import org.example.GUI.PartecipanteGUI;
 import org.example.GUI.organizzatoreGUI;
+import org.example.GUI.partecipanteAddProgressiGUI;
+import org.example.Model.ruoli.Team;
 
 import java.util.Random;
 
@@ -17,7 +20,7 @@ public class Main {
 
 
         new Home();
-        //new organizzatoreGUI(new Controller());
+        //new PartecipanteGUI();
 
 
     }

@@ -72,7 +72,7 @@ public class UtenteToPartecipanteGUI {
 
                 try { c.addPartecToTeam(team,hackathon); }
                 catch (IllegalArgumentException exception)
-                {JOptionPane.showMessageDialog(frame,exception.getMessage(),"Team Pieno",JOptionPane.INFORMATION_MESSAGE);
+                {JOptionPane.showMessageDialog(frame,exception.getMessage()," ",JOptionPane.INFORMATION_MESSAGE);
                 return;}
 
 

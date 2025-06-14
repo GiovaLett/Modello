@@ -11,8 +11,11 @@ public class Giudice extends Utente_registrato
     private static int n=0;
     private String IDHackatlon;
 
-    public Giudice(String nome,String cognome,String email,String password,String IDHackatlon){
-        super(nome,cognome,email,password);
+    public Giudice(String nome,String cognome,String email,String password,String IDHackatlon){ //Non uso super perche poi potrebbe avanzare con la creazione di indirizzi ID di Utenete registrato
+        this.nome=nome;
+        this.cognome=cognome;
+        this.email=email;
+        this.password=password;
         this.IDHackatlon=IDHackatlon;
         this.ID=Codice_ID();}
 

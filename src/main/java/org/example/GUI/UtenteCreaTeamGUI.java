@@ -37,6 +37,7 @@ public class UtenteCreaTeamGUI {
 
                if(risposta==JOptionPane.YES_OPTION)
                {
+                   try{
                     c.creaTeam(nomeTeam,hackathon);
                    /*Team team=new Team(nomeTeam,hackathon);
 
@@ -45,7 +46,10 @@ public class UtenteCreaTeamGUI {
                    frame.dispose();
                    origFrame.dispose();
                    JOptionPane.showMessageDialog(frame,"Sarai indirizzato alla Home, riaccedi per vedere i nuovi aggiornamenti al profilo!");
-                   new Home();
+                   new Home();}
+                   catch (IllegalArgumentException exce){
+                       JOptionPane.showMessageDialog(frame,exce.getMessage());
+                   }
                }
 
            }

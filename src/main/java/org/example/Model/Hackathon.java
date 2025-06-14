@@ -10,7 +10,7 @@ public class Hackathon
     private static int n=0;
 
 
-    public final int n_max_partec=500;
+    public final int n_max_partec=2;
     public final int dim_max_team =5;
     private int n_partec=0;
     ArrayList<Team> ListaTeam =new ArrayList<>();
@@ -36,7 +36,9 @@ public class Hackathon
     private String problema="";
 
 
-    Hackathon(){ this.data=new Data(); ID=Codice_ID();} //Necessario il costruttore di data, altrimenti darà errore, PointerNull riferito a data
+    public Hackathon(){ this.data=new Data(); ID=Codice_ID();} //Necessario il costruttore di data, altrimenti darà errore, PointerNull riferito a data
+
+    public Hackathon(String nome){this.nome=nome; this.data=new Data(); ID=Codice_ID();}
 
     public String getID() {return ID;}
 
@@ -47,7 +49,16 @@ public class Hackathon
     public ArrayList<Giudice> getListaGiudici(){return ListaGiudici;}
 
     public int getNumeroPartec() {return n_partec;}
-    public void incrementaNpartec(){n_partec++;}
+
+    public void incrementaNpartec() throws IllegalArgumentException //Se n_partec==n_max
+    {
+        if(n_partec<n_max_partec)
+            n_partec++;
+        else
+            throw new IllegalArgumentException("Numero di partecipanti massimo raggiunto per questo hackathon\n" +
+                    "Impossibile iscriversi");
+
+    }
 
 
 

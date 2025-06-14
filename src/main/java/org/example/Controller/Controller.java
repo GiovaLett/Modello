@@ -95,15 +95,18 @@ public class Controller
 
     /* OPERAZIONE UTENTE REGISTRATO */
 
-    public void creaTeam(String nomeTeam,Hackathon hackathon){
-        utenteCorrente.creaTeam(piattaforma,hackathon,nomeTeam);
-        hackathon.incrementaNpartec();
+    public void creaTeam(String nomeTeam,Hackathon hackathon)throws IllegalArgumentException{
+
+        hackathon.incrementaNpartec();//throws numero di partecipanti all'hackathon massimo
+        utenteCorrente.creaTeam(piattaforma,hackathon,nomeTeam);//throws numero di membri massimo
+        //IMPORTANTISSIMO L'ORDINE DI QUESTE 2 FUNZIONI
     }
 
     public void addPartecToTeam(Team team,Hackathon hackathon) throws IllegalArgumentException{
 
-        utenteCorrente.registratiInTeam(piattaforma, hackathon,team);
-        hackathon.incrementaNpartec();
+        hackathon.incrementaNpartec();//throws numero di partecipanti all'hackathon massimo
+        utenteCorrente.registratiInTeam(piattaforma, hackathon,team);//throws numero di membri al team massimo
+        //IMPORTANTISSIMO L'ORDINE DI QUESTE 2 FUNZIONI
 
     }
 
@@ -118,27 +121,7 @@ public class Controller
 
 
 
-    public void setEventoPronto(boolean isEventoPronto) { piattaforma.setEventoPronto(isEventoPronto);}
-    public boolean isEventoPronto() {return piattaforma.isEventoPronto();}
 
-    public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
-
-
-    public void apriIscrizioni(){
-        if(utenteCorrente instanceof Organizzatore organizzatore)
-            organizzatore.apriIscrizioni(this.piattaforma);
-    }
-
-    public void chiudiIscrizioni(){
-        if(utenteCorrente instanceof Organizzatore organizzatore){
-            organizzatore.chiudiIscrizioni(this.piattaforma);
-            setEventoPronto(true);
-        }
-
-
-        for(Hackathon hackathon: piattaforma.getListaHackathon())
-            hackathon.fareHackathonFromNTeams();
-    }
 
 
     /**
@@ -152,6 +135,48 @@ public class Controller
                 return hackathon;
         }
         throw new IllegalArgumentException("ID non presente");
+    }
+
+
+    public void removeHackathonNoGiudici(){
+
+        Hackathon hackathon;
+        for(int i=0;i<getListaHackathon().size();)
+        {
+            hackathon=getListaHackathon().get(i);
+            if(hackathon.getListaGiudici().isEmpty())
+                removeHackathon(hackathon);
+            else
+                i++;
+
+
+        }
+    }
+
+/**
+ * OPERAZIONI AMMINISTRATORE
+ */
+
+    public void addHackathon(String nomeHackathon)
+    {
+        if(utenteCorrente instanceof Organizzatore organizzatore)
+            organizzatore.creaHackathon(piattaforma,nomeHackathon);
+    }
+
+    public void removeHackathon(Hackathon hackathon){
+
+        Giudice  giudice;
+        if(!hackathon.getListaGiudici().isEmpty())
+        {
+            for(int i=0;i<hackathon.getListaGiudici().size();)
+            {
+                giudice=hackathon.getListaGiudici().get(i);
+                System.out.println(giudice.getNome()+giudice.getCognome()+giudice.getID());
+                removeGiudice(giudice,hackathon);
+                }
+        }
+        piattaforma.getListaHackathon().remove(hackathon);
+
     }
 
 
@@ -182,10 +207,57 @@ public class Controller
 
 
 
+    public void removeGiudice(Giudice giudice,Hackathon hackathon){
+        if(utenteCorrente instanceof Organizzatore organizzatore)
+            organizzatore.rimuoviGiudice(giudice,piattaforma,hackathon);
+    }
+
+    public void apriIscrizioni(){
+        if(utenteCorrente instanceof Organizzatore organizzatore)
+            organizzatore.apriIscrizioni(this.piattaforma);
+        removeHackathonNoGiudici();
+    }
+
+    public void chiudiIscrizioni(){
+        if(utenteCorrente instanceof Organizzatore organizzatore){
+            organizzatore.chiudiIscrizioni(this.piattaforma);
+
+            piattaforma.setEventoPronto(true);
+
+        }
+
+
+        for(Hackathon hackathon: piattaforma.getListaHackathon())
+            hackathon.fareHackathonFromNTeams();
+    }
 
 
 
 
+    public Giudice findIdGiudice(Hackathon hackathon,String idGiudice)throws IllegalArgumentException{
+        for(Giudice giudice: hackathon.getListaGiudici())
+        {
+            if(giudice.getID().equals(idGiudice)){
+
+                {
+                    return giudice;
+                }
+
+            }
+        }
+        throw new IllegalArgumentException("ID Giudice non trovato");
+    }
+
+
+
+
+
+
+
+
+    public boolean isEventoPronto() {return piattaforma.isEventoPronto();}
+
+    public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
 
 
     public ArrayList<Utente_registrato> getListaUtenti(){return piattaforma.getListaUtenReg();}

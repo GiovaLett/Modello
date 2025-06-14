@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Piattaforma
 {
     private boolean open_iscr = false;// indica la possibilità di iscriversi
-    private boolean eventoPronto=false;
+    private boolean eventoPronto=false;//quando si chiudono le iscrizioni, perchè dovra iniziare l'hackathon
     private boolean eventoFinito=false;
 
     ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();

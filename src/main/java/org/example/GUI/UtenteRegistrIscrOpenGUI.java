@@ -35,11 +35,17 @@ public class UtenteRegistrIscrOpenGUI {
         setHackathonTable(c);
         setEntraButton(c);
         frame.setVisible(true);
-        frame.setContentPane(mainPanel);
+        if(c.getListaHackathon().isEmpty())
+            JOptionPane.showMessageDialog(frame,"Gli hackathon purtroppo non si svolgeranno\n" +
+                    "(Mancanza di giudici)");
+
     }
 
     public void setHackathonTable(Controller c) {
+
+
         ModelloHackTab modello=new ModelloHackTab(c.getListaHackathon());
+
         hackathonTable.setModel(modello);
     }
 
