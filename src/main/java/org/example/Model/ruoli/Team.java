@@ -10,7 +10,7 @@ public class Team {
 
     private static int nt=0;
 
-    private final int maxMembri=5;
+    private final int maxMembri=1;
     float Voto=-1;
     private String Nome;
     private String ID;

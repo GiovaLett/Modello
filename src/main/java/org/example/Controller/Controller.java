@@ -93,7 +93,9 @@ public class Controller
         throw new IllegalArgumentException("Codice di accesso errato");
     }
 
-    /* OPERAZIONE UTENTE REGISTRATO */
+    /**
+     *  OPERAZIONE UTENTE REGISTRATO
+     */
 
     public void creaTeam(String nomeTeam,Hackathon hackathon)throws IllegalArgumentException{
 
@@ -104,13 +106,20 @@ public class Controller
 
     public void addPartecToTeam(Team team,Hackathon hackathon) throws IllegalArgumentException{
 
-        hackathon.incrementaNpartec();//throws numero di partecipanti all'hackathon massimo
-        utenteCorrente.registratiInTeam(piattaforma, hackathon,team);//throws numero di membri al team massimo
+        if(hackathon.getNumeroPartec()<hackathon.n_max_partec)
+        {
+            utenteCorrente.registratiInTeam(piattaforma, hackathon,team);//throws "numero di membri al team massimo"
+
+        }
+        hackathon.incrementaNpartec(); //throws "numero di partecipanti all'hackathon massimo", presente ulteriore controllo
+
         //IMPORTANTISSIMO L'ORDINE DI QUESTE 2 FUNZIONI
 
     }
 
-    /*OPERAZIONE PARTECIPANTE*/
+    /**
+     * OPERAZIONE PARTECIPANTE
+     */
 
     public void caricaProgresso(String nomeProgresso,String progresso,Team team)
     {
