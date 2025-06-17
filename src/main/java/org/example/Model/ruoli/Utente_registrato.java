@@ -5,10 +5,13 @@ import org.example.Model.Piattaforma;
 
 public class Utente_registrato extends Utente {
 
-    private static int nu=0;
+    private static int nU =0;
     protected String email;
     protected String password;
     protected String ID;
+
+    private String richiestaGiudice="";
+    private String hackIDRichiesta;
 
     public Utente_registrato(String nome, String cognome, String email, String password) {
         super(nome, cognome);
@@ -26,13 +29,13 @@ public class Utente_registrato extends Utente {
 
     private String Codice_ID(){
         String ID_codice="-1";
-        if(nu>=0 && nu<10)  ID_codice="U00"+String.valueOf(nu);
+        if(nU >=0 && nU <10)  ID_codice="U00"+String.valueOf(nU);
 
-        else if (nu<100)   ID_codice="U0"+String.valueOf(nu);
+        else if (nU <100)   ID_codice="U0"+String.valueOf(nU);
 
-        else if (nu<1000)   ID_codice="U"+String.valueOf(nu);
+        else if (nU <1000)   ID_codice="U"+String.valueOf(nU);
 
-        nu++;
+        nU++;
 
         return ID_codice;
     }
@@ -52,4 +55,10 @@ public class Utente_registrato extends Utente {
         hackathon.addTeam(nuovoTeam);
 
     }
+
+    public void setRichiestaGiudice(String richiestaGiudice) {this.richiestaGiudice = richiestaGiudice;}
+    public String getRichiestaGiudice() {return richiestaGiudice;}
+
+    public void setHackIDRichiesta(String hackIDRichiesta) {this.hackIDRichiesta = hackIDRichiesta;}
+    public String getHackIDRichiesta() {return hackIDRichiesta;}
 }

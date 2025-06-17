@@ -31,6 +31,10 @@ public class PartecipanteGUI {
     private JPanel codicePanel;
     private JPanel listPanel;
     private JScrollPane progressListScroll;
+    private JLabel noHackLabel;
+    private JLabel classificaField;
+    private JPanel posizionamentoPanel;
+    private JLabel posizLabel;
 
     public PartecipanteGUI(){
         frame=new JFrame("Partecipante");
@@ -78,7 +82,9 @@ public class PartecipanteGUI {
         setCaricaProgressiButton(c,hackathon,team);
 
 
+        setPosizionamentoPanel(c,hackathon,team);
         frame.setVisible(true);
+        cotrolloTeamSuff( c,hackathon);
 
     }
 
@@ -116,10 +122,8 @@ public class PartecipanteGUI {
 
     private void setCaricaProgressiButton(Controller c,Hackathon hackathon,Team team){
 
-        if(!hackathon.isView_problema())
-            caricaProgressiButton.setVisible(false);
-        else{
-            caricaProgressiButton.setVisible(true);
+        caricaProgressiButton.setVisible( hackathon.isView_problema() && !hackathon.isEventoFinito() );
+
 
             caricaProgressiButton.addActionListener(new ActionListener() {
                 @Override
@@ -128,7 +132,7 @@ public class PartecipanteGUI {
                     setProgressiList(team);
                 }
             });
-        }
+
 
     }
 
@@ -161,6 +165,35 @@ public class PartecipanteGUI {
     }
 
 
+    private void cotrolloTeamSuff(Controller c,Hackathon hackathon)
+    {
+        if(c.isEventoPronto() && !hackathon.isTeam_suffic()) {
+            JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (solo 1 team iscritto)");
+            noHackLabel.setVisible(true);
+        }
+        else
+            noHackLabel.setVisible(false);
+    }
+
+    public void setPosizionamentoPanel(Controller c,Hackathon hackathon,Team teamMio) {
+
+        int posiz=0;
+        if(hackathon.isClassificaPubblicata()) {
+            posizionamentoPanel.setVisible(true);
+
+            for (Team team : hackathon.getListaTeam())
+            {
+                if (team.getID().equals(teamMio.getID()))
+                {
+                    posiz=hackathon.getListaTeam().indexOf(team)+1;
+                    break;
+                }
+            }
+            posizLabel.setText(posiz+"° posizione");
+        }
+        else
+            posizionamentoPanel.setVisible(false);
 
 
+    }
 }

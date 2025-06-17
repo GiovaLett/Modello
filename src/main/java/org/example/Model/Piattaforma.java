@@ -7,7 +7,7 @@ public class Piattaforma
 {
     private boolean open_iscr = false;// indica la possibilità di iscriversi
     private boolean eventoPronto=false;//quando si chiudono le iscrizioni, perchè dovra iniziare l'hackathon
-    private boolean eventoFinito=false;
+
 
     ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
     ArrayList<Hackathon> ListaHackathon=new ArrayList<>();
@@ -17,17 +17,16 @@ public class Piattaforma
     public void setOpen_iscr(boolean open_iscr) {this.open_iscr = open_iscr;}
 
     public boolean isEventoPronto() {return eventoPronto;}
-
     public void setEventoPronto(boolean eventoPronto) {this.eventoPronto = eventoPronto;}
 
     public ArrayList<Hackathon> getListaHackathon() {return ListaHackathon;}
+    public void addHackathon(Hackathon hackathon){ListaHackathon.add(hackathon);}
+
     public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
-
-
     public void addUtenteReg(Utente_registrato nuovoUtente){ListaUtenReg.add(nuovoUtente);}
 
 
-    public void addHackathon(Hackathon hackathon){ListaHackathon.add(hackathon);}
+
 
     public void buildListaHackathon(int n)
     {
@@ -38,86 +37,6 @@ public class Piattaforma
             ListaHackathon.add(hackathon);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-    private class Classificato {
-        String nome;
-        float voto;
-
-        public Classificato(String nome, float voto){
-            this.voto=voto;
-            this.nome=nome;
-        }
-    }
-
-    ArrayList<Classificato> Classifica=new ArrayList<>();
-    public ArrayList<Classificato> getClassifica() {return Classifica;}
-    //  CREA CLASSIFICA
-
-    public void CreaClassifica(){
-        float min;
-
-        int k;
-        for(int i = 0; i<this.ListaTeam.size(); i++){
-
-            min=this.ListaTeam.get(0).Voto;
-            k=i;
-
-            for(int j = i; j<this.ListaTeam.size()-i; j++)
-            {
-                if( this.ListaTeam.get(j).Voto<min)
-                {
-                    min=this.ListaTeam.get(j).Voto;
-                    k=j;
-                }
-
-            }
-            ListaTeam.add(ListaTeam.get(k));
-            Classificato classificato=new Classificato(ListaTeam.get(k).Nome, ListaTeam.get(k).Voto);
-            Classifica.add(0,classificato);
-            ListaTeam.remove(k);
-
-        }
-
-    }
-
-
-
-      STAMPA CLASSIFICA
-
-    public void StampaClassifica(){
-
-        System.out.println("CLASSIFICA:\n");
-        int i=1;
-        for(Classificato classificato:Classifica)
-        {
-            System.out.println(i+".  "+classificato.nome+" ("+ classificato.voto+")");
-        }
-    }
-
-
-      MOSTRA PROBLEMA
-
-    public String getProblema()
-    {
-        if(this.view_problema)
-            return this.problema;
-        else
-            return "Problema non disponibile";
-
-    }*/
 
 }
 

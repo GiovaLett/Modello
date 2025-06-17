@@ -3,6 +3,7 @@ package org.example.GUI;
 import org.example.Controller.Controller;
 import org.example.Model.Hackathon;
 import org.example.Model.ruoli.Giudice;
+import org.example.Model.ruoli.Utente_registrato;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class organTeamGUI {
+public class organHackPreIscrizGUI {
 
     private JFrame frame;
     private JPanel mainPanel;
@@ -24,8 +25,9 @@ public class organTeamGUI {
     private JTextField idGiudiceField;
     private JPanel rimuovGiudPanel;
     private JButton rimuoviButton;
+    private JButton inviaRichiestaPerGiudiceButton;
 
-    organTeamGUI(Controller c, JFrame origFrame, Hackathon hackathon){
+    public organHackPreIscrizGUI(Controller c, JFrame origFrame, Hackathon hackathon){
 
         frame=new JFrame("Selezione Giudici");
         frame.setContentPane(mainPanel);
@@ -46,6 +48,7 @@ public class organTeamGUI {
         else
             rimuovGiudPanel.setVisible(true);
 
+        setInviaRichiestaPerGiudiceButton( c,hackathon);
         frame.setVisible(true);
 
 
@@ -70,6 +73,10 @@ public class organTeamGUI {
     }
 
     private void setSelezGiudButton(Controller c,Hackathon hackathon){
+
+        selezGiudButton.setVisible(false);
+
+
         selezGiudButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -139,5 +146,38 @@ public class organTeamGUI {
         ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( hackathon.getID() ) );
         giudiciTable.setModel(modello);
 
+    }
+
+
+    public void setInviaRichiestaPerGiudiceButton(Controller c,Hackathon hackathon) {
+
+
+        inviaRichiestaPerGiudiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String utenteID=idUtenteField.getText();
+
+                try {
+
+                    Utente_registrato utente=c.trovaUtenteForGiudice(hackathon,utenteID);
+
+
+                    int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di mandare la richiesta a\n" +
+                            utente.getNome()+" "+utente.getCognome()+" ?","",JOptionPane.YES_NO_OPTION);
+
+                    if(risp==0)
+                    {
+                        c.mandaRichiestaUtenteForGiudice(utente,hackathon);
+                    }
+
+
+                }
+                catch(IllegalArgumentException exce){
+                    JOptionPane.showMessageDialog(frame,exce.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
+                }
+
+
+            }
+        });
     }
 }

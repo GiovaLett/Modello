@@ -34,6 +34,7 @@ public class partecipanteAddProgressiGUI {
         frame.setContentPane(mainPanel);
         frame.setSize(500,600);
         frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         setCaricaButton(c,team,origGUI);
         CloseOperation( origGUI,  team);

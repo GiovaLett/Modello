@@ -72,8 +72,12 @@ public class organizzatoreGUI {
                     return;
                 }
 
-                if(!c.isOpenIscri() && !c.isEventoPronto())  { new organTeamGUI( c, frame, hackathon); }
-                else    {new oraganTeamOpenIsrcGUI(c,frame,hackathon);}
+                if(!c.isOpenIscri() && !c.isEventoPronto())  {
+                    new organHackPreIscrizGUI( c, frame, hackathon);
+                }
+                else    {
+                    new oraganHackGUI(c,frame,hackathon);
+                }
 
                     frame.setVisible(false);
 

@@ -2,6 +2,7 @@ package org.example.GUI;
 
 import org.example.Controller.Controller;
 import org.example.Model.Hackathon;
+import org.example.Model.ruoli.Team;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,11 @@ public class giudiceGUI {
     private JTextArea problemaTextArea;
     private JTextField idTeamField;
     private JButton vediProgressiButton;
+    private JPanel vediProgressiPanel;
+    private JButton assegnaVotiButton;
+    private JPanel problemaButtonPanel;
+    private JButton caricaValutazioniButton;
+    private JLabel noHackLabel;
 
 
     public giudiceGUI(Controller c, JFrame orifFrame,Hackathon hackathon){
@@ -37,11 +43,25 @@ public class giudiceGUI {
        idGiudice.setText(c.getUtenteCorrente().getID());
        nomeHackathoneLabel.setText(hackathon.getNome());
 
-       problemaTextArea.setText(hackathon.getProblema());
-        setSalvaProblemaButton(c,hackathon);
-       setTeamTable(hackathon);
-        setPubblicaProblemaButton(c,hackathon);
+
+      setProblemaTextArea(hackathon);
+       setSalvaProblemaButton(c,hackathon);
+       setTeamTable(c,hackathon);
+       setPubblicaProblemaButton(c,hackathon);
+
+        if(!hackathon.isView_problema())
+            vediProgressiPanel.setVisible(false);
+
+        if(hackathon.isEventoFinito())
+            problemaButtonPanel.setVisible(false);
+
+
+        setAssegnaVoto( c, hackathon);
+       setVediProgressiButton(c,hackathon);
+        setCaricaValutazioniButton(c,hackathon);
+
        frame.setVisible(true);
+        cotrolloTeamSuff( c,hackathon);
 
     }
 
@@ -58,12 +78,29 @@ public class giudiceGUI {
     }
 
 
-    public void setTeamTable(Hackathon hackathon) {
-        ModelloTeamsTab modello=new ModelloTeamsTab(hackathon.getListaTeam());
-        teamTable.setModel(modello);
+    public void setTeamTable(Controller c,Hackathon hackathon) {     //Carattere differente in base alla fase( in periodo di votazione mostrerà anche i voti)
+
+        if(!c.isEventoFinito(hackathon))
+        {
+            ModelloTeamsTab modello=new ModelloTeamsTab(hackathon.getListaTeam());
+            teamTable.setModel(modello);
+        }
+        else
+        {
+            c.ordinaTeamVoti(hackathon);
+            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(hackathon.getListaTeam());
+            teamTable.setModel(modello);
+
+        }
     }
 
-    public void setPubblicaProblemaButton(Controller c,Hackathon hackathon) {
+    public void setProblemaTextArea(Hackathon hackathon) {
+        if(hackathon.isEventoFinito())
+            problemaTextArea.setEditable(false);
+        problemaTextArea.setText(hackathon.getProblema());
+    }
+
+    public void setPubblicaProblemaButton(Controller c, Hackathon hackathon) {
 
             pubblicaProblemaButton.addActionListener(new ActionListener() {
                 @Override
@@ -90,6 +127,7 @@ public class giudiceGUI {
                     if(risp==0){
                         hackathon.setView_problema(true);
                         JOptionPane.showMessageDialog(frame,"Problema pubblicato");
+                        vediProgressiPanel.setVisible(true);
                     }
 
 
@@ -115,5 +153,119 @@ public class giudiceGUI {
         });
 
 
+    }
+
+    public void setVediProgressiButton(Controller c,Hackathon hackathon) {
+
+        if(c.isEventoFinito(hackathon) && !hackathon.isVotazioneConclusa()) {
+            vediProgressiButton.setVisible(false);
+
+        } else {
+            vediProgressiButton.setVisible(true);
+        }
+
+
+
+        vediProgressiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String idTeam=idTeamField.getText();
+                try{
+                    Team team=c.findIDTeam(idTeam,hackathon);
+                    new giudiceVediProgressiGUI(c,hackathon,team,giudiceGUI.this);
+
+                } catch (IllegalArgumentException exce) {
+
+                    JOptionPane.showMessageDialog(frame,exce.getMessage(),"Not Found",JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+        });
+
+    }
+
+
+    private void setAssegnaVoto(Controller c, Hackathon hackathon){
+
+        if(c.isEventoFinito(hackathon) && !hackathon.isVotazioneConclusa()) {
+            assegnaVotiButton.setVisible(true);
+
+        } else {
+            assegnaVotiButton.setVisible(false);
+
+        }
+
+
+
+        assegnaVotiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                String idTeam=idTeamField.getText();
+                try{
+                    Team team=c.findIDTeam(idTeam,hackathon);
+                    new giudiceVediProgressiGUI(c,hackathon,team,giudiceGUI.this);
+
+                } catch (IllegalArgumentException exce) {
+
+                    JOptionPane.showMessageDialog(frame,exce.getMessage(),"Not Found",JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+
+        });
+
+
+
+    }
+
+    public void setCaricaValutazioniButton(Controller c, Hackathon hackathon) {
+        if(c.isEventoFinito(hackathon) && !hackathon.isVotazioneConclusa()) {
+
+            caricaValutazioniButton.setVisible(true);
+        } else {
+
+            caricaValutazioniButton.setVisible(false);
+        }
+
+        caricaValutazioniButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for(Team team: hackathon.getListaTeam())
+                {
+                    if(team.getVoto()==-1)
+                    {
+                        JOptionPane.showMessageDialog(frame,"Non tutti i team sono stati valutati\n" +
+                                "Caricamento annullato");
+                        return;
+                    }
+
+                }
+                int risp=JOptionPane.showConfirmDialog(frame,"Confermare le valutazioni\nNon potranno essere più modificate",
+                        "Conderma",JOptionPane.YES_NO_OPTION);
+
+                if(risp==0){
+                    hackathon.setVotazioneConclusa(true);
+                    caricaValutazioniButton.setVisible(false);
+                    assegnaVotiButton.setVisible(false);
+                    vediProgressiButton.setVisible(true);
+
+                }
+
+
+            }
+        });
+    }
+
+    private void cotrolloTeamSuff(Controller c,Hackathon hackathon)
+    {
+        if(c.isEventoPronto() && !hackathon.isTeam_suffic()) {
+            JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (solo 1 team iscritto)");
+            noHackLabel.setVisible(true);
+        }
+        else
+            noHackLabel.setVisible(false);
     }
 }

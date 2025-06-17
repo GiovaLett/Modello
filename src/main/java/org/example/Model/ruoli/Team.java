@@ -8,17 +8,24 @@ import java.util.Random;
 
 public class Team {
 
-    private static int nt=0;
 
-    private final int maxMembri=1;
-    float Voto=-1;
+
     private String Nome;
-    private String ID;
+
     private String codice_accesso;
-    int numero_membri=0;
+
+    String IDHackathon;
+    private String ID;
+    private static int nT =0;
+
+    private final int MAX_MEMBRI =1;
+    int numeroMembri =0;
+
+    float voto =-1;//Valore di default indica che ancora non ha un voto
+
     ArrayList<Progresso> ArrayProgresso = new ArrayList<>();
     ArrayList<Partecipante> ArrayPartecipante = new ArrayList<>();
-    String IDHackathon;
+
 
 
 
@@ -32,7 +39,7 @@ public class Team {
 
     public String getNome() {return Nome;}
 
-    public int getNumero_membri() {return numero_membri;}
+    public int getNumeroMembri() {return numeroMembri;}
 
     public String getCodiceAccesso(){
         return this.codice_accesso;
@@ -40,16 +47,17 @@ public class Team {
 
     public String getIDHackathon() {return IDHackathon;}
 
+    public float getVoto() {return voto;}
 
+    public void setVoto(float voto) {this.voto = voto;}
 
     public ArrayList<Partecipante> getArrayPartecipante() {return ArrayPartecipante;}
-
     public void addPartecipante(Partecipante partec) throws IllegalArgumentException{
 
-        if(numero_membri<maxMembri)
+        if(numeroMembri < MAX_MEMBRI)
         {
             this.ArrayPartecipante.add(partec);
-            numero_membri++;
+            numeroMembri++;
         }
 
         else
@@ -73,17 +81,19 @@ public class Team {
     private String CreaIDTeam(){
 
         String ID_codice="-1";
-        if(nt >=0 && nt <10)  ID_codice="T00"+String.valueOf(nt);
+        if(nT >=0 && nT <10)  ID_codice="T00"+String.valueOf(nT);
 
-        else if (nt <100)   ID_codice="T0"+String.valueOf(nt);
+        else if (nT <100)   ID_codice="T0"+String.valueOf(nT);
 
-        else if (nt <1000)   ID_codice="T"+String.valueOf(nt);
+        else if (nT <1000)   ID_codice="T"+String.valueOf(nT);
 
-        nt++;
+        nT++;
 
         return ID_codice;
 
     }
+
+
 
     private String creaCodiceAccesso(){
         char[] lettere={'A','B','C','D','E','F','G','H','I','L','J','K','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};

@@ -3,7 +3,7 @@ package org.example.Model;
 public class Progresso {
 
     private String nome="";
-    private String codiceProgresso="";
+    private String codiceProgresso=""; //Sarebbe il progresso effettivo
     private String commento="";
 
     public void setNome(String nome) {this.nome = nome;}

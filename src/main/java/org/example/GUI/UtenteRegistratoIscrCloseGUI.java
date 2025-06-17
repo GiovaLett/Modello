@@ -24,9 +24,11 @@ public class UtenteRegistratoIscrCloseGUI {
 
         setHackathonTable(c);
 
+
         CloseOperation(origFrame);
         frame.setVisible(true);
-        frame.setContentPane(mainPanel);
+        messageToBeJudge(c);
+
 
 
     }
@@ -45,5 +47,21 @@ public class UtenteRegistratoIscrCloseGUI {
     public void setHackathonTable(Controller c) {
         ModelloHackTab modello=new ModelloHackTab(c.getListaHackathon());
         hackathonTable.setModel(modello);
+    }
+
+    private void messageToBeJudge(Controller c){
+        String richiesta=c.getUtenteCorrente().getRichiestaGiudice();
+        if(richiesta.equals(""));
+        else {
+            int risp=JOptionPane.showConfirmDialog(frame,richiesta,"Vuoi essere giudice?",JOptionPane.YES_NO_OPTION);
+            if(risp==0)
+            {
+                c.diventaGiudice();
+                JOptionPane.showMessageDialog(frame,"Sei diventato giudice\n Riaccedi per vedere i cambiamenti");
+
+            }
+            else
+                c.getUtenteCorrente().setRichiestaGiudice("");
+        }
     }
 }

@@ -7,38 +7,37 @@ import java.util.ArrayList;
 
 public class Hackathon
 {
-    private static int n=0;
 
 
-    public final int n_max_partec=2;
-    public final int dim_max_team =5;
+    private String nome;
+    private String ID;
+    private static int nH =0;//Per la creazione dei codiciID
+
+    public final int N_MAX_PARTEC =2;
     private int n_partec=0;
+
+    private int n_team;
+
+
+    public String sede;
+
+    private String problema="";
     ArrayList<Team> ListaTeam =new ArrayList<>();
     ArrayList<Giudice> ListaGiudici=new ArrayList<>();
 
-    private String ID;
-    private String nome;
 
-
-    private int n_team;
+    //Ordine temporale di attivazione
     private boolean team_suffic =false;
-
-    public String sede;
-    public class Data {
-        public int anno;
-        public int mese;
-        public int giorno;
-    }
-    public Data data;
-
-    int durata=3;     //giorni
     private boolean view_problema =false;
-    private String problema="";
+    private boolean eventoFinito=false;
+    private boolean votazioneConclusa =false;
+    private boolean classificaPubblicata=false;
 
 
-    public Hackathon(){ this.data=new Data(); ID=Codice_ID();} //Necessario il costruttore di data, altrimenti darà errore, PointerNull riferito a data
 
-    public Hackathon(String nome){this.nome=nome; this.data=new Data(); ID=Codice_ID();}
+    public Hackathon(){ ID=Codice_ID();}
+
+    public Hackathon(String nome){this.nome=nome;  ID=Codice_ID();}
 
     public String getID() {return ID;}
 
@@ -49,10 +48,9 @@ public class Hackathon
     public ArrayList<Giudice> getListaGiudici(){return ListaGiudici;}
 
     public int getNumeroPartec() {return n_partec;}
-
     public void incrementaNpartec() throws IllegalArgumentException //Se n_partec==n_max
     {
-        if(n_partec<n_max_partec)
+        if(n_partec< N_MAX_PARTEC)
             n_partec++;
         else
             throw new IllegalArgumentException("Numero di partecipanti massimo raggiunto per questo hackathon\n" +
@@ -79,17 +77,27 @@ public class Hackathon
     public boolean isView_problema() {return view_problema;}
     public void setView_problema(boolean view_problema) {this.view_problema = view_problema;}
 
+    public boolean isVotazioneConclusa() {return votazioneConclusa;}
+    public void setVotazioneConclusa(boolean votazioneConclusa) {
+        this.votazioneConclusa = votazioneConclusa;}
+
+    public boolean isEventoFinito(){return eventoFinito;}
+    public void setEventoFinito(boolean isEventoFinito){this.eventoFinito=isEventoFinito;}
+
+    public void setClassificaPubblicata(boolean classificaPubblicata) {this.classificaPubblicata = classificaPubblicata;}
+    public boolean isClassificaPubblicata() {return classificaPubblicata;}
+
     public boolean isTeam_suffic() {return team_suffic;}
 
     private String Codice_ID(){
         String ID_codice="-1";
-        if(n>=0 && n<10)  ID_codice="H00"+String.valueOf(n);
+        if(nH >=0 && nH <10)  ID_codice="H00"+String.valueOf(nH);
 
-        else if (n<100)   ID_codice="H0"+String.valueOf(n);
+        else if (nH <100)   ID_codice="H0"+String.valueOf(nH);
 
-        else if (n<1000)   ID_codice="H"+String.valueOf(n);
+        else if (nH <1000)   ID_codice="H"+String.valueOf(nH);
 
-        n++;
+        nH++;
 
         return ID_codice;
     }
