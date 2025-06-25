@@ -1,12 +1,13 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
+
 import org.example.Model.ruoli.*;
 
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 
 public class AccediGUI
 {
@@ -51,10 +52,15 @@ public class AccediGUI
 
                 String email=emailField.getText();
                 String password=passwordField.getText();
-                try { utente=c.findAccount(email,password); }
+                try {
+
+                    utente=c.findAccount(email,password);
+
+                }
                 catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame,exception.getMessage(),"Errore credenziali",JOptionPane.ERROR_MESSAGE);
                     correct=false;
+
                 }
 
                 if(correct)
@@ -67,14 +73,17 @@ public class AccediGUI
 
                     else if (utente instanceof Partecipante partecipante)  {
                         c.setUtenteCorrente(partecipante);
-                        Hackathon partecHack=c.findHackId(partecipante.getIDHackathon());
-                        new PartecipanteGUI(c,frame,partecHack  ,c.findIDTeam(partecipante.getIDTeam(),partecHack));
+                        c.setHackathonCorrente( c.findHackId(partecipante.getIDHackathon()) );
+                        c.setTeamCorrente( c.findIDTeam(partecipante.getIDTeam(), c.getHackathonCorrente()));
+                        new PartecipanteGUI(c,frame);
                     }
 
 
                     else if(utente instanceof Giudice giudice)
-                    {   c.setUtenteCorrente(giudice);
-                        new giudiceGUI( c, frame, c.findHackId(giudice.getIDHackatlon() ) );
+                    {
+                        c.setUtenteCorrente(giudice);
+                        c.setHackathonCorrente(  c.findHackId(giudice.getIDHackatlon() )  );
+                        new giudiceGUI( c, frame);
                     }
 
                     else if(utente instanceof Utente_registrato utenteReg) {

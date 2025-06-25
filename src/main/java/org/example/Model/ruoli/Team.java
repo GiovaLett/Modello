@@ -10,7 +10,7 @@ public class Team {
 
 
 
-    private String Nome;
+    private String nome;
 
     private String codice_accesso;
 
@@ -18,7 +18,7 @@ public class Team {
     private String ID;
     private static int nT =0;
 
-    private final int MAX_MEMBRI =1;
+    private final int MAX_MEMBRI =5;
     int numeroMembri =0;
 
     float voto =-1;//Valore di default indica che ancora non ha un voto
@@ -28,16 +28,21 @@ public class Team {
 
 
 
+    public Team( String id,String nome,String codice_accesso, float voto, String idHackathon){
 
+        this.ID=id;   this.nome=nome;   this.codice_accesso=codice_accesso;
+        this.voto=voto;   this.IDHackathon=idHackathon;
+    }
+    
     public Team(String nome, Hackathon hackathon){
-        this.codice_accesso=creaCodiceAccesso();   this.ID=CreaIDTeam();  this.IDHackathon=hackathon.getID();  this.Nome=nome;
+        this.codice_accesso=creaCodiceAccesso();   this.ID=CreaIDTeam();  this.IDHackathon=hackathon.getID();  this.nome =nome;
     }
 
     public String getID() {return ID;}
 
 
 
-    public String getNome() {return Nome;}
+    public String getNome() {return nome;}
 
     public int getNumeroMembri() {return numeroMembri;}
 
@@ -52,6 +57,7 @@ public class Team {
     public void setVoto(float voto) {this.voto = voto;}
 
     public ArrayList<Partecipante> getArrayPartecipante() {return ArrayPartecipante;}
+
     public void addPartecipante(Partecipante partec) throws IllegalArgumentException{
 
         if(numeroMembri < MAX_MEMBRI)
@@ -67,13 +73,16 @@ public class Team {
     /**
      * CARICAMENTO PROGRESSI
      */
-    public void caricaProgresso(String nomeProgresso,String codiceProgresso)
+    public Progresso caricaProgresso(String nomeProgresso,String codiceProgresso)
     {
 
         Progresso progresso =new Progresso();
         progresso.setCodiceProgresso(codiceProgresso);
         progresso.setNome(nomeProgresso);
+        progresso.setIdTeam(this.getID());
         this.ArrayProgresso.add(progresso);
+        return progresso;
+
     }
 
     public ArrayList<Progresso> getArrayProgresso() {return ArrayProgresso;}
@@ -92,8 +101,13 @@ public class Team {
         return ID_codice;
 
     }
+    public static int getnT() {
+        return nT;
+    }
 
-
+    public static void setnT(int nT) {
+        Team.nT = nT;
+    }
 
     private String creaCodiceAccesso(){
         char[] lettere={'A','B','C','D','E','F','G','H','I','L','J','K','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};

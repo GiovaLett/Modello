@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class registrazioneGUI {
 
@@ -63,10 +64,14 @@ public class registrazioneGUI {
                             "Nome: "+nome+"\nCognome: "+cognome+"\nEmail: "+email+"\n");
                     if(risp==0)
                     {
+                        try{
                         c.addUtenteRegistrato(nome,cognome,email,password);
                         JOptionPane.showMessageDialog(frame,"Account registrato!");
                         frame.dispose();
-                        origFrame.setVisible(true);
+                        origFrame.setVisible(true);}
+                        catch (SQLException exce){
+                            JOptionPane.showMessageDialog(frame,"Errore Database","",JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
             }

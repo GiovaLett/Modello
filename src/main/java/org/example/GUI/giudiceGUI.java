@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class giudiceGUI {
 
@@ -30,7 +31,7 @@ public class giudiceGUI {
     private JLabel noHackLabel;
 
 
-    public giudiceGUI(Controller c, JFrame orifFrame,Hackathon hackathon){
+    public giudiceGUI(Controller c, JFrame orifFrame){
 
        frame=new JFrame("Giudice");
        frame.setContentPane(mainPanel);
@@ -41,27 +42,27 @@ public class giudiceGUI {
 
        nomeCognomeGiudice.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
        idGiudice.setText(c.getUtenteCorrente().getID());
-       nomeHackathoneLabel.setText(hackathon.getNome());
+       nomeHackathoneLabel.setText(c.getHackathonCorrente().getNome());
 
 
-      setProblemaTextArea(hackathon);
-       setSalvaProblemaButton(c,hackathon);
-       setTeamTable(c,hackathon);
-       setPubblicaProblemaButton(c,hackathon);
+      setProblemaTextArea(c);
+       setSalvaProblemaButton(c);
+       setTeamTable(c);
+       setPubblicaProblemaButton(c);
 
-        if(!hackathon.isView_problema())
+        if(!c.getHackathonCorrente().isView_problema())
             vediProgressiPanel.setVisible(false);
 
-        if(hackathon.isEventoFinito())
+        if(c.getHackathonCorrente().isEventoFinito())
             problemaButtonPanel.setVisible(false);
 
 
-        setAssegnaVoto( c, hackathon);
-       setVediProgressiButton(c,hackathon);
-        setCaricaValutazioniButton(c,hackathon);
+        setAssegnaVoto( c);
+       setVediProgressiButton(c);
+        setCaricaValutazioniButton(c);
 
        frame.setVisible(true);
-        cotrolloTeamSuff( c,hackathon);
+        cotrolloTeamSuff( c);
 
     }
 
@@ -78,46 +79,46 @@ public class giudiceGUI {
     }
 
 
-    public void setTeamTable(Controller c,Hackathon hackathon) {     //Carattere differente in base alla fase( in periodo di votazione mostrerà anche i voti)
+    public void setTeamTable(Controller c) {     //Carattere differente in base alla fase( in periodo di votazione mostrerà anche i voti)
 
-        if(!c.isEventoFinito(hackathon))
+        if(!c.isEventoFinito(c.getHackathonCorrente() ) )
         {
-            ModelloTeamsTab modello=new ModelloTeamsTab(hackathon.getListaTeam());
+            ModelloTeamsTab modello=new ModelloTeamsTab(c.getHackathonCorrente().getListaTeam());
             teamTable.setModel(modello);
         }
         else
         {
-            c.ordinaTeamVoti(hackathon);
-            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(hackathon.getListaTeam());
+            c.ordinaTeamVoti(c.getHackathonCorrente());
+            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(c.getHackathonCorrente().getListaTeam());
             teamTable.setModel(modello);
 
         }
     }
 
-    public void setProblemaTextArea(Hackathon hackathon) {
-        if(hackathon.isEventoFinito())
+    public void setProblemaTextArea(Controller c) {
+        if(c.getHackathonCorrente().isEventoFinito())
             problemaTextArea.setEditable(false);
-        problemaTextArea.setText(hackathon.getProblema());
+        problemaTextArea.setText(c.getHackathonCorrente().getProblema());
     }
 
-    public void setPubblicaProblemaButton(Controller c, Hackathon hackathon) {
+    public void setPubblicaProblemaButton(Controller c) {
 
             pubblicaProblemaButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
                     if(!c.isEventoPronto()) {
-                        JOptionPane.showMessageDialog(frame,"Le iscrizioni sono ancora aperte, non puoi pubblicare il problema");
+                        JOptionPane.showMessageDialog(frame," Non puoi ancora pubblicare il problema");
                         return;
                     }
 
-                    if(!hackathon.isTeam_suffic()){
+                    if(!c.getHackathonCorrente().isTeam_suffic()){
                         JOptionPane.showMessageDialog(frame,"Purtroppo non si sono formati abbastanza Team\nQuest'hackathon non verrà eseguito");
                         return;
                     }
 
 
-                    if(hackathon.getProblema().equals("")){
+                    if(c.getHackathonCorrente().getProblema()==null  ||  c.getHackathonCorrente().getProblema().equals("")  ){
                         JOptionPane.showMessageDialog(frame,"Nessun problema salvato\nScrivi-->Salva Problema-->Pubblica Problema ");
                         return;
                     }
@@ -125,22 +126,23 @@ public class giudiceGUI {
                     int risp=JOptionPane.showConfirmDialog(frame,"La traccia pubblicata sarà la seguente:\n"+problemaTextArea.getText()+"\n\nConfermare?\n",
                             "Conferma", JOptionPane.YES_NO_OPTION);
                     if(risp==0){
-                        hackathon.setView_problema(true);
-                        JOptionPane.showMessageDialog(frame,"Problema pubblicato");
-                        vediProgressiPanel.setVisible(true);
+
+                        try{
+                            c.pubblicaProblema();
+                            JOptionPane.showMessageDialog(frame,"Problema pubblicato");
+                            vediProgressiPanel.setVisible(true);
+                        }catch (SQLException ex){
+                            ex.printStackTrace();
+                        }
+
                     }
-
-
-
-
-
                 }
             });
 
     }
 
 
-    public void setSalvaProblemaButton(Controller c,Hackathon hackathon) {
+    public void setSalvaProblemaButton(Controller c) {
         salvaProblemaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -148,16 +150,22 @@ public class giudiceGUI {
                 int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di salvare la seguente traccia:\n"+problema+"\n","Salvataggio",JOptionPane.YES_NO_OPTION);
 
                 if(risp==0)
-                    hackathon.setProblema(problema);
+
+                    try{
+                        c.salvaProblema(problema);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
             }
         });
 
 
     }
 
-    public void setVediProgressiButton(Controller c,Hackathon hackathon) {
+    public void setVediProgressiButton(Controller c) {
 
-        if(c.isEventoFinito(hackathon) && !hackathon.isVotazioneConclusa()) {
+        if(c.isEventoFinito(c.getHackathonCorrente()) && !c.getHackathonCorrente().isVotazioneConclusa()) {
             vediProgressiButton.setVisible(false);
 
         } else {
@@ -171,8 +179,8 @@ public class giudiceGUI {
             public void actionPerformed(ActionEvent e) {
                 String idTeam=idTeamField.getText();
                 try{
-                    Team team=c.findIDTeam(idTeam,hackathon);
-                    new giudiceVediProgressiGUI(c,hackathon,team,giudiceGUI.this);
+                    c.setTeamCorrente(c.findIDTeam(idTeam,c.getHackathonCorrente()) );
+                    new giudiceVediProgressiGUI(c,giudiceGUI.this);
 
                 } catch (IllegalArgumentException exce) {
 
@@ -185,9 +193,9 @@ public class giudiceGUI {
     }
 
 
-    private void setAssegnaVoto(Controller c, Hackathon hackathon){
+    private void setAssegnaVoto(Controller c){
 
-        if(c.isEventoFinito(hackathon) && !hackathon.isVotazioneConclusa()) {
+        if(c.isEventoFinito(c.getHackathonCorrente()) && !c.getHackathonCorrente().isVotazioneConclusa()) {
             assegnaVotiButton.setVisible(true);
 
         } else {
@@ -204,8 +212,8 @@ public class giudiceGUI {
 
                 String idTeam=idTeamField.getText();
                 try{
-                    Team team=c.findIDTeam(idTeam,hackathon);
-                    new giudiceVediProgressiGUI(c,hackathon,team,giudiceGUI.this);
+                    c.setTeamCorrente(  c.findIDTeam(idTeam,c.getHackathonCorrente())  );
+                    new giudiceVediProgressiGUI(c,giudiceGUI.this);
 
                 } catch (IllegalArgumentException exce) {
 
@@ -220,8 +228,8 @@ public class giudiceGUI {
 
     }
 
-    public void setCaricaValutazioniButton(Controller c, Hackathon hackathon) {
-        if(c.isEventoFinito(hackathon) && !hackathon.isVotazioneConclusa()) {
+    public void setCaricaValutazioniButton(Controller c) {
+        if(c.isEventoFinito(c.getHackathonCorrente()) && !c.getHackathonCorrente().isVotazioneConclusa()) {
 
             caricaValutazioniButton.setVisible(true);
         } else {
@@ -233,7 +241,7 @@ public class giudiceGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                for(Team team: hackathon.getListaTeam())
+                for(Team team: c.getHackathonCorrente().getListaTeam())
                 {
                     if(team.getVoto()==-1)
                     {
@@ -247,10 +255,15 @@ public class giudiceGUI {
                         "Conderma",JOptionPane.YES_NO_OPTION);
 
                 if(risp==0){
-                    hackathon.setVotazioneConclusa(true);
-                    caricaValutazioniButton.setVisible(false);
-                    assegnaVotiButton.setVisible(false);
-                    vediProgressiButton.setVisible(true);
+
+                    try {
+                        c.concludiVotazioni();
+                        caricaValutazioniButton.setVisible(false);
+                        assegnaVotiButton.setVisible(false);
+                        vediProgressiButton.setVisible(true);
+                    }catch (SQLException ex){
+                        ex.printStackTrace();
+                    }
 
                 }
 
@@ -259,10 +272,10 @@ public class giudiceGUI {
         });
     }
 
-    private void cotrolloTeamSuff(Controller c,Hackathon hackathon)
+    private void cotrolloTeamSuff(Controller c)
     {
-        if(c.isEventoPronto() && !hackathon.isTeam_suffic()) {
-            JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (solo 1 team iscritto)");
+        if(c.isEventoPronto() && !c.getHackathonCorrente().isTeam_suffic()) {
+            JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (teams insufficienti)");
             noHackLabel.setVisible(true);
         }
         else

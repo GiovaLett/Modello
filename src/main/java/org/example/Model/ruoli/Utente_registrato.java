@@ -19,6 +19,12 @@ public class Utente_registrato extends Utente {
         this.password = password;
         this.ID = Codice_ID();
     }
+
+    public Utente_registrato(String ID,String nome, String cognome, String email, String password){
+
+        this.ID=ID;   this.nome=nome;   this.cognome=cognome;   this.email=email;   this.password=password;
+    }
+
     public Utente_registrato() {}
 
     public String getEmail() {return email;}
@@ -40,19 +46,25 @@ public class Utente_registrato extends Utente {
         return ID_codice;
     }
 
+    public static int getnU() {return nU;}
+    public static void setnU(int nU) {Utente_registrato.nU = nU;}
+
     //IMPORTANTISSIMO L'ORDINE DELLE FUNZIONI CON QUELLA CHE LANCIA UN'ECCEZIONE
-    public void registratiInTeam(Piattaforma piattaforma,Hackathon hackathon, Team team) throws IllegalArgumentException
+    public Partecipante registratiInTeam(Piattaforma piattaforma,Hackathon hackathon, Team team) throws IllegalArgumentException
     {
         Partecipante nuovoPartec=new Partecipante(this.getNome(), this.getCognome(), this.getEmail(), this.getPassword(), team.getID(), hackathon.getID());
         team.addPartecipante(nuovoPartec);//throws
         piattaforma.getListaUtenReg().add(nuovoPartec);
         piattaforma.getListaUtenReg().remove(this);
+        return nuovoPartec;
     }
 
-    public void creaTeam(Piattaforma piattaforma, Hackathon hackathon, String nomeTeam) throws IllegalArgumentException{
+    public Team creaTeam(Piattaforma piattaforma, Hackathon hackathon, String nomeTeam) throws IllegalArgumentException{
+
         Team nuovoTeam=new Team(nomeTeam,hackathon);
         registratiInTeam(piattaforma,hackathon,nuovoTeam);//throws
         hackathon.addTeam(nuovoTeam);
+        return nuovoTeam;
 
     }
 

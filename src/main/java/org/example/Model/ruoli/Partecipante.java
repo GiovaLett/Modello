@@ -15,9 +15,16 @@ public class Partecipante extends Utente_registrato {
 
     }
 
+    public Partecipante(String ID, String nome,String cognome,String email,String password,String IDTeam,String IDHackathon){
+        super(nome,cognome,email,password);
+        this.ID=ID;   this.IDTeam=IDTeam;   this.IDHackathon=IDHackathon;
+
+    }
 
 
 
+    public static int getnP() { return nP;}
+    public static void setnP(int nP) {Partecipante.nP = nP;}
 
     private String CreaIDPartecip(){
 

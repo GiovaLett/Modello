@@ -26,15 +26,18 @@ public class Organizzatore extends Utente_registrato
 
     }
 
-    public void rimuoviGiudice(Giudice giudice, Piattaforma piattaforma,Hackathon hackathon)
+    public Utente_registrato rimuoviGiudice(Giudice giudice, Piattaforma piattaforma,Hackathon hackathon)
     {
         Utente_registrato utente=new Utente_registrato(giudice.getNome(),giudice.getCognome(),giudice.getEmail(), giudice.getPassword());
         piattaforma.getListaUtenReg().add(utente);
         piattaforma.getListaUtenReg().remove(giudice);
         hackathon.getListaGiudici().remove(giudice);
+        return utente;
     }
 
-    public void creaHackathon(Piattaforma piattaforma, String nomeHackathon){
-        piattaforma.addHackathon(new Hackathon(nomeHackathon));
+    public Hackathon creaHackathon(Piattaforma piattaforma, String nomeHackathon){
+        Hackathon nuovoHackathon=new Hackathon(nomeHackathon);
+        piattaforma.addHackathon(nuovoHackathon);
+        return nuovoHackathon;
     }
 }

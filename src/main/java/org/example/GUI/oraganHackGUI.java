@@ -1,13 +1,14 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class oraganHackGUI {
 
@@ -22,22 +23,24 @@ public class oraganHackGUI {
     private JButton pubblicaClassificaButton;
     private JLabel noHackLabel;
 
-    public oraganHackGUI(Controller c, JFrame origFrame, Hackathon hackathon){
-        frame=new JFrame(hackathon.getNome());
+    public oraganHackGUI(Controller c, JFrame origFrame){
+
+
+        frame=new JFrame(c.getHackathonCorrente().getNome());
         frame.setContentPane(mainPanel);
-        nomeHackLabel.setText(hackathon.getNome());
-        IdLabel.setText(hackathon.getID());
+        nomeHackLabel.setText(c.getHackathonCorrente().getNome());
+        IdLabel.setText(c.getHackathonCorrente().getID());
         frame.setSize(700,500);
         frame.setLocationRelativeTo(null);
 
-        setTeamsTable(c,hackathon);
-        setGiudiciTable(c, hackathon);
-        setTerminaQuestoHackathonButton(c, hackathon);
-        setPubblicaClassificaButton( hackathon);
+        setTeamsTable(c);
+        setGiudiciTable(c);
+        setTerminaQuestoHackathonButton(c);
+        setPubblicaClassificaButton(c);
 
         closeOperation(origFrame);
         frame.setVisible(true);
-        cotrolloTeamSuff(c, hackathon);
+        cotrolloTeamSuff(c);
 
     }
 
@@ -52,24 +55,24 @@ public class oraganHackGUI {
     }
 
 
-    private void setGiudiciTable(Controller c,Hackathon hackathon){
-        ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( hackathon.getID() ) );
+    private void setGiudiciTable(Controller c){
+        ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( c.getHackathonCorrente().getID() ) );
         giudiciTable.setModel(modello);
 
     }
 
-    private void setTeamsTable(Controller c,Hackathon hackathon){
+    private void setTeamsTable(Controller c){
 
 
-        if(hackathon.isVotazioneConclusa())
+        if(c.getHackathonCorrente().isVotazioneConclusa())
         {
             TeamsOrClassificaLabels.setText("Classifica:");
-            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(hackathon.getListaTeam());
+            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(c.getHackathonCorrente().getListaTeam());
             teamsTable.setModel(modello);
         }
         else{
             TeamsOrClassificaLabels.setText("Teams:");
-            ModelloTeamsTab modello=new ModelloTeamsTab(hackathon.getListaTeam());
+            ModelloTeamsTab modello=new ModelloTeamsTab(c.getHackathonCorrente().getListaTeam());
             teamsTable.setModel(modello);
         }
 
@@ -78,9 +81,9 @@ public class oraganHackGUI {
     }
 
 
-    public void setTerminaQuestoHackathonButton(Controller c, Hackathon hackathon) {
+    public void setTerminaQuestoHackathonButton(Controller c) {
 
-        if(!hackathon.isEventoFinito() && hackathon.isView_problema())
+        if(!c.getHackathonCorrente().isEventoFinito() && c.getHackathonCorrente().isView_problema())
             terminaQuestoHackathonButton.setVisible(true);
         else
             terminaQuestoHackathonButton.setVisible(false);
@@ -94,8 +97,14 @@ public class oraganHackGUI {
                         "Termine Hackathon",JOptionPane.YES_NO_OPTION);
 
                 if(risp==0){
-                    hackathon.setEventoFinito(true);
-                    terminaQuestoHackathonButton.setVisible(false);
+
+                    try{
+                        c.setEventoFinito(true);
+                        terminaQuestoHackathonButton.setVisible(false);
+                    }catch (SQLException ex){
+                        ex.printStackTrace();
+                    }
+
                 }
 
 
@@ -104,9 +113,9 @@ public class oraganHackGUI {
 
     }
 
-    public void setPubblicaClassificaButton(Hackathon hackathon) {
+    public void setPubblicaClassificaButton(Controller c) {
 
-        if(hackathon.isVotazioneConclusa() && !hackathon.isClassificaPubblicata())
+        if(c.getHackathonCorrente().isVotazioneConclusa() && !c.getHackathonCorrente().isClassificaPubblicata())
             pubblicaClassificaButton.setVisible(true);
         else
             pubblicaClassificaButton.setVisible(false);
@@ -115,17 +124,17 @@ public class oraganHackGUI {
         pubblicaClassificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                hackathon.setClassificaPubblicata(true);
+                c.getHackathonCorrente().setClassificaPubblicata(true);
                 pubblicaClassificaButton.setVisible(false);
             }
         });
     }
 
 
-    private void cotrolloTeamSuff(Controller c,Hackathon hackathon)
+    private void cotrolloTeamSuff(Controller c)
     {
-        if(c.isEventoPronto() && !hackathon.isTeam_suffic()) {
-            JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (solo 1 team iscritto)");
+        if(c.isEventoPronto() && !c.getHackathonCorrente().isTeam_suffic()) {
+            JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (teams insufficienti)");
             noHackLabel.setVisible(true);
         }
         else

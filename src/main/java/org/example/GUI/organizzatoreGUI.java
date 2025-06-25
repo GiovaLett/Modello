@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class organizzatoreGUI {
 
@@ -63,20 +64,20 @@ public class organizzatoreGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String idHack = idHackField.getText();
-                Hackathon hackathon;
+
 
                 try {
-                    hackathon = c.findHackId(idHack);
+                    c.setHackathonCorrente(  c.findHackId(idHack)  );
                 } catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 if(!c.isOpenIscri() && !c.isEventoPronto())  {
-                    new organHackPreIscrizGUI( c, frame, hackathon);
+                    new organHackPreIscrizGUI( c, frame);
                 }
                 else    {
-                    new oraganHackGUI(c,frame,hackathon);
+                    new oraganHackGUI(c,frame);
                 }
 
                     frame.setVisible(false);
@@ -109,8 +110,12 @@ public class organizzatoreGUI {
                         hackathon.getNome()+" ?","Conferma",0);
                 if(risp==0)
                 {
+                    try{
                     c.removeHackathon(hackathon);
-                    JOptionPane.showMessageDialog(frame,"Hackathon eliminato!");
+                    JOptionPane.showMessageDialog(frame,"Hackathon eliminato!");}
+                    catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(frame,"Errore DB","",JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -130,9 +135,17 @@ public class organizzatoreGUI {
                 if(nomeHackathon.equals(""))
                     JOptionPane.showMessageDialog(frame,"Digita il nome dell'hackathon\n(non può essere un campo vuoto)");
                 else {
+
                     int risp=JOptionPane.showConfirmDialog(frame,"Confermare il nome <<"+nomeHackathon+">> ?","Conferma",0);
                     if(risp==JOptionPane.YES_OPTION){
-                        c.addHackathon(nomeHackathon);
+
+                        try{
+                            c.addHackathon(nomeHackathon);      }
+                        catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(frame,"Errore con DB","",JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                        }
+
                         JOptionPane.showMessageDialog(frame,"Hackathon aggiunto");
                         setHackathonTable(c);
                     }
@@ -163,11 +176,17 @@ public class organizzatoreGUI {
                         "Conferma?",
                         JOptionPane.YES_NO_OPTION);
                 if(risposta==JOptionPane.YES_OPTION) {
+
+                    try{
                     c.apriIscrizioni();
                     apriIsrizButton.setVisible(false);
                     creaHackathonPanel.setVisible(false);
                     rimuoviButton.setVisible(false);
-                    setHackathonTable(c);
+                    setHackathonTable(c);}
+                    catch (SQLException exc){
+                        JOptionPane.showMessageDialog(frame,"Errore DB","",JOptionPane.ERROR_MESSAGE);
+                        exc.printStackTrace();
+                    }
 
                 }
 
@@ -184,7 +203,16 @@ public class organizzatoreGUI {
             public void actionPerformed(ActionEvent e) {
                 int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di chiudere le iscrizioni?", "Conferma?", JOptionPane.YES_NO_OPTION);
 
-                if(risposta==JOptionPane.YES_OPTION) { c.chiudiIscrizioni(); chiudiIscrizioniButton.setVisible(false);}
+                if(risposta==JOptionPane.YES_OPTION) {
+
+                    try{
+                    c.chiudiIscrizioni();
+                    chiudiIscrizioniButton.setVisible(false);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
 
             }
         });

@@ -16,7 +16,11 @@ public class Giudice extends Utente_registrato
         this.IDHackatlon=IDHackatlon;
         this.ID=Codice_ID();}
 
+public Giudice(String ID,String nome,String cognome,String email,String password,String IDHackatlon){
 
+        this.ID=ID;   this.nome=nome;   this.cognome=cognome;   this.email=email;   this.password=password;
+        this.IDHackatlon=IDHackatlon;
+}
     public String getIDHackatlon() {return IDHackatlon;}
 
     public void CommentaProgressi(Progresso progresso)
@@ -57,7 +61,11 @@ public class Giudice extends Utente_registrato
         return ID_codice;
     }
 
+    public static int getnG() {
+        return nG;
+    }
 
-
-
+    public static void setnG(int nG) {
+        Giudice.nG = nG;
+    }
 }

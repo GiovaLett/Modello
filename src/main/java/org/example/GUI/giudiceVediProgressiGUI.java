@@ -1,9 +1,9 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
-import org.example.Model.Progresso;
-import org.example.Model.ruoli.Team;
+
+import org.example.Model.Progresso; //Per poter settare e scorrere la lista
+
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,6 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class giudiceVediProgressiGUI {
 
@@ -41,28 +42,28 @@ public class giudiceVediProgressiGUI {
         frame.setVisible(true);
     }
 
-        public giudiceVediProgressiGUI(Controller c, Hackathon hackathon, Team team,giudiceGUI origGUI)
+        public giudiceVediProgressiGUI(Controller c, giudiceGUI origGUI)
         {
-            frame=new JDialog((Frame) null,team.getNome(),true);
+            frame=new JDialog((Frame) null,c.getTeamCorrente().getNome(),true);
             frame.setContentPane(mainPanel);
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            nomeTeamLabel.setText(team.getNome());
+            nomeTeamLabel.setText(c.getTeamCorrente().getNome());
             frame.setSize(500,750);
             frame.setLocationRelativeTo(null);
 
 
-            setProgressiList(team);
-            setVotoFinalePanel(hackathon,team);
+            setProgressiList(c);
+            setVotoFinalePanel(c);
 
-            if(hackathon.isEventoFinito() && !hackathon.isVotazioneConclusa())
+            if(c.getHackathonCorrente().isEventoFinito() && !c.getHackathonCorrente().isVotazioneConclusa())
 
-                setFrameHackFinito(c,hackathon,team,origGUI);//Per permettere le votazioni
+                setFrameHackFinito(c,origGUI);//Per permettere le votazioni
 
 
-            else if(!hackathon.isEventoFinito()) {
+            else if(!c.getHackathonCorrente().isEventoFinito()) {
 
                 votaTeamPanel.setVisible(false);
-                setSalvaButton(team);
+                setSalvaButton(c);
             }
             else {
                 votaTeamPanel.setVisible(false);
@@ -77,9 +78,9 @@ public class giudiceVediProgressiGUI {
 
         }
 
-        public void setProgressiList(Team team) {
+        public void setProgressiList(Controller c) {
             DefaultListModel modello=new DefaultListModel<>();
-            for(Progresso progresso:team.getArrayProgresso()){
+            for(Progresso progresso:c.getTeamCorrente().getArrayProgresso()){
                 modello.add(0,progresso.getNome());
             }
             progressiList.setModel(modello);
@@ -91,7 +92,7 @@ public class giudiceVediProgressiGUI {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
                     String rigaSelezionata= (String) progressiList.getSelectedValue();
-                    for(Progresso progresso : team.getArrayProgresso())
+                    for(Progresso progresso : c.getTeamCorrente().getArrayProgresso())
                     {
                         if(rigaSelezionata.equals(progresso.getNome()))
                         {
@@ -106,7 +107,7 @@ public class giudiceVediProgressiGUI {
 
 
 
-        public void setSalvaButton(Team team) {
+        public void setSalvaButton(Controller c) {
             salvaButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -121,12 +122,14 @@ public class giudiceVediProgressiGUI {
 
                         if (risp == 0) {
                             String rigaSelezionata = (String) progressiList.getSelectedValue();
-                            for (Progresso progresso : team.getArrayProgresso()) {
-                                if (rigaSelezionata.equals(progresso.getNome())) {
-                                    progresso.setCommento(commento);
-                                }
+
+                            try{
+                                c.setCommentoTeamCorrente(commento,rigaSelezionata);
+                                JOptionPane.showMessageDialog(frame, "Commento Salvato");
+                            }catch (SQLException ex){
+                                ex.printStackTrace();
                             }
-                            JOptionPane.showMessageDialog(frame, "Commento Salvato");
+
                         }
                     }
                 }
@@ -135,7 +138,7 @@ public class giudiceVediProgressiGUI {
 
         }
 
-        private void setFrameHackFinito(Controller c,Hackathon hackathon,Team team,giudiceGUI origGUI){
+        private void setFrameHackFinito(Controller c,giudiceGUI origGUI){
             commentoTextArea.setEditable(false);
             salvaButton.setVisible(false);
             votaTeamPanel.setVisible(true);
@@ -146,12 +149,15 @@ public class giudiceVediProgressiGUI {
                 public void actionPerformed(ActionEvent e) {
 
                     try{
-                        c.assegnaVotoTeam(team, votoField.getText());
+                        c.assegnaVotoTeam(c.getTeamCorrente(), votoField.getText());
                         JOptionPane.showMessageDialog(frame,"Voto inserito");
-                        origGUI.setTeamTable(c,hackathon);
+                        origGUI.setTeamTable(c);
 
                     }catch(IllegalArgumentException exce){
                         JOptionPane.showMessageDialog(frame,exce.getMessage(),"Errore",JOptionPane.ERROR_MESSAGE);
+                    }catch (SQLException ex){
+
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -161,10 +167,10 @@ public class giudiceVediProgressiGUI {
 
         }
 
-    public void setVotoFinalePanel(Hackathon hackathon,Team team) {
-        if(hackathon.isVotazioneConclusa())
+    public void setVotoFinalePanel(Controller c) {
+        if(c.getHackathonCorrente().isVotazioneConclusa())
         {
-            votoFinaleLabel.setText(String.valueOf(team.getVoto()));
+            votoFinaleLabel.setText(String.valueOf(c.getTeamCorrente().getVoto()));
             votoFinalePanel.setVisible(true);
         }
 

@@ -1,7 +1,9 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
+
+
+//L'import di questi 2 package serve per poter stampare nome e cognome degli utenti nei messaggi di conferma
 import org.example.Model.ruoli.Giudice;
 import org.example.Model.ruoli.Utente_registrato;
 
@@ -10,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class organHackPreIscrizGUI {
 
@@ -27,28 +30,28 @@ public class organHackPreIscrizGUI {
     private JButton rimuoviButton;
     private JButton inviaRichiestaPerGiudiceButton;
 
-    public organHackPreIscrizGUI(Controller c, JFrame origFrame, Hackathon hackathon){
+    public organHackPreIscrizGUI(Controller c, JFrame origFrame){
 
         frame=new JFrame("Selezione Giudici");
         frame.setContentPane(mainPanel);
-        nomeHackLabel.setText(hackathon.getNome());
-        IdLabel.setText(hackathon.getID());
+        nomeHackLabel.setText(c.getHackathonCorrente().getNome());
+        IdLabel.setText(c.getHackathonCorrente().getID());
         frame.pack();
         frame.setSize(700,500);
         frame.setLocationRelativeTo(null);
 
         setUtentiTable(c);
-        setSelezGiudButton(c, hackathon);
-        setRimuoviButton( c,hackathon);
-        setGiudiciTable(c, hackathon);
+        setSelezGiudButton(c);
+        setRimuoviButton( c);
+        setGiudiciTable(c);
         closeOperation(origFrame);
 
-        if(hackathon.getListaGiudici().isEmpty())
+        if(c.getHackathonCorrente().getListaGiudici().isEmpty())
             rimuovGiudPanel.setVisible(false);
         else
             rimuovGiudPanel.setVisible(true);
 
-        setInviaRichiestaPerGiudiceButton( c,hackathon);
+        setInviaRichiestaPerGiudiceButton( c);
         frame.setVisible(true);
 
 
@@ -72,7 +75,7 @@ public class organHackPreIscrizGUI {
 
     }
 
-    private void setSelezGiudButton(Controller c,Hackathon hackathon){
+    private void setSelezGiudButton(Controller c){
 
         selezGiudButton.setVisible(false);
 
@@ -83,25 +86,21 @@ public class organHackPreIscrizGUI {
                 String IdUtente = idUtenteField.getText();
 
                 try {
-                    c.addGiudiceHackaton(hackathon,IdUtente);
-                    setGiudiciTable(c,hackathon);
+                    c.addGiudiceHackaton(c.getHackathonCorrente(),IdUtente);
+                    setGiudiciTable(c);
                     setUtentiTable(c);
                     rimuovGiudPanel.setVisible(true);
-                    for(Giudice giudice: hackathon.getListaGiudici())
-                        System.out.println(giudice.getNome());
-                    System.out.println(" ");
+
                 }
                 catch(IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(),"Errore", 0);
                 }
 
-
-
             }
         });
     }
 
-    public void setRimuoviButton(Controller c,Hackathon hackathon) {
+    public void setRimuoviButton(Controller c) {
 
 
         rimuoviButton.addActionListener(new ActionListener() {
@@ -111,17 +110,22 @@ public class organHackPreIscrizGUI {
                 Giudice giudice;
                 try {
 
-                    giudice=c.findIdGiudice(hackathon,IdGiudice);
+                    giudice=c.findIdGiudice(c.getHackathonCorrente(),IdGiudice);
                     int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di voler eliminate il giudice:\n"
                             +giudice.getNome()+" "+giudice.getCognome()+" ?","Conferma eliminazione",0);
 
                     if(risp==0) {
-                        c.removeGiudice(giudice, hackathon);
-                        JOptionPane.showMessageDialog(frame, "Giudice eliminato!");
 
-                        setGiudiciTable(c, hackathon);
+                        try{
+                        c.removeGiudice(giudice, c.getHackathonCorrente());
+                        JOptionPane.showMessageDialog(frame, "Giudice eliminato!");
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+
+                        setGiudiciTable(c);
                         setUtentiTable(c);
-                        if(hackathon.getListaGiudici().isEmpty())
+                        if(c.getHackathonCorrente().getListaGiudici().isEmpty())
                             rimuovGiudPanel.setVisible(false);
                         else
                             rimuovGiudPanel.setVisible(true);
@@ -142,14 +146,14 @@ public class organHackPreIscrizGUI {
 
     }
 
-    private void setGiudiciTable(Controller c, Hackathon hackathon){
-        ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( hackathon.getID() ) );
+    private void setGiudiciTable(Controller c){
+        ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( c.getHackathonCorrente().getID() ) );
         giudiciTable.setModel(modello);
 
     }
 
 
-    public void setInviaRichiestaPerGiudiceButton(Controller c,Hackathon hackathon) {
+    public void setInviaRichiestaPerGiudiceButton(Controller c) {
 
 
         inviaRichiestaPerGiudiceButton.addActionListener(new ActionListener() {
@@ -159,7 +163,7 @@ public class organHackPreIscrizGUI {
 
                 try {
 
-                    Utente_registrato utente=c.trovaUtenteForGiudice(hackathon,utenteID);
+                    Utente_registrato utente=c.trovaUtenteForGiudice(c.getHackathonCorrente(),utenteID);
 
 
                     int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di mandare la richiesta a\n" +
@@ -167,7 +171,11 @@ public class organHackPreIscrizGUI {
 
                     if(risp==0)
                     {
-                        c.mandaRichiestaUtenteForGiudice(utente,hackathon);
+                        try {
+                            c.mandaRichiestaUtenteForGiudice(utente, c.getHackathonCorrente());
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
                     }
 
 

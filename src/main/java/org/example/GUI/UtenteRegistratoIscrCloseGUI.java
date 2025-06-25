@@ -2,9 +2,12 @@ package org.example.GUI;
 
 import org.example.Controller.Controller;
 
+
+
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class UtenteRegistratoIscrCloseGUI {
 
@@ -56,12 +59,21 @@ public class UtenteRegistratoIscrCloseGUI {
             int risp=JOptionPane.showConfirmDialog(frame,richiesta,"Vuoi essere giudice?",JOptionPane.YES_NO_OPTION);
             if(risp==0)
             {
-                c.diventaGiudice();
-                JOptionPane.showMessageDialog(frame,"Sei diventato giudice\n Riaccedi per vedere i cambiamenti");
+                try {
+                    c.diventaGiudice();
+                    JOptionPane.showMessageDialog(frame, "Sei diventato giudice\n Riaccedi per vedere i cambiamenti");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
             }
             else
-                c.getUtenteCorrente().setRichiestaGiudice("");
+                try {
+                    c.rifiutaInvitoGiudice();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
         }
     }
 }

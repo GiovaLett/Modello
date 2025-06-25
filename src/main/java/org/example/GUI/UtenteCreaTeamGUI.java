@@ -1,13 +1,13 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
-import org.example.Model.ruoli.Partecipante;
-import org.example.Model.ruoli.Team;
+
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class UtenteCreaTeamGUI {
 
@@ -16,18 +16,18 @@ public class UtenteCreaTeamGUI {
     private JTextField nomeTeamField;
     private JButton creaButton;
 
-   public UtenteCreaTeamGUI(Controller c, Hackathon hackathon,JFrame origFrame){
+   public UtenteCreaTeamGUI(Controller c,JFrame origFrame){
 
        frame=new JDialog((JFrame)null,"Crea Team",true);
        frame.setContentPane(mainPanel);
        frame.pack();
 
        frame.setLocationRelativeTo(null);
-       setCreaButton(c,hackathon,origFrame);
+       setCreaButton(c,origFrame);
        frame.setVisible(true);
    }
 
-   private void setCreaButton(Controller c, Hackathon hackathon,JFrame origFrame){
+   private void setCreaButton(Controller c,JFrame origFrame){
        creaButton.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
@@ -38,7 +38,7 @@ public class UtenteCreaTeamGUI {
                if(risposta==JOptionPane.YES_OPTION)
                {
                    try{
-                    c.creaTeam(nomeTeam,hackathon);
+                    c.creaTeam(nomeTeam,c.getHackathonCorrente());
                    /*Team team=new Team(nomeTeam,hackathon);
 
                    c.addPartecToTeam(team);
@@ -49,6 +49,9 @@ public class UtenteCreaTeamGUI {
                    new Home();}
                    catch (IllegalArgumentException exce){
                        JOptionPane.showMessageDialog(frame,exce.getMessage());
+                   }
+                   catch (SQLException ex){
+                       ex.printStackTrace();
                    }
                }
 

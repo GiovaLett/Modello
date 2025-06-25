@@ -37,12 +37,34 @@ public class Hackathon
 
     public Hackathon(){ ID=Codice_ID();}
 
+
     public Hackathon(String nome){this.nome=nome;  ID=Codice_ID();}
 
+
+   public  Hackathon(String id,String nome,int n_team,String problema,
+              boolean team_suff,boolean view_problema,boolean evento_finito,boolean votaz_conclusa){
+
+        this.ID=id;  this.nome=nome;   this.n_team=n_team;   this.problema=problema;
+
+        this.team_suffic=team_suff;  this.view_problema=view_problema;  this.eventoFinito=evento_finito;
+
+        this.votazioneConclusa=votaz_conclusa;
+
+    }
+
+    public void setID(String ID) {this.ID = ID;}
     public String getID() {return ID;}
 
     public String getNome(){return nome;}
-    void setNome(String nome){this.nome=nome;}
+    public void setNome(String nome){this.nome=nome;}
+
+    public int getN_team() {
+        return n_team;
+    }
+
+    public void setN_team(int n_team) {
+        this.n_team = n_team;
+    }
 
     public ArrayList<Team> getListaTeam() {return ListaTeam;}
     public ArrayList<Giudice> getListaGiudici(){return ListaGiudici;}
@@ -100,5 +122,11 @@ public class Hackathon
         nH++;
 
         return ID_codice;
+    }
+
+    public static int getnH() {return nH;}
+
+    public static void setnH(int nH) {
+        Hackathon.nH = nH;
     }
 }

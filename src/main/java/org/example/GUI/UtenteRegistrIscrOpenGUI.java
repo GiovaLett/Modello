@@ -1,7 +1,8 @@
 package org.example.GUI;
 
 import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
+
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -67,17 +68,19 @@ public class UtenteRegistrIscrOpenGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String idHack = idHackField.getText();
-                Hackathon hackathon;
+
 
                 try {
-                    hackathon = c.findHackId(idHack);
+                    c.setHackathonCorrente(c.findHackId(idHack));
+                    new UtenteToPartecipanteGUI( c,frame);
+                    frame.setVisible(false);
+
                 } catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                new UtenteToPartecipanteGUI( c,frame, hackathon);
-                frame.setVisible(false);
+
             }
 
         });

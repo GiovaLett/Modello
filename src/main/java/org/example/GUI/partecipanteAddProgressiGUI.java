@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 public class partecipanteAddProgressiGUI {
 
@@ -28,7 +29,7 @@ public class partecipanteAddProgressiGUI {
 
         frame.setVisible(true);}
 
-    public partecipanteAddProgressiGUI(Controller c, Team team, PartecipanteGUI origGUI){
+    public partecipanteAddProgressiGUI(Controller c, PartecipanteGUI origGUI){
 
 
         frame.setContentPane(mainPanel);
@@ -36,18 +37,18 @@ public class partecipanteAddProgressiGUI {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        setCaricaButton(c,team,origGUI);
-        CloseOperation( origGUI,  team);
+        setCaricaButton(c,origGUI);
+        CloseOperation( c,origGUI);
 
 
         frame.setVisible(true);
     }
 
-    private void CloseOperation(PartecipanteGUI origGUI, Team team){
+    private void CloseOperation(Controller c, PartecipanteGUI origGUI){
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                origGUI.setProgressiList(team);
+                origGUI.setProgressiList(c);
                 frame.dispose();
             }
         });
@@ -56,7 +57,7 @@ public class partecipanteAddProgressiGUI {
 
 
 
-    public void setCaricaButton(Controller c,Team team, PartecipanteGUI origGUI) {
+    public void setCaricaButton(Controller c, PartecipanteGUI origGUI) {
 
         caricaButton.addActionListener(new ActionListener() {
             @Override
@@ -64,15 +65,26 @@ public class partecipanteAddProgressiGUI {
                 String progresso=progressoTextArea.getText();
                 String nomeProgresso=nomeProgressoField.getText();
 
+                if( !c.isNomeProgressoOriginale(nomeProgresso)){
+                    JOptionPane.showMessageDialog(frame,"Presente un altro progresso con lo stesso nome\n" +
+                            "(Cambiare nome al progresso corrente)");
+                    return;
+                }
+
                 int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di caricare questo progresso dal nome:\n"+nomeProgresso,"Conferma",JOptionPane.YES_NO_OPTION);
                 if(risp==0)
                 {
-                    c.caricaProgresso(nomeProgresso,progresso,team);
+                    try{
+                        c.caricaProgresso(nomeProgresso,progresso,c.getTeamCorrente());
 
-                    JOptionPane.showMessageDialog(frame,"Progresso aggiunto!");
-                    origGUI.setProgressiList(team);
+                        JOptionPane.showMessageDialog(frame,"Progresso aggiunto!");
+                        origGUI.setProgressiList(c);
 
-                    frame.dispose();
+                        frame.dispose();
+                    }catch (SQLException ex){
+                        ex.printStackTrace();
+                    }
+
 
                 }
             }
