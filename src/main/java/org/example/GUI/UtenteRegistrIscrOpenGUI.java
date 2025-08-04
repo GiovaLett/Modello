@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 
 
@@ -19,6 +19,7 @@ public class UtenteRegistrIscrOpenGUI {
     private JButton entraButton;
     private JLabel nomeCognomLabel;
     private JLabel idLabel;
+    private JLabel scadenzaLabel;
 
     public UtenteRegistrIscrOpenGUI(Controller c,JFrame origFrame){
 
@@ -29,23 +30,23 @@ public class UtenteRegistrIscrOpenGUI {
         frame.setSize(500,275);
         frame.setLocationRelativeTo(null);
 
-        nomeCognomLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
-        idLabel.setText(c.getUtenteCorrente().getID());
+        nomeCognomLabel.setText(c.getNomeUtenCorr()+" "+c.getCognomeUtenCorr());
+        idLabel.setText(c.getIdUtenCorr());
 
         CloseOperation(origFrame);
         setHackathonTable(c);
         setEntraButton(c);
+        setScadenzaLabel(c);
         frame.setVisible(true);
-        if(c.getListaHackathon().isEmpty())
-            JOptionPane.showMessageDialog(frame,"Gli hackathon purtroppo non si svolgeranno\n" +
-                    "(Mancanza di giudici)");
+        if(c.isListaHackathonEmpty())
+            JOptionPane.showMessageDialog(frame,"Gli hackathon purtroppo non si svolgeranno\n" );
 
     }
 
     public void setHackathonTable(Controller c) {
 
 
-        ModelloHackTab modello=new ModelloHackTab(c.getListaHackathon());
+        ModelloHackTab modello=new ModelloHackTab(c);
 
         hackathonTable.setModel(modello);
     }
@@ -61,7 +62,9 @@ public class UtenteRegistrIscrOpenGUI {
 
     }
 
-
+    public void setScadenzaLabel(Controller c) {
+        this.scadenzaLabel.setText(c.getDataScadenzaIscriz());
+    }
 
     private void setEntraButton(Controller c){
         entraButton.addActionListener(new ActionListener() {
@@ -71,7 +74,7 @@ public class UtenteRegistrIscrOpenGUI {
 
 
                 try {
-                    c.setHackathonCorrente(c.findHackId(idHack));
+                    c.identificaHackathon(idHack);
                     new UtenteToPartecipanteGUI( c,frame);
                     frame.setVisible(false);
 

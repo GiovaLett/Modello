@@ -14,7 +14,11 @@ public class Organizzatore extends Utente_registrato
     }
 
     public void apriIscrizioni(Piattaforma piattaforma) {piattaforma.setOpen_iscr(true);}
-    public void chiudiIscrizioni(Piattaforma piattaforma) {piattaforma.setOpen_iscr(false);}
+    public void chiudiIscrizioni(Piattaforma piattaforma) {
+        piattaforma.setOpen_iscr(false);
+        piattaforma.setEventoPronto(true);
+
+    }
 
 
     public void SelezionaGiudice(Utente_registrato utente, Piattaforma piattaforma,Hackathon hackathon)
@@ -35,8 +39,10 @@ public class Organizzatore extends Utente_registrato
         return utente;
     }
 
-    public Hackathon creaHackathon(Piattaforma piattaforma, String nomeHackathon){
+    public Hackathon creaHackathon(Piattaforma piattaforma, String nomeHackathon,String sede, int durata){
         Hackathon nuovoHackathon=new Hackathon(nomeHackathon);
+        nuovoHackathon.setSede(sede);
+        nuovoHackathon.setDurata(durata);
         piattaforma.addHackathon(nuovoHackathon);
         return nuovoHackathon;
     }

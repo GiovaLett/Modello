@@ -1,7 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
-import org.example.Model.ruoli.Team;
+import org.example.controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,7 +74,7 @@ public class partecipanteAddProgressiGUI {
                 if(risp==0)
                 {
                     try{
-                        c.caricaProgresso(nomeProgresso,progresso,c.getTeamCorrente());
+                        c.caricaProgressoTeamCorr(nomeProgresso,progresso);
 
                         JOptionPane.showMessageDialog(frame,"Progresso aggiunto!");
                         origGUI.setProgressiList(c);

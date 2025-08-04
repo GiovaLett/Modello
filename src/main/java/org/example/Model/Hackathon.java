@@ -13,13 +13,13 @@ public class Hackathon
     private String ID;
     private static int nH =0;//Per la creazione dei codiciID
 
-    public final int N_MAX_PARTEC =2;
+    public final int N_MAX_PARTEC =50;
     private int n_partec=0;
 
     private int n_team;
 
-
-    public String sede;
+    private int durata;
+    private String sede;
 
     private String problema="";
     ArrayList<Team> ListaTeam =new ArrayList<>();
@@ -42,13 +42,14 @@ public class Hackathon
 
 
    public  Hackathon(String id,String nome,int n_team,String problema,
-              boolean team_suff,boolean view_problema,boolean evento_finito,boolean votaz_conclusa){
+              boolean team_suff,boolean view_problema,boolean evento_finito,boolean votaz_conclusa, boolean classificaPubblicata,String sede,int durata){
 
         this.ID=id;  this.nome=nome;   this.n_team=n_team;   this.problema=problema;
 
         this.team_suffic=team_suff;  this.view_problema=view_problema;  this.eventoFinito=evento_finito;
 
-        this.votazioneConclusa=votaz_conclusa;
+        this.votazioneConclusa=votaz_conclusa;  this.classificaPubblicata=classificaPubblicata;
+        this.sede=sede;     this.durata=durata;
 
     }
 
@@ -57,6 +58,12 @@ public class Hackathon
 
     public String getNome(){return nome;}
     public void setNome(String nome){this.nome=nome;}
+
+    public void setDurata(int durata) {this.durata = durata;}
+    public int getDurata() {return durata;}
+
+    public void setSede(String sede) {this.sede = sede;}
+    public String getSede() {return sede;}
 
     public int getN_team() {
         return n_team;
@@ -90,7 +97,6 @@ public class Hackathon
     }
 
     public void setProblema(String problema) {this.problema = problema;}
-
     public String getProblema() {return problema;}
 
     public void addGiudice(Giudice giudice){ListaGiudici.add(giudice);}

@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 
 import javax.swing.*;
@@ -26,10 +26,10 @@ public class oraganHackGUI {
     public oraganHackGUI(Controller c, JFrame origFrame){
 
 
-        frame=new JFrame(c.getHackathonCorrente().getNome());
+        frame=new JFrame(c.getNomeHackCorr());
         frame.setContentPane(mainPanel);
-        nomeHackLabel.setText(c.getHackathonCorrente().getNome());
-        IdLabel.setText(c.getHackathonCorrente().getID());
+        nomeHackLabel.setText(c.getNomeHackCorr());
+        IdLabel.setText(c.getIdHackCorr());
         frame.setSize(700,500);
         frame.setLocationRelativeTo(null);
 
@@ -56,7 +56,7 @@ public class oraganHackGUI {
 
 
     private void setGiudiciTable(Controller c){
-        ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( c.getHackathonCorrente().getID() ) );
+        ModelloGiudiciTab modello=new ModelloGiudiciTab( c);
         giudiciTable.setModel(modello);
 
     }
@@ -64,15 +64,16 @@ public class oraganHackGUI {
     private void setTeamsTable(Controller c){
 
 
-        if(c.getHackathonCorrente().isVotazioneConclusa())
+        if(c.isVotazioneConclusaHackCorr())
         {
             TeamsOrClassificaLabels.setText("Classifica:");
-            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(c.getHackathonCorrente().getListaTeam());
+            c.ordinaTeamVoti();
+            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(c);
             teamsTable.setModel(modello);
         }
         else{
             TeamsOrClassificaLabels.setText("Teams:");
-            ModelloTeamsTab modello=new ModelloTeamsTab(c.getHackathonCorrente().getListaTeam());
+            ModelloTeamsTab modello=new ModelloTeamsTab(c);
             teamsTable.setModel(modello);
         }
 
@@ -83,7 +84,7 @@ public class oraganHackGUI {
 
     public void setTerminaQuestoHackathonButton(Controller c) {
 
-        if(!c.getHackathonCorrente().isEventoFinito() && c.getHackathonCorrente().isView_problema())
+        if(!c.isEventoFinitoHackCorr() && c.isViewProblemaHackCorr())
             terminaQuestoHackathonButton.setVisible(true);
         else
             terminaQuestoHackathonButton.setVisible(false);
@@ -93,7 +94,7 @@ public class oraganHackGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di voler terminare l'Hackathon",
+                int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di voler forzare la chiusura dell'Hackathon prima della durata prestabilita?",
                         "Termine Hackathon",JOptionPane.YES_NO_OPTION);
 
                 if(risp==0){
@@ -115,7 +116,7 @@ public class oraganHackGUI {
 
     public void setPubblicaClassificaButton(Controller c) {
 
-        if(c.getHackathonCorrente().isVotazioneConclusa() && !c.getHackathonCorrente().isClassificaPubblicata())
+        if(c.isVotazioneConclusaHackCorr() && !c.isClassificaPubblHackCorr())
             pubblicaClassificaButton.setVisible(true);
         else
             pubblicaClassificaButton.setVisible(false);
@@ -124,8 +125,13 @@ public class oraganHackGUI {
         pubblicaClassificaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                c.getHackathonCorrente().setClassificaPubblicata(true);
-                pubblicaClassificaButton.setVisible(false);
+                try{
+                    c.pubblicaClassifica();
+                    pubblicaClassificaButton.setVisible(false);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
             }
         });
     }
@@ -133,7 +139,7 @@ public class oraganHackGUI {
 
     private void cotrolloTeamSuff(Controller c)
     {
-        if(c.isEventoPronto() && !c.getHackathonCorrente().isTeam_suffic()) {
+        if(c.isEventoPronto() && !c.isTeamSuffHackCorr()) {
             JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (teams insufficienti)");
             noHackLabel.setVisible(true);
         }

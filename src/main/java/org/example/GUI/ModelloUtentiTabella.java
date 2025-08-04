@@ -1,26 +1,31 @@
 package org.example.GUI;
 
-import org.example.Model.ruoli.*;
+
+import org.example.controller.Controller;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+
 
 public class ModelloUtentiTabella extends AbstractTableModel {
 
-    private ArrayList<Utente_registrato> ListaUtenti;
+    Controller contr;
+
     private String[] nomeColonne ={"ID","Nome","Cognome","Email"};
 
 
-    ModelloUtentiTabella(ArrayList<Utente_registrato> ListaUtenti){
-        this.ListaUtenti=ListaUtenti;
+
+
+    ModelloUtentiTabella(Controller c){
+        contr=c;
     }
+
 
 
 
 
     @Override
     public int getRowCount() {
-        return ListaUtenti.size();
+        return contr.sizeListaUtenReg();
     }
 
     @Override
@@ -34,14 +39,14 @@ public class ModelloUtentiTabella extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) //ID,nome,cognome,email;
+    public Object getValueAt(int rowIndex, int columnIndex)
     {
-        Utente_registrato utenteRow=ListaUtenti.get(rowIndex);
 
-        if(columnIndex==0)  { return utenteRow.getID();}
-        if(columnIndex==1)  {return utenteRow.getNome();}
-        if(columnIndex==2)  {return utenteRow.getCognome();}
-        if(columnIndex==3)  {return utenteRow.getEmail();}
+
+        if(columnIndex==0)  { return contr.idUtenTab(rowIndex);}
+        if(columnIndex==1)  {return contr.nomeUtenTab(rowIndex);}
+        if(columnIndex==2)  {return contr.cognUtenTab(rowIndex);}
+        if(columnIndex==3)  {return contr.emailUtenTab(rowIndex);}
         else  return null;
 
 

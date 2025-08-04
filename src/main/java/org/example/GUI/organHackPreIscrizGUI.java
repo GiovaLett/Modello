@@ -1,11 +1,10 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 
 //L'import di questi 2 package serve per poter stampare nome e cognome degli utenti nei messaggi di conferma
 import org.example.Model.ruoli.Giudice;
-import org.example.Model.ruoli.Utente_registrato;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -34,8 +33,8 @@ public class organHackPreIscrizGUI {
 
         frame=new JFrame("Selezione Giudici");
         frame.setContentPane(mainPanel);
-        nomeHackLabel.setText(c.getHackathonCorrente().getNome());
-        IdLabel.setText(c.getHackathonCorrente().getID());
+        nomeHackLabel.setText(c.getNomeHackCorr());
+        IdLabel.setText(c.getIdHackCorr());
         frame.pack();
         frame.setSize(700,500);
         frame.setLocationRelativeTo(null);
@@ -46,7 +45,7 @@ public class organHackPreIscrizGUI {
         setGiudiciTable(c);
         closeOperation(origFrame);
 
-        if(c.getHackathonCorrente().getListaGiudici().isEmpty())
+        if(c.isListaGiudHackCorrEmpty())
             rimuovGiudPanel.setVisible(false);
         else
             rimuovGiudPanel.setVisible(true);
@@ -70,7 +69,7 @@ public class organHackPreIscrizGUI {
     }
 
     private void setUtentiTable(Controller c){
-        ModelloUtentiTabella modello=new ModelloUtentiTabella(c.getListaUtenti());
+        ModelloUtentiTabella modello=new ModelloUtentiTabella(c);
         utentiTable.setModel(modello);
 
     }
@@ -86,7 +85,7 @@ public class organHackPreIscrizGUI {
                 String IdUtente = idUtenteField.getText();
 
                 try {
-                    c.addGiudiceHackaton(c.getHackathonCorrente(),IdUtente);
+                    c.addGiudiceHackCorr(IdUtente);
                     setGiudiciTable(c);
                     setUtentiTable(c);
                     rimuovGiudPanel.setVisible(true);
@@ -106,18 +105,18 @@ public class organHackPreIscrizGUI {
         rimuoviButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String IdGiudice = idGiudiceField.getText();
+                String idGiudice = idGiudiceField.getText();
                 Giudice giudice;
                 try {
 
-                    giudice=c.findIdGiudice(c.getHackathonCorrente(),IdGiudice);
+                    c.identificaGiudiceSelezionatoHackCorr(idGiudice);
                     int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di voler eliminate il giudice:\n"
-                            +giudice.getNome()+" "+giudice.getCognome()+" ?","Conferma eliminazione",0);
+                            +c.getNomeGiudSel()+" "+c.getCognomeGiudSel()+" ?","Conferma eliminazione",0);
 
                     if(risp==0) {
 
                         try{
-                        c.removeGiudice(giudice, c.getHackathonCorrente());
+                        c.removeGiudiceSelHackCorr();
                         JOptionPane.showMessageDialog(frame, "Giudice eliminato!");
                         } catch (SQLException ex) {
                             ex.printStackTrace();
@@ -125,21 +124,15 @@ public class organHackPreIscrizGUI {
 
                         setGiudiciTable(c);
                         setUtentiTable(c);
-                        if(c.getHackathonCorrente().getListaGiudici().isEmpty())
+                        if(c.isListaGiudHackCorrEmpty())
                             rimuovGiudPanel.setVisible(false);
                         else
                             rimuovGiudPanel.setVisible(true);
                     }
-
-
-
-
                 }
                 catch(IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(),"Errore", 0);
-                    return;
                 }
-
 
             }
         });
@@ -147,7 +140,7 @@ public class organHackPreIscrizGUI {
     }
 
     private void setGiudiciTable(Controller c){
-        ModelloGiudiciTab modello=new ModelloGiudiciTab( c.getListaGiudici( c.getHackathonCorrente().getID() ) );
+        ModelloGiudiciTab modello=new ModelloGiudiciTab( c );
         giudiciTable.setModel(modello);
 
     }
@@ -163,16 +156,15 @@ public class organHackPreIscrizGUI {
 
                 try {
 
-                    Utente_registrato utente=c.trovaUtenteForGiudice(c.getHackathonCorrente(),utenteID);
-
+                    c.identificaUtenteSelezionatoHackCorr(utenteID);
 
                     int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di mandare la richiesta a\n" +
-                            utente.getNome()+" "+utente.getCognome()+" ?","",JOptionPane.YES_NO_OPTION);
+                            c.getNomeUtenSele()+" "+c.getCognomeUtenSele()+" ?","",JOptionPane.YES_NO_OPTION);
 
                     if(risp==0)
                     {
                         try {
-                            c.mandaRichiestaUtenteForGiudice(utente, c.getHackathonCorrente());
+                            c.mandaRichiestaUtenteSelForGiudiceHackCorr();
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }

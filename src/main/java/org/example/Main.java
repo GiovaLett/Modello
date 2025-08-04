@@ -1,11 +1,9 @@
 package org.example;
 
-import org.example.Controller.Controller;
 import org.example.GUI.*;
 import org.example.Model.Hackathon;
 import org.example.Model.ruoli.Team;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

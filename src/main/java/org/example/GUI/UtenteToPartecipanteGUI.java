@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 
 
@@ -52,7 +52,7 @@ public class UtenteToPartecipanteGUI {
     }
 
     private void setTeamTable(Controller c) {
-        ModelloTeamsTab modello=new ModelloTeamsTab(c.getHackathonCorrente().getListaTeam());
+        ModelloTeamsTab modello=new ModelloTeamsTab(c);
         teamTable.setModel(modello);
     }
 
@@ -61,11 +61,16 @@ public class UtenteToPartecipanteGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                if(c.isIscrizioneScaduta()){
+                    JOptionPane.showMessageDialog(frame,"Data iscrizione Scaduta");
+                    return;
+                }
+
                 String codiceTeam= codiceAccessoField.getText();
 
 
                 try {
-                    c.setTeamCorrente(  c.findCodeAccessTeam(codiceTeam,c.getHackathonCorrente())  );
+                    c.identificaCODTeamHC(codiceTeam);
                 }
                 catch(IllegalArgumentException exception)
                 {
@@ -73,7 +78,7 @@ public class UtenteToPartecipanteGUI {
                     return;
                 }
 
-                try { c.addPartecToTeam(c.getTeamCorrente(),c.getHackathonCorrente()); }
+                try { c.addPartecToTeamCorrHC(); }
                 catch (IllegalArgumentException exception)
                 {
                     JOptionPane.showMessageDialog(frame,exception.getMessage()," ",JOptionPane.INFORMATION_MESSAGE);
@@ -84,7 +89,7 @@ public class UtenteToPartecipanteGUI {
                 }
 
 
-                JOptionPane.showMessageDialog(frame,"Ora sei membro del team:\n"+c.getTeamCorrente().getNome());
+                JOptionPane.showMessageDialog(frame,"Ora sei membro del team:\n"+c.getNomeTeamCorr());
                 JOptionPane.showMessageDialog(frame,"Sarai indirizzato alla Home, riaccedi per vedere i nuovi aggiornamenti al profilo!");
                 frame.dispose();
                 new Home();
@@ -100,8 +105,14 @@ public class UtenteToPartecipanteGUI {
         creaTeamButton.addActionListener(new ActionListener() {
 
 
+
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                if(c.isIscrizioneScaduta()){
+                    JOptionPane.showMessageDialog(frame,"Data iscrizione Scaduta");
+                    return;
+                }
 
                 new UtenteCreaTeamGUI( c, frame);
 

@@ -1,17 +1,23 @@
 package org.example.GUI;
 
-import org.example.Model.ruoli.Team;
+
+import org.example.controller.Controller;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+
 
 public class ModelloTeamsTab extends AbstractTableModel {
 
-    ArrayList<Team>ListaTeam;
+    Controller contr;
+
 
     private String[] nomeColonne={"ID","Nome","Numero membri"};
 
-    ModelloTeamsTab(ArrayList<Team> listaTeam){ListaTeam=listaTeam;}
+
+
+    ModelloTeamsTab(Controller c){
+        contr=c;
+    }
 
     @Override
     public String getColumnName(int column) {
@@ -20,7 +26,7 @@ public class ModelloTeamsTab extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return ListaTeam.size();
+        return contr.sizeListaTeam();
     }
 
     @Override
@@ -31,11 +37,11 @@ public class ModelloTeamsTab extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
 
-        Team teamRow=ListaTeam.get(rowIndex);
 
-        if(columnIndex==0){ return teamRow.getID();}
-        if(columnIndex==1){return teamRow.getNome();}
-        if(columnIndex==2){return teamRow.getNumeroMembri();}
+
+        if(columnIndex==0){ return contr.idTeamTab(rowIndex);}
+        if(columnIndex==1){return contr.nomeTeamTab(rowIndex);}
+        if(columnIndex==2){return contr.numMembriTeamTab(rowIndex);}
 
         return null;
     }

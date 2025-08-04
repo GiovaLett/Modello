@@ -1,14 +1,16 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
+import org.example.controller.Controller;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class organizzatoreGUI {
 
@@ -24,12 +26,19 @@ public class organizzatoreGUI {
     private JButton aggiungiButton;
     private JPanel creaHackathonPanel;
     private JButton rimuoviButton;
+    private JSpinner giornoSpinner;
+    private JSpinner meseSpinner;
+    private JSpinner annoSpinner;
+    private JButton impostaDataButton;
+    private JPanel dataEventoPanel;
+    private JTextField sedeField;
+    private JTextField durataField;
 
 
     public organizzatoreGUI(Controller c,JFrame origFrame){
 
         frame=new JFrame();
-        nomeAmministratore.setText(c.getAmministratore().getNome()+" "+c.getAmministratore().getCognome());
+        nomeAmministratore.setText(c.getNomeUtenCorr()+" "+c.getCognomeUtenCorr());
         frame.setContentPane(mainPanel);
         setHackathonTable(c);
         frame.pack();
@@ -40,23 +49,109 @@ public class organizzatoreGUI {
         setApriIsrizButton(c);
         setChiudiIscrizioniButton(c);
         setEntraButton(c);
+        setDataEventoPanel(c);
         CloseOperation( origFrame);
         frame.setVisible(true);
 
 
     }
 
-    private void seeGiudiciTable(){
 
-        /*if(c.Listagiudici.size()>0)
-        * giudiciTable.setVisible(true)*/
-    }
 
 
 
    private void setHackathonTable(Controller c){
-        ModelloHackTab modello=new ModelloHackTab(c.getListaHackathon());
+        ModelloHackTab modello=new ModelloHackTab(c);
         hackathonTable.setModel(modello);
+   }
+
+
+   private void setDataEventoPanel(Controller c){
+
+        dataEventoPanel.setVisible(!c.isEventoPronto() && !c.isOpenIscri());
+        setAnnoSpinner();
+        setMeseSpinner();
+        setGiornoSpinner(1);
+       setImpostaDataButton(c);
+    }
+
+   private void setGiornoSpinner(int giornoSalvato){
+
+
+        int mese=(int)meseSpinner.getValue();
+       SpinnerNumberModel modello=null;
+
+        if(mese==1 || mese==3 || mese==5 || mese==7 || mese==8 || mese==10 || mese==12){
+             modello=new SpinnerNumberModel(giornoSalvato,1,31,1);
+
+        }
+       else if(mese==4 || mese==6 || mese==9 || mese==11 ){
+
+
+           if(giornoSalvato>30)
+              modello=new SpinnerNumberModel(30,1,30,1);
+           else
+               modello=new SpinnerNumberModel(giornoSalvato,1,30,1);
+
+
+       }
+       else if(mese==2){
+            if(giornoSalvato>28)
+                modello=new SpinnerNumberModel(28,1,30,1);
+            else
+                modello=new SpinnerNumberModel(giornoSalvato,1,30,1);
+
+        }
+       giornoSpinner.setModel(modello);
+
+
+   }
+
+   private void setMeseSpinner(){
+
+        SpinnerNumberModel modello=new SpinnerNumberModel(6,1,12,1);
+        meseSpinner.setModel(modello);
+
+        meseSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+
+                int giornoSalvato=(int)giornoSpinner.getValue();
+                setGiornoSpinner(giornoSalvato);
+
+
+            }
+        });
+   }
+
+   private void setAnnoSpinner(){
+
+       LocalDate dataOggi=LocalDate.now();
+       int annoOdierno=dataOggi.getYear();
+       SpinnerNumberModel modello=new SpinnerNumberModel(annoOdierno,annoOdierno,null,1);
+       annoSpinner.setModel(modello);
+   }
+
+   private void setImpostaDataButton(Controller c){
+
+        impostaDataButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                 int giorno= (int)giornoSpinner.getValue();
+                int mese= (int)meseSpinner.getValue();
+                int  anno= (int)annoSpinner.getValue();
+
+                try{
+                    c.setDataEvento(giorno,mese,anno);
+                    JOptionPane.showMessageDialog(frame,"Data impostata");
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(frame,ex.getMessage());
+                }
+
+            }
+        });
+
    }
 
    private void setEntraButton(Controller c){
@@ -65,9 +160,8 @@ public class organizzatoreGUI {
             public void actionPerformed(ActionEvent e) {
                 String idHack = idHackField.getText();
 
-
                 try {
-                    c.setHackathonCorrente(  c.findHackId(idHack)  );
+                    c.identificaHackathon(idHack);
                 } catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -87,6 +181,8 @@ public class organizzatoreGUI {
             });
    }
 
+
+
     public void setRimuoviButton(Controller c) {
 
         if(!c.isOpenIscri() && !c.isEventoPronto())
@@ -98,20 +194,20 @@ public class organizzatoreGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String idHack = idHackField.getText();
-                Hackathon hackathon;
+
 
                 try {
-                    hackathon = c.findHackId(idHack);
+                    c.identificaHackathon(idHack);
                 } catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 int risp=JOptionPane.showConfirmDialog(frame,"Sicuro di voler eliminare l'hackathon: "+
-                        hackathon.getNome()+" ?","Conferma",0);
+                        c.getNomeHackCorr()+" ?","Conferma",0);
                 if(risp==0)
                 {
                     try{
-                    c.removeHackathon(hackathon);
+                    c.removeHackCorr();
                     JOptionPane.showMessageDialog(frame,"Hackathon eliminato!");}
                     catch (SQLException ex) {
                         JOptionPane.showMessageDialog(frame,"Errore DB","",JOptionPane.ERROR_MESSAGE);
@@ -132,15 +228,28 @@ public class organizzatoreGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nomeHackathon= nomeHackathonField.getText();
-                if(nomeHackathon.equals(""))
-                    JOptionPane.showMessageDialog(frame,"Digita il nome dell'hackathon\n(non può essere un campo vuoto)");
+                String sedeHackathon=sedeField.getText();
+                String durataHackathonStr=durataField.getText();
+                int durataHackathon;
+
+                if(nomeHackathon.equals("") || sedeHackathon.equals("") || durataHackathonStr.equals(""))
+                    JOptionPane.showMessageDialog(frame,"Nessun campo è facoltativo");
                 else {
 
-                    int risp=JOptionPane.showConfirmDialog(frame,"Confermare il nome <<"+nomeHackathon+">> ?","Conferma",0);
+                    try{
+                        durataHackathon=Integer.parseInt(durataHackathonStr);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(frame,"Il formato del campo durata deve essere un intero\n(Es. 1,2,34...");
+                        return;
+                    }
+
+
+                    int risp=JOptionPane.showConfirmDialog(frame,"Confermare:\n" +
+                            "- Nome:"+nomeHackathon+"\n- Sede:"+sedeHackathon+"\n- Durata:"+durataHackathon+"g","Conferma",0);
                     if(risp==JOptionPane.YES_OPTION){
 
                         try{
-                            c.addHackathon(nomeHackathon);      }
+                            c.addHackathon(nomeHackathon,sedeHackathon,durataHackathon);      }
                         catch (SQLException ex) {
                             JOptionPane.showMessageDialog(frame,"Errore con DB","",JOptionPane.ERROR_MESSAGE);
                             ex.printStackTrace();
@@ -171,8 +280,14 @@ public class organizzatoreGUI {
         apriIsrizButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(c.getDataEvento()==null){
+                    JOptionPane.showMessageDialog(frame,"Imposta prima una data di inizio dell'evento");
+                    return;
+                }
                 int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di aprire le iscrizioni\n" +
-                                "- modifiche ai giudici e agli hackathon non più disponibili\n- Hackathon senza giudici verranno eliminati ",
+                                "- modifiche ai giudici e agli hackathon non più disponibili\n" +
+                                "- Hackathon senza giudici verranno eliminati\n "+
+                                "- Data dell'evento impostata: "+c.getDataEvento(),
                         "Conferma?",
                         JOptionPane.YES_NO_OPTION);
                 if(risposta==JOptionPane.YES_OPTION) {
@@ -182,6 +297,7 @@ public class organizzatoreGUI {
                     apriIsrizButton.setVisible(false);
                     creaHackathonPanel.setVisible(false);
                     rimuoviButton.setVisible(false);
+                    dataEventoPanel.setVisible(false);
                     setHackathonTable(c);}
                     catch (SQLException exc){
                         JOptionPane.showMessageDialog(frame,"Errore DB","",JOptionPane.ERROR_MESSAGE);
@@ -201,7 +317,7 @@ public class organizzatoreGUI {
         chiudiIscrizioniButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di chiudere le iscrizioni?", "Conferma?", JOptionPane.YES_NO_OPTION);
+                int risposta=JOptionPane.showConfirmDialog(frame,"Sicuro di Forzare la chiusura delle iscrizioni prima dei 2 giorni dall'evento?", "Conferma?", JOptionPane.YES_NO_OPTION);
 
                 if(risposta==JOptionPane.YES_OPTION) {
 
@@ -218,5 +334,5 @@ public class organizzatoreGUI {
         });
     }
 
-    private void seeApriIscrizButton(){}
+
 }

@@ -1,9 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
-import org.example.Model.Hackathon;
-import org.example.Model.Progresso;
-import org.example.Model.ruoli.Team;
+import org.example.controller.Controller;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class PartecipanteGUI {
 
@@ -65,15 +63,15 @@ public class PartecipanteGUI {
         frame.setLocationRelativeTo(null);
 
         caricaProgressiButton.setVisible(false);
-        nomeTeamLabel.setText(c.getTeamCorrente().getNome());
-        IDTeamLabel.setText(c.getTeamCorrente().getID());
-        codiceLabel.setText(c.getTeamCorrente().getCodiceAccesso());
-        nomeCognomeLabel.setText(c.getUtenteCorrente().getNome()+" "+c.getUtenteCorrente().getCognome());
+        nomeTeamLabel.setText(c.getNomeTeamCorr());
+        IDTeamLabel.setText(c.getIdTeamCorr());
+        codiceLabel.setText(c.getCodiceAccessoTeamCorr());
+        nomeCognomeLabel.setText(c.getNomeUtenCorr()+" "+c.getCognomeUtenCorr());
 
-        nomeHackathon.setText(c.getHackathonCorrente().getNome());
+        nomeHackathon.setText(c.getNomeHackCorr());
         CloseOperation(origFrame);
         setMembriTable(c);
-        setAltriTeamsTable(c);
+        setAltriTeamsTable(c);//Ordina i team una volta pubblicata la classifica
         setProblemaTextArea(c);
 
         setProgressiList(c);
@@ -101,20 +99,30 @@ public class PartecipanteGUI {
     }
 
     private void setMembriTable(Controller c){
-        ModelloPartecipantiTab modello=new ModelloPartecipantiTab(c.getTeamCorrente().getArrayPartecipante());
+        ModelloPartecipantiTab modello=new ModelloPartecipantiTab(c);
         membriTable.setModel(modello);
 
     }
 
     private void setAltriTeamsTable(Controller c) {
-        ModelloTeamsTab modello=new ModelloTeamsTab(c.getHackathonCorrente().getListaTeam());
-        altriTeamsTable.setModel(modello);
+
+
+        if(c.isClassificaPubblHackCorr()) {
+            c.ordinaTeamVoti();
+            ModelloTeamsVotiTab modello=new ModelloTeamsVotiTab(c);
+            altriTeamsTable.setModel(modello);
+        }else
+        {
+        ModelloTeamsTab modello=new ModelloTeamsTab(c);
+            altriTeamsTable.setModel(modello);
+        }
+
     }
 
     private void setProblemaTextArea(Controller c) {
 
-        if(c.getHackathonCorrente().isView_problema())
-            problemaTextArea.setText(c.getHackathonCorrente().getProblema());
+        if(c.isViewProblemaHackCorr())
+            problemaTextArea.setText(c.getProblemaHackCorr());
         else
             problemaTextArea.setText(" Problema non disponibile");
         problemaTextArea.setEditable(false);
@@ -122,12 +130,18 @@ public class PartecipanteGUI {
 
     private void setCaricaProgressiButton(Controller c){
 
-        caricaProgressiButton.setVisible( c.getHackathonCorrente().isView_problema() && !c.getHackathonCorrente().isEventoFinito() );
+        caricaProgressiButton.setVisible( c.isViewProblemaHackCorr() && !c.isEventoFinitoHackCorr() );
 
 
             caricaProgressiButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
+                    if(c.isDurataHCTerminata()){
+                        JOptionPane.showMessageDialog(frame,"L'hackathon è terminato\n(Impossibile caricare progressi)");
+                        return;
+                    }
+
                     new partecipanteAddProgressiGUI(c,PartecipanteGUI.this);
                     setProgressiList(c);
                 }
@@ -136,10 +150,14 @@ public class PartecipanteGUI {
 
     }
 
+
     public void setProgressiList(Controller c) {
+
         DefaultListModel modello=new DefaultListModel<>();
-        for(Progresso progresso:c.getTeamCorrente().getArrayProgresso()){
-            modello.add(0,progresso.getNome());
+
+        ArrayList<String> nomiProgressi=c.getNomiProgressTeamCorr();
+        for(String nomeProgresso:nomiProgressi){
+            modello.add(0,nomeProgresso);
         }
         progressiList.setModel(modello);
 
@@ -151,15 +169,19 @@ public class PartecipanteGUI {
         progressiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         progressiList.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
+            public void  valueChanged(ListSelectionEvent e) {
                 String rigaSelezionata= (String) progressiList.getSelectedValue();
-                for(Progresso progresso : c.getTeamCorrente().getArrayProgresso())
-                {
-                    if(rigaSelezionata.equals(progresso.getNome()))
-                    {
-                        progressiTextArea.setText(progresso.getCodiceProgresso());
-                    }
+
+                if(rigaSelezionata==null)
+                    progressiTextArea.setText("");
+
+                else{
+
+                   c.identificaProgressoTC(rigaSelezionata);
+                   progressiTextArea.setText(c.getCodiceProgCorr());
+
                 }
+
             }
         });
     }
@@ -167,7 +189,7 @@ public class PartecipanteGUI {
 
     private void cotrolloTeamSuff(Controller c)
     {
-        if(c.isEventoPronto() && !c.getHackathonCorrente().isTeam_suffic()) {
+        if(c.isEventoPronto() && !c.isTeamSuffHackCorr()) {
             JOptionPane.showMessageDialog(frame, "L'hackathon non si svolgerà\n (solo 1 team iscritto)");
             noHackLabel.setVisible(true);
         }
@@ -177,19 +199,11 @@ public class PartecipanteGUI {
 
     public void setPosizionamentoPanel(Controller c) {
 
-        int posiz=0;
-        if(c.getHackathonCorrente().isClassificaPubblicata()) {
+
+        if(c.isClassificaPubblHackCorr()) {
             posizionamentoPanel.setVisible(true);
 
-            for (Team team : c.getHackathonCorrente().getListaTeam())
-            {
-                if (team.getID().equals(c.getTeamCorrente().getID()))
-                {
-                    posiz=c.getHackathonCorrente().getListaTeam().indexOf(team)+1;
-                    break;
-                }
-            }
-            posizLabel.setText(posiz+"° posizione");
+            posizLabel.setText(c.calcolaPosizionamentoTeamCorrente()+"° posizione");
         }
         else
             posizionamentoPanel.setVisible(false);

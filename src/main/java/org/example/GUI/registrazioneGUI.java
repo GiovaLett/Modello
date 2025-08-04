@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -56,21 +56,24 @@ public class registrazioneGUI {
 
                 if( !password.equals(confePassword)){
                     JOptionPane.showMessageDialog(frame,"Le due password non coincidono!","Errore password",0);
-
+                    return;
+                }
+                if(c.isEmailRegisteredYet(email)){
+                    JOptionPane.showMessageDialog(frame,"Email già registrata\n(Registarti con un'altra email)");
                 }
                 else{
 
                     int risp=JOptionPane.showConfirmDialog(frame,"Confermi le credenziali?:\n " +
-                            "Nome: "+nome+"\nCognome: "+cognome+"\nEmail: "+email+"\n");
+                            "Nome: "+nome+"\nCognome: "+cognome+"\nEmail: "+email+"\n","Conferma",JOptionPane.YES_NO_OPTION);
                     if(risp==0)
                     {
                         try{
                         c.addUtenteRegistrato(nome,cognome,email,password);
                         JOptionPane.showMessageDialog(frame,"Account registrato!");
                         frame.dispose();
-                        origFrame.setVisible(true);}
-                        catch (SQLException exce){
-                            JOptionPane.showMessageDialog(frame,"Errore Database","",JOptionPane.ERROR_MESSAGE);
+                        origFrame.setVisible(true);
+                        } catch (SQLException ex){
+                            JOptionPane.showMessageDialog(frame,"Errore con il sistema, siamo spiacenti");
                         }
                     }
                 }

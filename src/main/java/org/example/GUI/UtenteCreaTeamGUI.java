@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 
 
@@ -38,11 +38,8 @@ public class UtenteCreaTeamGUI {
                if(risposta==JOptionPane.YES_OPTION)
                {
                    try{
-                    c.creaTeam(nomeTeam,c.getHackathonCorrente());
-                   /*Team team=new Team(nomeTeam,hackathon);
+                    c.creaTeamHC(nomeTeam);
 
-                   c.addPartecToTeam(team);
-                   hackathon.addTeam(team);*/
                    frame.dispose();
                    origFrame.dispose();
                    JOptionPane.showMessageDialog(frame,"Sarai indirizzato alla Home, riaccedi per vedere i nuovi aggiornamenti al profilo!");

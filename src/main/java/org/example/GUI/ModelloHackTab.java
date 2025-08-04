@@ -1,18 +1,22 @@
 package org.example.GUI;
 
-import org.example.Model.Hackathon;
+
+import org.example.controller.Controller;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+
 
 public class ModelloHackTab extends AbstractTableModel {
 
-    ArrayList<Hackathon> ListaHackathon;
-    String[] nomeColonne={"ID","Nome","Numero partecipanti"};
+    Controller controller;
+
+    String[] nomeColonne={"ID","Nome","Sede","Durata","Numero partecipanti"};
 
 
-    ModelloHackTab(ArrayList<Hackathon> listaHackathon) {
-        ListaHackathon = listaHackathon;
+
+
+    ModelloHackTab(Controller c){
+        controller=c;
     }
 
     @Override
@@ -22,21 +26,23 @@ public class ModelloHackTab extends AbstractTableModel {
 
 
     public int getRowCount() {
-        return ListaHackathon.size();
+        return controller.getSizeListaHack();
     }
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 5;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex)
     {
-        Hackathon hackathonRow=ListaHackathon.get(rowIndex);
-        if(columnIndex==0) {return hackathonRow.getID();}
-        if(columnIndex==1) {return hackathonRow.getNome();}
-        if(columnIndex==2) {return hackathonRow.getNumeroPartec();}
+
+        if(columnIndex==0) {return controller.idHackTab(rowIndex);}
+        if(columnIndex==1) {return controller.nomeHackTab(rowIndex);}
+        if(columnIndex==2) {return controller.sedeHackTab(rowIndex);}
+        if(columnIndex==3) {return controller.durataHackTab(rowIndex)+"g";}
+        if(columnIndex==4) {return controller.numPartecHackTab(rowIndex);}
         return null;
     }
 }

@@ -1,15 +1,10 @@
-package org.example.ImplementazionePostgresDAO;
+package org.example.implementazionePostgresDAO;
 
-import org.example.ConnessioneDB.ConnessioneDB;
-import org.example.DAO.HackathonDao;
+import org.example.connessioneDB.ConnessioneDB;
+import org.example.dao.HackathonDao;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class HackathonDAOImplement implements HackathonDao {
 
@@ -27,10 +22,16 @@ public class HackathonDAOImplement implements HackathonDao {
         conn=ConnessioneDB.getInstance();
 
         String sql="INSERT INTO \"UtentiRegistrati\" "+
-                "(id,nome,cognome,email,password) VALUES ('"+id+"','"+nome+"','"+cognome+"','"+email+"','"+password+"')";
+                "(id,nome,cognome,email,password) VALUES (?,?,?,?,?)";
 
+        PreparedStatement preparedStatement=null;
         try{
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
+             preparedStatement=conn.prepareStatement(sql);
+             preparedStatement.setString(1,id);
+             preparedStatement.setString(2,nome);
+             preparedStatement.setString(3,cognome);
+             preparedStatement.setString(4,email);
+             preparedStatement.setString(5,password);
             preparedStatement.executeUpdate();
 
 
@@ -38,7 +39,8 @@ public class HackathonDAOImplement implements HackathonDao {
             System.out.println("Errore nell'aggiunta a database");
             exc.printStackTrace();
         }
-
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
 
@@ -55,8 +57,10 @@ public class HackathonDAOImplement implements HackathonDao {
 
         String sql="SELECT * FROM \"UtentiRegistrati\" ";
 
+        PreparedStatement prepStat=null;
+
         try{
-            PreparedStatement prepStat = conn.prepareStatement(sql);
+             prepStat = conn.prepareStatement(sql);
             ResultSet row= prepStat.executeQuery();
 
             while(row.next()){
@@ -76,20 +80,24 @@ public class HackathonDAOImplement implements HackathonDao {
         }
         catch (Exception e){e.printStackTrace();}
 
+        if(prepStat!=null){
+            prepStat.close();
+        }
         conn.close();
 
 
     }
 
-
+    @Override
     public void setUtenteToGiudiceDB(String idUtente,String idGiudice,String idHackathon)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String query="UPDATE \"UtentiRegistrati\" SET  id=?, \"idHackathon\"=? WHERE id=?";
 
+        PreparedStatement preparedStatement=null;
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+             preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,idGiudice);
             preparedStatement.setString(2,idHackathon);
             preparedStatement.setString(3,idUtente);
@@ -97,19 +105,24 @@ public class HackathonDAOImplement implements HackathonDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
 
     }
-
+    @Override
     public void setGiudiceToUtenteDB(String idUtente,String idGiudice)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String query="UPDATE \"UtentiRegistrati\" SET  id=?, \"idHackathon\"=? WHERE id=?";
 
+        PreparedStatement preparedStatement=null;
+
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+            preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,idUtente);
             preparedStatement.setString(2,null);
             preparedStatement.setString(3,idGiudice);
@@ -117,21 +130,25 @@ public class HackathonDAOImplement implements HackathonDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
 
     }
 
 
-
+    @Override
     public void setUtenteToPartecipanteDB(String idUtente,String idPartecipante,String idHackathon, String idTeam)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String query="UPDATE \"UtentiRegistrati\" SET  id=?, \"idHackathon\"=?,\"idTeam\"=? WHERE id=?";
 
+        PreparedStatement preparedStatement=null;
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+             preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,idPartecipante);
             preparedStatement.setString(2,idHackathon);
             preparedStatement.setString(3,idTeam);
@@ -140,6 +157,8 @@ public class HackathonDAOImplement implements HackathonDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
 
@@ -147,22 +166,23 @@ public class HackathonDAOImplement implements HackathonDao {
 
 
     /**TEAMS*/
-
-    public void getAllTeamsDB(ArrayList<String> id,ArrayList<String> nome, ArrayList<String> cod_accesso
+    @Override
+    public void getAllTeamsDB(ArrayList<String> id,ArrayList<String> nome, ArrayList<String> codAccesso
                              , ArrayList<Float> voti, ArrayList<String> idHackathon) throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String sql="SELECT * FROM \"Teams\" ";
 
+        PreparedStatement preparedStatement=null;
         try{
-            PreparedStatement prepStat = conn.prepareStatement(sql);
-            ResultSet row= prepStat.executeQuery();
+            preparedStatement = conn.prepareStatement(sql);
+            ResultSet row= preparedStatement.executeQuery();
 
             while(row.next()){
                 id.add(0,row.getString("id"));   //getNString si usa per leggere anche altri caratteri speciali, emoji ecc
                 nome.add(0,row.getString("nome"));
-                cod_accesso.add(0, row.getString("codice_accesso"));
+                codAccesso.add(0, row.getString("codice_accesso"));
                 voti.add(0,row.getFloat("voto") );
                 idHackathon.add(0,row.getString("id_hackathon") );
 
@@ -174,22 +194,27 @@ public class HackathonDAOImplement implements HackathonDao {
         }
         catch (Exception e){e.printStackTrace();}
 
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
     }
 
-
-    public void addTeamsDB(String id, String nome, String cod_accesso, String idHackathon) throws SQLException{
+    @Override
+    public void addTeamsDB(String id, String nome, String codAccesso, String idHackathon) throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String query="INSERT INTO \"Teams\"  (id, nome, codice_accesso,id_hackathon) VALUES" +
                 "(?,?,?,?)";
+
+        PreparedStatement preparedStatement=null;
+
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+            preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,id);
             preparedStatement.setString(2,nome);
-            preparedStatement.setString(3,cod_accesso);
+            preparedStatement.setString(3,codAccesso);
 
             preparedStatement.setString(4,idHackathon);
             preparedStatement.executeUpdate();
@@ -197,31 +222,37 @@ public class HackathonDAOImplement implements HackathonDao {
 
             ex.printStackTrace();
         }
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
     }
 
+
+    @Override
     public void setVotoTeam(String idTeam, float voto)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String query="UPDATE \"Teams\" SET voto=?  WHERE id=?";
 
+        PreparedStatement preparedStatement=null;
+
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+            preparedStatement= conn.prepareStatement(query);
             preparedStatement.setFloat(1,voto);
             preparedStatement.setString(2,idTeam);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
-
     }
 
     /** PROGRESSI*/
-
+    @Override
     public void getProgressiTeam(ArrayList<String> nome,ArrayList<String> codice, ArrayList<String> commento,
                                 String idTeam) throws SQLException{
 
@@ -229,8 +260,10 @@ public class HackathonDAOImplement implements HackathonDao {
 
         String query="SELECT * FROM \"Progressi\" WHERE \"id_team\"=?";
 
+        PreparedStatement preparedStatement=null;
+
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+            preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,idTeam);
             ResultSet row= preparedStatement.executeQuery();
 
@@ -244,10 +277,15 @@ public class HackathonDAOImplement implements HackathonDao {
         } catch (Exception e) {
 
             e.printStackTrace();
+        
         }
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
     }
 
+
+    @Override
     public void addProgresso(String idTeam,String nomeProgresso, String codice) throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -255,8 +293,10 @@ public class HackathonDAOImplement implements HackathonDao {
         String query="INSERT INTO \"Progressi\"  ( codice,id_team, nome) VALUES" +
                 "(?,?,?)";
 
+        PreparedStatement preparedStatement=null;
+
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+            preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,codice);
             preparedStatement.setString(2,idTeam);
             preparedStatement.setString(3,nomeProgresso);
@@ -265,20 +305,24 @@ public class HackathonDAOImplement implements HackathonDao {
         }catch(Exception e){
             e.printStackTrace();
         }
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
     }
 
 
-
+    @Override
     public void setCommentoProgresso(String idTeam,String nomeProgresso, String commento) throws SQLException{
 
         conn=ConnessioneDB.getInstance();
 
         String query="UPDATE \"Progressi\" SET commento=?  WHERE id_team=? AND nome=? ";
 
+        PreparedStatement preparedStatement=null;
+
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+           preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,commento);
             preparedStatement.setString(2,idTeam);
             preparedStatement.setString(3,nomeProgresso);
@@ -287,6 +331,8 @@ public class HackathonDAOImplement implements HackathonDao {
         }catch(Exception e){
             e.printStackTrace();
         }
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
 
     }
@@ -299,15 +345,23 @@ public class HackathonDAOImplement implements HackathonDao {
 
      */
     @Override
-    public void addHackathonDB(String id, String nome) throws SQLException {
+    public void addHackathonDB(String id, String nome,String sede,int durata) throws SQLException {
 
         conn=ConnessioneDB.getInstance();
 
         String sql="INSERT INTO \"Hackathon\" "+
-                "(id,nome) VALUES ('"+id+"','"+nome+"')";
+                "(id,nome,sede,durata)  VALUES (?,?,?,?)";;
+
+
+
+        PreparedStatement preparedStatement=null;
 
         try{
-            PreparedStatement preparedStatement=conn.prepareStatement(sql);
+            preparedStatement=conn.prepareStatement(sql);
+            preparedStatement.setString(1,id);
+            preparedStatement.setString(2,nome);
+            preparedStatement.setString(3,sede);
+            preparedStatement.setInt(4,durata);
             preparedStatement.executeUpdate();
 
 
@@ -316,6 +370,8 @@ public class HackathonDAOImplement implements HackathonDao {
             exc.printStackTrace();
         }
 
+        if(preparedStatement!=null)
+            preparedStatement.close();
         conn.close();
     }
 
@@ -325,26 +381,30 @@ public class HackathonDAOImplement implements HackathonDao {
         conn=ConnessioneDB.getInstance();
 
         String query="DELETE FROM \"Hackathon\" WHERE id=?";
-
+        PreparedStatement preparedStatement = null;
         try{
-            PreparedStatement preparedStatement= conn.prepareStatement(query);
+            preparedStatement= conn.prepareStatement(query);
             preparedStatement.setString(1,id);
             preparedStatement.executeUpdate();
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        preparedStatement.close();
         conn.close();
     }
 
     @Override
-    public void getAllHackathonDB(ArrayList<String> id, ArrayList<String> nome, ArrayList<Integer> n_max_partec, ArrayList<Integer> n_team, ArrayList<String> problema,
-                                  ArrayList<Boolean> team_suff, ArrayList<Boolean> view_problema, ArrayList<Boolean> evento_finito, ArrayList<Boolean> votaz_conclusa) throws SQLException {
+    public void getAllHackathonDB(ArrayList<String> id, ArrayList<String> nome, ArrayList<Integer> nMaxPartec, ArrayList<Integer> numTeam, ArrayList<String> problema,
+                                  ArrayList<Boolean> teamSuff, ArrayList<Boolean> viewProblema, ArrayList<Boolean> eventoFinito, ArrayList<Boolean> votazConclusa,
+                                  ArrayList<Boolean> classPubblicata, ArrayList<String> sede, ArrayList<Integer> durata) throws SQLException {
 
 
         conn=ConnessioneDB.getInstance();
 
         String sql="SELECT * FROM \"Hackathon\" ";
+
+        
 
         try{
             PreparedStatement prepStat = conn.prepareStatement(sql);
@@ -353,12 +413,15 @@ public class HackathonDAOImplement implements HackathonDao {
             while(row.next()){
                 id.add(0,row.getString("id"));   //getNString si usa per leggere anche altri caratteri speciali, emoji ecc
                 nome.add(0,row.getString("nome"));
-                n_team.add(0,row.getInt("n_team"));
+                numTeam.add(0,row.getInt("n_team"));
                 problema.add(0, row.getString("problema"));
-                team_suff.add(0,row.getBoolean("team_suff"));
-                view_problema.add(0,row.getBoolean("view_problema"));
-                evento_finito.add(0,row.getBoolean("evento_finito"));
-                votaz_conclusa.add(0,row.getBoolean("votaz_conclusa"));
+                teamSuff.add(0,row.getBoolean("team_suff"));
+                viewProblema.add(0,row.getBoolean("view_problema"));
+                eventoFinito.add(0,row.getBoolean("evento_finito"));
+                votazConclusa.add(0,row.getBoolean("votaz_conclusa"));
+                classPubblicata.add(0,row.getBoolean("classifica_pubblicata"));
+                sede.add(0,row.getString("sede"));
+                durata.add(0,row.getInt("durata"));
             }
             row.close();
 
@@ -369,7 +432,7 @@ public class HackathonDAOImplement implements HackathonDao {
 
         conn.close();
     }
-
+    @Override
     public void setHackathonProblema(String idHackathon,String problema) throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -397,6 +460,7 @@ public class HackathonDAOImplement implements HackathonDao {
 
     /**FLAGS HACKATHON*/
 
+    @Override
     public void setTeamSuff(boolean teamSuff, String idHackathon)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -415,7 +479,7 @@ public class HackathonDAOImplement implements HackathonDao {
         conn.close();
 
     }
-
+    @Override
     public void setViewProblema(boolean viewProblema,String idHackathon)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -435,7 +499,7 @@ public class HackathonDAOImplement implements HackathonDao {
 
     }
 
-
+    @Override
     public void setEventoFinito(boolean eventoFinito,String idHackathon)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -455,7 +519,7 @@ public class HackathonDAOImplement implements HackathonDao {
 
     }
 
-
+    @Override
     public void setVotazConclusa(boolean votazConclusa, String idHackathon)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -475,6 +539,30 @@ public class HackathonDAOImplement implements HackathonDao {
 
     }
 
+    @Override
+    public void setClassPubblicata(boolean classPubblicata, String idHackathon)throws SQLException{
+
+        conn=ConnessioneDB.getInstance();
+
+        String query="UPDATE \"Hackathon\" SET  classifica_pubblicata=? WHERE id=? ";
+
+        try{
+            PreparedStatement preparedStatement=conn.prepareStatement(query);
+            preparedStatement.setBoolean(1, classPubblicata);
+            preparedStatement.setString(2,idHackathon);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally{conn.close(); }
+
+
+
+
+
+    }
+
 
 
 
@@ -482,6 +570,7 @@ public class HackathonDAOImplement implements HackathonDao {
 
     /**FLAGS PIATTAFORMA*/
 
+    @Override
     public boolean[] getAllFlagsPiattaforma()throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -498,7 +587,7 @@ public class HackathonDAOImplement implements HackathonDao {
             boolean[]flags={openIscr,eventoPronto};
             row.close();
 
-            conn.close();
+
             return flags;
 
         }catch (Exception ex)
@@ -506,11 +595,57 @@ public class HackathonDAOImplement implements HackathonDao {
             ex.printStackTrace();
             throw new SQLException("Errore caricamento flags piattaforma");
         }
+        finally{    conn.close();   }
 
 
 
     }
 
+    public String getDataEvento() throws SQLException{
+
+        conn=ConnessioneDB.getInstance();
+
+        String query="SELECT * FROM \"FlagsPiattaforma\" ";
+
+        PreparedStatement preparedStatement=null;
+        try{
+            preparedStatement=conn.prepareStatement(query);
+            ResultSet row=preparedStatement.executeQuery();
+            row.next();
+
+            String dataEvento=row.getString("data_evento");
+            row.close();
+            return dataEvento;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException();
+        }
+        finally{
+            if(preparedStatement!=null)
+                preparedStatement.close();
+            conn.close();
+        }
+    }
+
+    public void setDataEvento(String dataEvento) throws SQLException{
+
+        conn=ConnessioneDB.getInstance();
+
+        String query="UPDATE \"FlagsPiattaforma\" SET  data_evento=? ";
+        try{
+            PreparedStatement preparedStatement=conn.prepareStatement(query);
+            preparedStatement.setString(1,dataEvento);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        finally{    conn.close();   }
+    }
+
+
+    @Override
     public void setOpenIscr(boolean openIscr)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -525,10 +660,10 @@ public class HackathonDAOImplement implements HackathonDao {
             e.printStackTrace();
         }
 
-        conn.close();
+        finally{    conn.close();   }
 
     }
-
+    @Override
     public void setEventoPronto(boolean eventoPronto)throws SQLException{
 
         conn=ConnessioneDB.getInstance();
@@ -552,6 +687,7 @@ public class HackathonDAOImplement implements HackathonDao {
 
 /**RichiesteGiudici*/
 
+@Override
 public void salvaRichiestaDB(String idUtente,String idHackathon, String richiesta)throws SQLException{
 
     conn=ConnessioneDB.getInstance();
@@ -572,7 +708,7 @@ public void salvaRichiestaDB(String idUtente,String idHackathon, String richiest
     conn.close();
 }
 
-
+@Override
 public void eliminaRichiestaGiudice(String idUtente) throws SQLException{
 
     conn=ConnessioneDB.getInstance();
@@ -592,7 +728,7 @@ public void eliminaRichiestaGiudice(String idUtente) throws SQLException{
 
 
 
-
+@Override
 public void getAllRichiesteGiudiciDB(ArrayList<String> idUtente, ArrayList<String> richieste, ArrayList<String> idHackathon) throws SQLException
 {
     conn=ConnessioneDB.getInstance();
@@ -651,7 +787,7 @@ public void getAllRichiesteGiudiciDB(ArrayList<String> idUtente, ArrayList<Strin
         }
     }
 
-
+    @Override
     public void storeNH(int nH) throws SQLException{
        conn=ConnessioneDB.getInstance();
 
@@ -667,7 +803,7 @@ public void getAllRichiesteGiudiciDB(ArrayList<String> idUtente, ArrayList<Strin
        }
        conn.close();
    }
-
+    @Override
     public void storeNU(int nU) throws SQLException{
         conn=ConnessioneDB.getInstance();
 
@@ -684,7 +820,7 @@ public void getAllRichiesteGiudiciDB(ArrayList<String> idUtente, ArrayList<Strin
         conn.close();
     }
 
-
+    @Override
     public void storeNG(int nG) throws SQLException{
         conn=ConnessioneDB.getInstance();
 
@@ -700,7 +836,7 @@ public void getAllRichiesteGiudiciDB(ArrayList<String> idUtente, ArrayList<Strin
         }
         conn.close();
     }
-
+    @Override
     public void storeNP(int nP) throws SQLException{
         conn=ConnessioneDB.getInstance();
 
@@ -717,7 +853,7 @@ public void getAllRichiesteGiudiciDB(ArrayList<String> idUtente, ArrayList<Strin
         conn.close();
     }
 
-
+    @Override
     public void storeNT(int nT) throws SQLException{
         conn=ConnessioneDB.getInstance();
 

@@ -1,6 +1,8 @@
 package org.example.Model;
 import org.example.Model.ruoli.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Piattaforma
@@ -11,7 +13,7 @@ public class Piattaforma
 
     ArrayList<Utente_registrato> ListaUtenReg =new ArrayList<>();
     ArrayList<Hackathon> ListaHackathon=new ArrayList<>();
-
+    LocalDate dataEvento=null;
 
     public boolean isOpen_iscr() {return open_iscr;}
     public void setOpen_iscr(boolean open_iscr) {this.open_iscr = open_iscr;}
@@ -25,6 +27,18 @@ public class Piattaforma
     public ArrayList<Utente_registrato> getListaUtenReg() {return ListaUtenReg;}
     public void addUtenteReg(Utente_registrato nuovoUtente){ListaUtenReg.add(nuovoUtente);}
 
+    public void setDataEvento(String giorno,String mese,String anno){
+        String dataInput=anno+"-"+mese+"-"+giorno;
+        dataEvento=LocalDate.parse(dataInput, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+    public void setDataEvento(String dataStr){
+
+        dataEvento=LocalDate.parse(dataStr, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+
+    public void setDataEvento(LocalDate dataEvento){    this.dataEvento=dataEvento;}
+    public LocalDate getDataEvento(){return dataEvento;}
 
 
 

@@ -1,8 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
-
-import org.example.Model.Progresso; //Per poter settare e scorrere la lista
+import org.example.controller.Controller;
 
 
 import javax.swing.*;
@@ -12,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class giudiceVediProgressiGUI {
 
@@ -44,10 +43,10 @@ public class giudiceVediProgressiGUI {
 
         public giudiceVediProgressiGUI(Controller c, giudiceGUI origGUI)
         {
-            frame=new JDialog((Frame) null,c.getTeamCorrente().getNome(),true);
+            frame=new JDialog((Frame) null,c.getNomeTeamCorr(),true);
             frame.setContentPane(mainPanel);
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            nomeTeamLabel.setText(c.getTeamCorrente().getNome());
+            nomeTeamLabel.setText(c.getNomeTeamCorr());
             frame.setSize(500,750);
             frame.setLocationRelativeTo(null);
 
@@ -55,12 +54,12 @@ public class giudiceVediProgressiGUI {
             setProgressiList(c);
             setVotoFinalePanel(c);
 
-            if(c.getHackathonCorrente().isEventoFinito() && !c.getHackathonCorrente().isVotazioneConclusa())
+            if(c.isEventoFinitoHackCorr() && !c.isVotazioneConclusaHackCorr())
 
                 setFrameHackFinito(c,origGUI);//Per permettere le votazioni
 
 
-            else if(!c.getHackathonCorrente().isEventoFinito()) {
+            else if(!c.isEventoFinitoHackCorr()) {
 
                 votaTeamPanel.setVisible(false);
                 setSalvaButton(c);
@@ -80,8 +79,11 @@ public class giudiceVediProgressiGUI {
 
         public void setProgressiList(Controller c) {
             DefaultListModel modello=new DefaultListModel<>();
-            for(Progresso progresso:c.getTeamCorrente().getArrayProgresso()){
-                modello.add(0,progresso.getNome());
+
+            ArrayList<String> nomiProgressi= c.getNomiProgressTeamCorr();
+
+            for(String nomeProgresso: nomiProgressi){
+                modello.add(0,nomeProgresso);
             }
             progressiList.setModel(modello);
 
@@ -92,14 +94,21 @@ public class giudiceVediProgressiGUI {
                 @Override
                 public void valueChanged(ListSelectionEvent e) {
                     String rigaSelezionata= (String) progressiList.getSelectedValue();
-                    for(Progresso progresso : c.getTeamCorrente().getArrayProgresso())
-                    {
-                        if(rigaSelezionata.equals(progresso.getNome()))
-                        {
-                            codiceTextArea.setText(progresso.getCodiceProgresso());
-                            commentoTextArea.setText(progresso.getCommento());
-                        }
+
+                    if(rigaSelezionata==null){
+                        codiceTextArea.setText("");
+                        commentoTextArea.setText("");
                     }
+
+
+                    else{
+                        c.identificaProgressoTC(rigaSelezionata);
+
+                        codiceTextArea.setText(c.getCodiceProgCorr());
+                        commentoTextArea.setText(c.getCommentoProgCorr());
+                    }
+
+
                 }
             });
         }
@@ -149,7 +158,7 @@ public class giudiceVediProgressiGUI {
                 public void actionPerformed(ActionEvent e) {
 
                     try{
-                        c.assegnaVotoTeam(c.getTeamCorrente(), votoField.getText());
+                        c.assegnaVotoTeamCorr( votoField.getText());
                         JOptionPane.showMessageDialog(frame,"Voto inserito");
                         origGUI.setTeamTable(c);
 
@@ -168,9 +177,9 @@ public class giudiceVediProgressiGUI {
         }
 
     public void setVotoFinalePanel(Controller c) {
-        if(c.getHackathonCorrente().isVotazioneConclusa())
+        if(c.isVotazioneConclusaHackCorr())
         {
-            votoFinaleLabel.setText(String.valueOf(c.getTeamCorrente().getVoto()));
+            votoFinaleLabel.setText(String.valueOf(c.getVotoTeamCorr()));
             votoFinalePanel.setVisible(true);
         }
 

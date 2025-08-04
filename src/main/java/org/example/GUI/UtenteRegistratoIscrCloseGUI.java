@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 
 
@@ -48,12 +48,12 @@ public class UtenteRegistratoIscrCloseGUI {
     }
 
     public void setHackathonTable(Controller c) {
-        ModelloHackTab modello=new ModelloHackTab(c.getListaHackathon());
+        ModelloHackTab modello=new ModelloHackTab(c);
         hackathonTable.setModel(modello);
     }
 
     private void messageToBeJudge(Controller c){
-        String richiesta=c.getUtenteCorrente().getRichiestaGiudice();
+        String richiesta=c.getRichiestaUC();
         if(richiesta.equals(""));
         else {
             int risp=JOptionPane.showConfirmDialog(frame,richiesta,"Vuoi essere giudice?",JOptionPane.YES_NO_OPTION);

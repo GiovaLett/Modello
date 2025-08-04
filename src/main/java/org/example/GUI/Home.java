@@ -1,6 +1,6 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
+import org.example.controller.Controller;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -30,15 +30,16 @@ public class Home
             //controller.getPiattaforma().buildListaHackathon(5);
 
             try{
-                controller.getCostantiID();
+                controller.getCostantiIdDB();
                 controller.getAllHackathonDB();//Importante l'ordine!!!
                 controller.getAllTeamDB();
                 controller.getUtentiRegistratiDB();
-                controller.getFlagsPiattaforma();
+                controller.getFlagsPiattaformaDB();
+                controller.getDataEventoDB();
 
 
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(frame,"Errore Database","",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame,"Errore con il sistema, siamo spiacenti\n(Riavvia il programma)");
                 e.printStackTrace();
             }
             //controller.addUtentiProva();

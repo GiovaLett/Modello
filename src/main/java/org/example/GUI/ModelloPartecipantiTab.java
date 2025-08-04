@@ -1,27 +1,29 @@
 package org.example.GUI;
 
-import org.example.Model.ruoli.Giudice;
-import org.example.Model.ruoli.Partecipante;
-import org.example.Model.ruoli.Utente_registrato;
+
+import org.example.controller.Controller;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+
 
 public class ModelloPartecipantiTab extends AbstractTableModel {
-    private ArrayList<Partecipante> ListaPartecipanti;
+
+    Controller contr;
+
     private String[] nomeColonne ={"ID","Nome","Cognome","Email"};
 
 
-    ModelloPartecipantiTab(ArrayList<Partecipante> ListaPartecipanti){
 
-        this.ListaPartecipanti = ListaPartecipanti;
+    ModelloPartecipantiTab(Controller c){
+
+        contr=c;
 
     }
 
 
     @Override
     public int getRowCount() {
-        return ListaPartecipanti.size();
+        return contr.sizeListaPartec();
     }
 
     @Override
@@ -35,14 +37,14 @@ public class ModelloPartecipantiTab extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) //ID,nome,cognome,email;
+    public Object getValueAt(int rowIndex, int columnIndex)
     {
-        Utente_registrato utenteRow= ListaPartecipanti.get(rowIndex);
 
-        if(columnIndex==0)  { return utenteRow.getID();}
-        if(columnIndex==1)  {return utenteRow.getNome();}
-        if(columnIndex==2)  {return utenteRow.getCognome();}
-        if(columnIndex==3)  {return utenteRow.getEmail();}
+
+        if(columnIndex==0)  { return contr.idPartecTab(rowIndex);}
+        if(columnIndex==1)  {return contr.nomePartecTab(rowIndex);}
+        if(columnIndex==2)  {return contr.cognPartecTab(rowIndex);}
+        if(columnIndex==3)  {return contr.emailPartecTab(rowIndex);}
         else  return null;
 
 

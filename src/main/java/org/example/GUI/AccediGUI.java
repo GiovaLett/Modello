@@ -1,13 +1,11 @@
 package org.example.GUI;
 
-import org.example.Controller.Controller;
-
-import org.example.Model.ruoli.*;
+import org.example.controller.Controller;
 
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.sql.SQLException;
+
 
 public class AccediGUI
 {
@@ -46,72 +44,42 @@ public class AccediGUI
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                boolean correct=true;
-
-                Utente_registrato utente=null;
-
                 String email=emailField.getText();
                 String password=passwordField.getText();
+
                 try {
 
-                    utente=c.findAccount(email,password);
+                    int n=c.identificaUtente(email,password);
 
+                    switch (n){
+                        case 0:
+                            new organizzatoreGUI(c,frame);
+                            break;
+                        case 1:
+                            new giudiceGUI( c, frame);
+                            break;
+                        case 2:
+                            new PartecipanteGUI(c,frame);
+                            break;
+                        case 3:
+                            new UtenteRegistratoIscrCloseGUI(c,frame);
+                            break;
+                        case 4:
+                            new UtenteRegistrIscrOpenGUI(c,frame);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(frame,"Utente non riconosciuto");
+
+                    }
                 }
                 catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame,exception.getMessage(),"Errore credenziali",JOptionPane.ERROR_MESSAGE);
-                    correct=false;
+                    return;
 
                 }
 
-                if(correct)
-                {
-
-                    if(utente instanceof Organizzatore organizzatore)     {
-                        c.setUtenteCorrente(organizzatore);
-                        new organizzatoreGUI(c,frame);
-                    }
-
-                    else if (utente instanceof Partecipante partecipante)  {
-                        c.setUtenteCorrente(partecipante);
-                        c.setHackathonCorrente( c.findHackId(partecipante.getIDHackathon()) );
-                        c.setTeamCorrente( c.findIDTeam(partecipante.getIDTeam(), c.getHackathonCorrente()));
-                        new PartecipanteGUI(c,frame);
-                    }
-
-
-                    else if(utente instanceof Giudice giudice)
-                    {
-                        c.setUtenteCorrente(giudice);
-                        c.setHackathonCorrente(  c.findHackId(giudice.getIDHackatlon() )  );
-                        new giudiceGUI( c, frame);
-                    }
-
-                    else if(utente instanceof Utente_registrato utenteReg) {
-                        c.setUtenteCorrente(utenteReg);
-                        if(!c.isOpenIscri())
-                            new UtenteRegistratoIscrCloseGUI(c,frame);
-
-                        else
-                            new UtenteRegistrIscrOpenGUI(c,frame);
-
-
-
-
-                    }
-
-
-                    frame.setVisible(false);
-
-
-
-
-
-                }
+                frame.setVisible(false);
             }
         });
     }
-
-
-
-
 }
