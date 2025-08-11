@@ -1,10 +1,10 @@
 package org.example.controller;
 
-import org.example.implementazionePostgresDAO.HackathonDAOImplement;
-import org.example.Model.Hackathon;
-import org.example.Model.Piattaforma;
-import org.example.Model.Progresso;
-import org.example.Model.ruoli.*;
+import org.example.implementazione_postgres_dao.HackathonDAOImplement;
+import org.example.model.Hackathon;
+import org.example.model.Piattaforma;
+import org.example.model.Progresso;
+import org.example.model.ruoli.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,15 +22,16 @@ public class Controller
      * L'attributo organizzatore fa rimerimento ad' un istanza di {@link Organizzatore}
      * La quale gestisce e organizza gli hackathon
      */
-    Utente_registrato organizzatorePiatt =new Organizzatore("0000","Giovanni","Lettieri","gio@email.it","password");
+    UtenteRegistrato organizzatorePiatt =new Organizzatore("0000","Giovanni","Lettieri","gio@email.it","password");
+
     Piattaforma piattaforma=new Piattaforma();
 
-    Utente_registrato utenteCorrente;
+    UtenteRegistrato utenteCorrente;
     Hackathon hackathonCorrente;
     Team teamCorrente;
     Progresso progressoCorrente;
 
-    Utente_registrato utenteSelezionato;
+    UtenteRegistrato utenteSelezionato;
     Giudice giudiceSelezionato;
 
     /**
@@ -54,7 +55,7 @@ public class Controller
      *  la quale indica se le iscrizioni sono aperte
      *  @return valore booleano che indica se le iscrizioni sono aperte
      */
-    public boolean isOpenIscri(){return piattaforma.isOpen_iscr();}
+    public boolean isOpenIscri(){return piattaforma.isOpenIscr();}
 
 
     public ArrayList<Hackathon> getListaHackathon(){return piattaforma.getListaHackathon();}
@@ -132,7 +133,7 @@ public class Controller
 
         else{
 
-            piattaforma.setOpen_iscr(false);
+            piattaforma.setOpenIscr(false);
             piattaforma.setEventoPronto(true);
             try{
             HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
@@ -168,7 +169,7 @@ public class Controller
      * Restituisce l' ID dell Utente Corrente
      * @return Stringa che indica l'ID dell' utente corrente
      */
-    public String getIdUtenCorr(){return utenteCorrente.getID();}
+    public String getIdUtenCorr(){return utenteCorrente.getId();}
 
     /**
      * Restituisce la richiesta per essere giudice dell Utente Corrente
@@ -178,12 +179,12 @@ public class Controller
 
 
     /**
-     * Funzione che ha come parametro un {@link Utente_registrato} il quale verrà
+     * Funzione che ha come parametro un {@link UtenteRegistrato} il quale verrà
      * impostato come utente corrente della piattaforma.
      * Utilizzato in seguito al riconoscimento dell'utente nella fase di accesso
      * @param utenteCorrente che diventerà utente corrente
      */
-    private void setUtenteCorrente(Utente_registrato utenteCorrente) {
+    private void setUtenteCorrente(UtenteRegistrato utenteCorrente) {
         this.utenteCorrente = utenteCorrente;
     }
 
@@ -198,14 +199,14 @@ public class Controller
      */
     public void addUtenteRegistrato(String nome,String cognome,String email,String password) throws SQLException
     {
-        Utente_registrato nuovoUtente =new Utente_registrato(nome,cognome,email,password);
+        UtenteRegistrato nuovoUtente =new UtenteRegistrato(nome,cognome,email,password);
 
         try {
             HackathonDAOImplement hackathonDAOImplement = new HackathonDAOImplement();
-            hackathonDAOImplement.addUtenteRegistratoDB(nuovoUtente.getID(), nuovoUtente.getNome(), nuovoUtente.getCognome(), nuovoUtente.getEmail(), nuovoUtente.getPassword());
+            hackathonDAOImplement.addUtenteRegistratoDB(nuovoUtente.getId(), nuovoUtente.getNome(), nuovoUtente.getCognome(), nuovoUtente.getEmail(), nuovoUtente.getPassword());
             piattaforma.addUtenteReg(nuovoUtente);
 
-            hackathonDAOImplement.storeNU(Utente_registrato.getnU());
+            hackathonDAOImplement.storeNU(UtenteRegistrato.getnU());
         }catch (SQLException ex){
             ex.printStackTrace();
             throw new SQLException();
@@ -219,7 +220,7 @@ public class Controller
      */
     public boolean isEmailRegisteredYet(String email){
 
-        for(Utente_registrato utente: piattaforma.getListaUtenReg()){
+        for(UtenteRegistrato utente: piattaforma.getListaUtenReg()){
             if(utente.getEmail().equals(email))
                 return true;
         }
@@ -230,12 +231,12 @@ public class Controller
      * Cerca un utente registrato alla piattaforma avendo in ingresso l'email e la password di esso
      * @param email dell'utente da cercare
      * @param password dell'utente da cercare
-     * @return L'istanza di {@link Utente_registrato} che indica l'utente che cercavamo
+     * @return L'istanza di {@link UtenteRegistrato} che indica l'utente che cercavamo
      * @throws IllegalArgumentException nel caso in cui non viene trovato
      */
-    private Utente_registrato findAccount(String email, String password) throws IllegalArgumentException{
+    private UtenteRegistrato findAccount(String email, String password) throws IllegalArgumentException{
 
-        for(Utente_registrato utente: piattaforma.getListaUtenReg())
+        for(UtenteRegistrato utente: piattaforma.getListaUtenReg())
         {
             if(utente.getEmail().equals(email) && utente.getPassword().equals(password))
                 return utente;
@@ -248,7 +249,7 @@ public class Controller
      *in base al valore degli ID Hackathon e ID Team di ognuno li smista:
      * -ID Hackathon != null e ID Team==null viene istanziato un {@link Giudice};
      * -ID Hackathon != null e ID Team!=null viene istanziato un {@link Partecipante};
-     * -altrimenti viene istanziato un {@link Utente_registrato}
+     * -altrimenti viene istanziato un {@link UtenteRegistrato}
      * @throws SQLException nel caso vi sia un errore con il data base;
      */
     public void getUtentiRegistratiDB()throws SQLException{
@@ -272,14 +273,14 @@ public class Controller
 
             if(idHackathon.get(i)==null && idTeam.get(i)==null) {
                 piattaforma.getListaUtenReg().add(
-                        new Utente_registrato(id.get(i), nome.get(i), cognome.get(i), email.get(i), password.get(i)));
+                        new UtenteRegistrato(id.get(i), nome.get(i), cognome.get(i), email.get(i), password.get(i)));
             }
             else if(idHackathon.get(i)!=null && idTeam.get(i)==null) {
 
                 Giudice giudice=new Giudice(id.get(i), nome.get(i), cognome.get(i), email.get(i), password.get(i), idHackathon.get(i));
                 piattaforma.getListaUtenReg().add(giudice);
 
-                Hackathon hackathon=findHackId(giudice.getIDHackatlon());
+                Hackathon hackathon=findHackId(giudice.getiDHackatlon());
                 hackathon.addGiudice(giudice);
 
             }
@@ -287,8 +288,8 @@ public class Controller
                 Partecipante partecipante= new Partecipante(id.get(i), nome.get(i), cognome.get(i), email.get(i), password.get(i), idTeam.get(i),idHackathon.get(i));
                 piattaforma.getListaUtenReg().add(partecipante);
 
-                Hackathon hackathon=findHackId(partecipante.getIDHackathon());
-                Team team=findIDTeam(partecipante.getIDTeam(), hackathon);
+                Hackathon hackathon=findHackId(partecipante.getIdHackathon());
+                Team team=findIDTeam(partecipante.getIdTeam(), hackathon);
                 team.addPartecipante(partecipante);
                 hackathon.incrementaNpartec();
             }
@@ -301,7 +302,7 @@ public class Controller
         hackathonDAOImplement.getAllRichiesteGiudiciDB(idUtente,richiesta,idHack);
 
         for(int i=0; i<idUtente.size(); i++){
-            Utente_registrato utente=findIdUtenteReg(idUtente.get(i));
+            UtenteRegistrato utente=findIdUtenteReg(idUtente.get(i));
             if(utente!=null){
                 utente.setRichiestaGiudice(richiesta.get(i));
                 utente.setHackIDRichiesta(idHack.get(i));
@@ -314,11 +315,11 @@ public class Controller
      * @param idUtente dell'utente da cercare
      * @return il riferimento a quell'utente
      */
-    private Utente_registrato findIdUtenteReg(String idUtente){
+    private UtenteRegistrato findIdUtenteReg(String idUtente){
 
-        for(Utente_registrato utente: piattaforma.getListaUtenReg())
+        for(UtenteRegistrato utente: piattaforma.getListaUtenReg())
         {
-            if(utente.getID().equals(idUtente))
+            if(utente.getId().equals(idUtente))
                 return utente;
         }
         return null;
@@ -336,7 +337,7 @@ public class Controller
      * <p>
      * - {@link Partecipante}, viene restituito 2;
      * <p>
-     * - se è semplicemente istanza di {@link Utente_registrato} viene restituito 3;
+     * - se è semplicemente istanza di {@link UtenteRegistrato} viene restituito 3;
      * <p>
      * - altrimenti se non è stato identificato -1;
      * <p>
@@ -352,7 +353,7 @@ public class Controller
      */
     public int identificaUtente(String email,String password)throws IllegalArgumentException{
 
-        Utente_registrato utente=findAccount(email, password);
+        UtenteRegistrato utente=findAccount(email, password);
         isIscrizioneScaduta();
         if(utente instanceof Organizzatore organizzatore)     {
             setUtenteCorrente(organizzatore);
@@ -361,18 +362,18 @@ public class Controller
         else if(utente instanceof Giudice giudice)
         {
             setUtenteCorrente(giudice);
-            setHackathonCorrente(  findHackId(giudice.getIDHackatlon() )  );
+            setHackathonCorrente(  findHackId(giudice.getiDHackatlon() )  );
             return 1;
         }
 
         else if (utente instanceof Partecipante partecipante)  {
             setUtenteCorrente(partecipante);
-            setHackathonCorrente( findHackId(partecipante.getIDHackathon()) );
-            setTeamCorrente( findIDTeam(partecipante.getIDTeam(), hackathonCorrente));
+            setHackathonCorrente( findHackId(partecipante.getIdHackathon()) );
+            setTeamCorrente( findIDTeam(partecipante.getIdTeam(), hackathonCorrente));
             return 2;
         }
 
-        else if(utente instanceof Utente_registrato utenteReg) {
+        else if(utente instanceof UtenteRegistrato utenteReg) {
             setUtenteCorrente(utenteReg);
             if(!isOpenIscri())
                 return 3;
@@ -396,7 +397,7 @@ public class Controller
         int[] costanti= hackathonDAOImplement.getCostantiID();
         Hackathon.setnH(        costanti[0]);
         Team.setnT(             costanti[1]);
-        Utente_registrato.setnU(costanti[2]);
+        UtenteRegistrato.setnU(costanti[2]);
         Partecipante.setnP(     costanti[3]);
         Giudice.setnG(          costanti[4]);
 
@@ -415,7 +416,7 @@ public class Controller
 
         boolean[] flagsPiattaforma= hackathonDAOImplement.getAllFlagsPiattaforma();
 
-        piattaforma.setOpen_iscr(  flagsPiattaforma[0]);
+        piattaforma.setOpenIscr(  flagsPiattaforma[0]);
         piattaforma.setEventoPronto(  flagsPiattaforma[1]);
     }
 
@@ -460,7 +461,7 @@ public class Controller
                 utenteCorrente.getEmail(), utenteCorrente.getPassword(), utenteCorrente.getHackIDRichiesta() );
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.setUtenteToGiudiceDB(utenteCorrente.getID(), nuovoGiudice.getID(), utenteCorrente.getHackIDRichiesta());
+        hackathonDAOImplement.setUtenteToGiudiceDB(utenteCorrente.getId(), nuovoGiudice.getId(), utenteCorrente.getHackIDRichiesta());
         hackathonDAOImplement.storeNG(Giudice.getnG());
 
         piattaforma.getListaUtenReg().remove(utenteCorrente);
@@ -480,7 +481,7 @@ public class Controller
         utenteCorrente.setHackIDRichiesta("");
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.eliminaRichiestaGiudice( utenteCorrente.getID() );
+        hackathonDAOImplement.eliminaRichiestaGiudice( utenteCorrente.getId() );
     }
 
 
@@ -489,7 +490,7 @@ public class Controller
     //DOPO LE ISCRIZIONI
 
     /**
-     * Tale funzione crea un team inserendo l'Utente corrente come Partecipante{@link Utente_registrato#creaTeam(Piattaforma, Hackathon, String)}
+     * Tale funzione crea un team inserendo l'Utente corrente come Partecipante{@link UtenteRegistrato#creaTeam(Piattaforma, Hackathon, String)}
      * Successivamente tale Team viene inserito nella lista Team dell'Hackathon corrente, incrementando anche il numero di partecipanti all'hackathon.
      * Crea un istanza di Partecipante con i stessi dati dell'utente corrente e sostituisce quest'ultimo nella
      * lista di utenti registrati alla piattaforma.
@@ -509,10 +510,10 @@ public class Controller
         //IMPORTANTISSIMO L'ORDINE DI QUESTE 2 FUNZIONI
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.addTeamsDB(team.getID(),team.getNome(),team.getCodiceAccesso(),team.getIDHackathon());
+        hackathonDAOImplement.addTeamsDB(team.getId(),team.getNome(),team.getCodiceAccesso(),team.getIdHackathon());
 
         Partecipante partecipante=team.getArrayPartecipante().get(0);
-        hackathonDAOImplement.setUtenteToPartecipanteDB(utenteCorrente.getID(), partecipante.getID(), partecipante.getIDHackathon(), partecipante.getIDTeam());
+        hackathonDAOImplement.setUtenteToPartecipanteDB(utenteCorrente.getId(), partecipante.getId(), partecipante.getIdHackathon(), partecipante.getIdTeam());
         hackathonDAOImplement.storeNP( Partecipante.getnP());
         hackathonDAOImplement.storeNT(Team.getnT());
     }
@@ -541,7 +542,7 @@ public class Controller
         if(partecipante==null)
             return;
 
-        hackathonDAOImplement.setUtenteToPartecipanteDB(utenteCorrente.getID(), partecipante.getID(),partecipante.getIDHackathon(), partecipante.getIDTeam());
+        hackathonDAOImplement.setUtenteToPartecipanteDB(utenteCorrente.getId(), partecipante.getId(),partecipante.getIdHackathon(), partecipante.getIdTeam());
         hackathonDAOImplement.storeNP( Partecipante.getnP());
         //inserimento nel DB del partecipante
 
@@ -579,7 +580,7 @@ public class Controller
             progresso.setCommento(commento);
 
             HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-            hackathonDAOImplement.setCommentoProgresso(teamCorrente.getID(),nomeProgresso,commento);
+            hackathonDAOImplement.setCommentoProgresso(teamCorrente.getId(),nomeProgresso,commento);
         }
     }
 
@@ -618,7 +619,7 @@ public class Controller
         if(utenteCorrente instanceof Organizzatore organizzatore) {
             hackathon = organizzatore.creaHackathon(piattaforma, nomeHackathon,sede,durata);
             hackathonDAOImplement.storeNH(Hackathon.getnH());
-            hackathonDAOImplement.addHackathonDB(hackathon.getID(),hackathon.getNome(),hackathon.getSede(),hackathon.getDurata());
+            hackathonDAOImplement.addHackathonDB(hackathon.getId(),hackathon.getNome(),hackathon.getSede(),hackathon.getDurata());
 
 
         }
@@ -636,7 +637,7 @@ public class Controller
         hackathonCorrente.setEventoFinito(isEventoFinito);
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.setEventoFinito(true, hackathonCorrente.getID());
+        hackathonDAOImplement.setEventoFinito(true, hackathonCorrente.getId());
     }
 
     /**
@@ -661,7 +662,7 @@ public class Controller
             for(int i=0;i<hackathon.getListaGiudici().size();)
             {
                 giudice=hackathon.getListaGiudici().get(i);
-                System.out.println(giudice.getNome()+giudice.getCognome()+giudice.getID());
+                System.out.println(giudice.getNome()+giudice.getCognome()+giudice.getId());
                 removeGiudice(giudice,hackathon);
             }
         }
@@ -669,7 +670,7 @@ public class Controller
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
 
         piattaforma.getListaHackathon().remove(hackathon);
-        hackathonDAOImplement.removeHackathonDB(hackathon.getID());
+        hackathonDAOImplement.removeHackathonDB(hackathon.getId());
 
     }
 
@@ -731,7 +732,7 @@ public class Controller
     //Selezione giudice senza richiesta
     public void addGiudiceHackCorr(String utenteID) throws IllegalArgumentException{
 
-        Utente_registrato utente= trovaUtenteForGiudice(utenteID);
+        UtenteRegistrato utente= trovaUtenteForGiudice(utenteID);
         if(utenteCorrente instanceof Organizzatore organizzatore)
             organizzatore.SelezionaGiudice( utente, piattaforma, hackathonCorrente);
 
@@ -747,11 +748,11 @@ public class Controller
 
 
         String richiesta="Vuoi essere giudice dell'hackathon:\n"+hackathonCorrente.getNome();
-        utenteSelezionato.setHackIDRichiesta(hackathonCorrente.getID());
+        utenteSelezionato.setHackIDRichiesta(hackathonCorrente.getId());
         utenteSelezionato.setRichiestaGiudice(richiesta);
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.salvaRichiestaDB(utenteSelezionato.getID(), hackathonCorrente.getID(), richiesta);
+        hackathonDAOImplement.salvaRichiestaDB(utenteSelezionato.getId(), hackathonCorrente.getId(), richiesta);
 
     }
 
@@ -763,14 +764,14 @@ public class Controller
      * si inserisce l id dell'organizzatore, si seleziona un utente già giudice, si seleziona un utente avente già una richiesta
      * oppure se l utente non viene trovato
      */
-    public Utente_registrato trovaUtenteForGiudice(String utenteID)throws IllegalArgumentException{
+    public UtenteRegistrato trovaUtenteForGiudice(String utenteID)throws IllegalArgumentException{
 
         if(utenteID.equals("0000"))
             throw new IllegalArgumentException("L'amministratore non può essere un giudice");
 
-        for(Utente_registrato utente: piattaforma.getListaUtenReg())
+        for(UtenteRegistrato utente: piattaforma.getListaUtenReg())
         {
-            if(utente.getID().equals(utenteID)){
+            if(utente.getId().equals(utenteID)){
 
                 if(utente instanceof Giudice)
                 {throw new IllegalArgumentException("L'utente scelto è già giudice");}
@@ -800,13 +801,13 @@ public class Controller
      * @throws SQLException nel caso in cui la rimozione dal DB non avvenga correttamente
      */
     public void removeGiudice(Giudice giudice,Hackathon hackathon)throws SQLException{
-        Utente_registrato utenteFromGiudice;
+        UtenteRegistrato utenteFromGiudice;
         if(utenteCorrente instanceof Organizzatore organizzatore){
             utenteFromGiudice=organizzatore.rimuoviGiudice(giudice,piattaforma,hackathon);
 
             HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-            hackathonDAOImplement.setGiudiceToUtenteDB(utenteFromGiudice.getID(),giudice.getID());
-            hackathonDAOImplement.storeNU(Utente_registrato.getnU());
+            hackathonDAOImplement.setGiudiceToUtenteDB(utenteFromGiudice.getId(),giudice.getId());
+            hackathonDAOImplement.storeNU(UtenteRegistrato.getnU());
         }
     }
 
@@ -861,7 +862,7 @@ public class Controller
 
         for(Hackathon hackathon: piattaforma.getListaHackathon()){
             hackathon.fareHackathonFromNTeams();
-            hackathonDAOImplement.setTeamSuff( hackathon.isTeam_suffic(), hackathon.getID() );
+            hackathonDAOImplement.setTeamSuff( hackathon.isTeamSuffic(), hackathon.getId() );
         }
 
     }
@@ -876,7 +877,7 @@ public class Controller
     public Giudice findIdGiudice(Hackathon hackathon,String idGiudice)throws IllegalArgumentException{
         for(Giudice giudice: hackathon.getListaGiudici())
         {
-            if(giudice.getID().equals(idGiudice)){
+            if(giudice.getId().equals(idGiudice)){
                 return giudice;
 
             }
@@ -889,7 +890,7 @@ public class Controller
      * e come secondo l id del giudice da cercare, il suo risultato viene poi assegnato a giudiceSelezionato.
      * @param idGiudice id del giudice da cercare
      */
-    public void identificaGiudiceSelezionatoHackCorr(String idGiudice){
+    public void identificaGiudiceSelezionatoHackCorr(String idGiudice) throws IllegalArgumentException{
 
         giudiceSelezionato=findIdGiudice(hackathonCorrente,idGiudice);
 
@@ -945,7 +946,7 @@ public class Controller
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
 
-        hackathonDAOImplement.setClassPubblicata(true, hackathonCorrente.getID());
+        hackathonDAOImplement.setClassPubblicata(true, hackathonCorrente.getId());
     }
 
 
@@ -953,10 +954,10 @@ public class Controller
      // OPERAZIONI GIUDICE
 
     /**
-     * Assegna un voto al {@link #teamCorrente} usando la funzione {@link Giudice#ValutaTeam(Team, String)};
+     * Assegna un voto al {@link #teamCorrente} usando la funzione {@link Giudice#valutaTeam(Team, String)};
      * Successivamente viene salvato nel DB con {@link HackathonDAOImplement#setVotoTeam(String, float)}
      * @param votoString rappresenta il voto assegnato dal giudice
-     * @throws IllegalArgumentException eccezione lanciata da {@link Giudice#ValutaTeam(Team, String)}
+     * @throws IllegalArgumentException eccezione lanciata da {@link Giudice#valutaTeam(Team, String)}
      * nel caso in cui il formato del voto in input non è compatibile con un voto decimale
      * @throws SQLException se la memorizzazione nel DB non va a buon fine
      */
@@ -964,10 +965,10 @@ public class Controller
 
         if(utenteCorrente instanceof Giudice giudice)
         {
-            giudice.ValutaTeam(teamCorrente,votoString);
+            giudice.valutaTeam(teamCorrente,votoString);
 
             HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-            hackathonDAOImplement.setVotoTeam(teamCorrente.getID(), Float.parseFloat(votoString));
+            hackathonDAOImplement.setVotoTeam(teamCorrente.getId(), Float.parseFloat(votoString));
         }
     }
 
@@ -981,7 +982,7 @@ public class Controller
         hackathonCorrente.setProblema(problema);
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.setHackathonProblema(hackathonCorrente.getID(), problema);
+        hackathonDAOImplement.setHackathonProblema(hackathonCorrente.getId(), problema);
         //DB Set problema
 
     }
@@ -993,10 +994,10 @@ public class Controller
      */
     public void pubblicaProblema()throws SQLException{
 
-        hackathonCorrente.setView_problema(true);
+        hackathonCorrente.setViewProblema(true);
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.setViewProblema(true, hackathonCorrente.getID());
+        hackathonDAOImplement.setViewProblema(true, hackathonCorrente.getId());
 
         //DB Flag view problema
     }
@@ -1011,7 +1012,7 @@ public class Controller
         hackathonCorrente.setVotazioneConclusa(true);
 
         HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
-        hackathonDAOImplement.setVotazConclusa(true, hackathonCorrente.getID());
+        hackathonDAOImplement.setVotazConclusa(true, hackathonCorrente.getId());
     }
 
 
@@ -1027,27 +1028,41 @@ public class Controller
     public void setTeamCorrente(Team teamCorrente) {    this.teamCorrente = teamCorrente;}
 
     /**
-     *
-     * @param codiceAccesso
-     * @throws IllegalArgumentException
+     * Trova il team in base al proprio 'codiceAccesso' usando la funzione {@link #findCodeAccessTeam(String, Hackathon)}e lo assegna a {@link #teamCorrente}
+     * @param codiceAccesso il codice di accesso del team che si vuole cercare
+     * @throws IllegalArgumentException sollevata dalla funzione interna {@link #findCodeAccessTeam(String, Hackathon)}
+     * nel caso in cui non viene trovato alcun team associato a tale codice accesso
      */
     public void identificaCODTeamHC(String codiceAccesso) throws IllegalArgumentException{
         teamCorrente=findCodeAccessTeam(codiceAccesso,hackathonCorrente);
     }
+
+    /**
+     * Trova il team conoscendone l'ID tramite la funzione {@link #findIDTeam(String, Hackathon)} dove come secondo argomento è inserito
+     * {@link #hackathonCorrente}, il risultato di tale funzione viene poi assegnato a {@link #teamCorrente}
+     * @param idTeam ID del team che si vuol cercare
+     * @throws IllegalArgumentException sollevato dalla funzione interna {@link #findIDTeam(String, Hackathon)}
+     * nel caso in cui non venisse trovato il team associato a tale ID
+     */
     public void identificaTeamHackCorr(String idTeam) throws IllegalArgumentException{
 
-        Team team=findIDTeam(idTeam,hackathonCorrente);
-        teamCorrente=team;
+        teamCorrente=findIDTeam(idTeam,hackathonCorrente);
 
     }
 
     public String getNomeTeamCorr(){return teamCorrente.getNome();}
-    public String getIdTeamCorr(){return teamCorrente.getID();}
+    public String getIdTeamCorr(){return teamCorrente.getId();}
     public String getCodiceAccessoTeamCorr(){ return teamCorrente.getCodiceAccesso();}
     public float getVotoTeamCorr(){return teamCorrente.getVoto();}
 
 
-
+    /**
+     * Estrae tutti i team dal DB, creando un ArrayList per ogni suo attributo. In questo modo
+     * si hanno tanti vettori quanti attributi e ognuno di essi presenta in ordine il valore di
+     * tale attributo per un team specifico, così allo stesso indice di tutti gli ArrayList è presente quell'attributo
+     * relativo al medesimo team. In fine in base al loro 'IDHackathon' vengono aggiunti al corrispettivo hackathon
+     * @throws SQLException nel caso in cui l'estrazione dal DB dia problemi
+     */
     public void getAllTeamDB()throws SQLException{
         ArrayList<String> id = new ArrayList<>();
         ArrayList<String> nome = new ArrayList<>();
@@ -1061,14 +1076,20 @@ public class Controller
 
         for(int i=0; i<id.size();i++){
             Team team=new Team(id.get(i),  nome.get(i), codAccesso.get(i), voti.get(i), idHackathon.get(i));
-            findHackId( team.getIDHackathon() ).addTeam(team);
+            findHackId( team.getIdHackathon() ).addTeam(team);
             getProgressiTeamDB(team);
 
         }
 
     }
 
-
+    /**
+     * Estrae i progressi di un team dal DB usando {@link HackathonDAOImplement#getProgressiTeam(ArrayList, ArrayList, ArrayList, String)}
+     * e li inserisce all'interno del team associato in base all'ID del team.
+     * Questo creando un vettore per ogni attributo a cui per lo stesso indice l elemento di tali vettori corrisponde al medesimo Team
+     * @param team riferimento al team di cui si vogliono estrarre i progressi dal DB
+     * @throws SQLException eccezione sollevata nel caso di problemi con il DB
+     */
     private void getProgressiTeamDB(Team team) throws SQLException{
 
         ArrayList<String> nome = new ArrayList<>();
@@ -1076,7 +1097,7 @@ public class Controller
         ArrayList<String> commento=new ArrayList<>();
 
         HackathonDAOImplement hackathonDao=new HackathonDAOImplement();
-        hackathonDao.getProgressiTeam(nome,codice,commento, team.getID());
+        hackathonDao.getProgressiTeam(nome,codice,commento, team.getId());
 
         for(int i=0;i< nome.size();i++){
 
@@ -1084,7 +1105,7 @@ public class Controller
             progresso.setNome( nome.get(i));
             progresso.setCodiceProgresso(codice.get(i));
             progresso.setCommento(commento.get(i));
-            progresso.setIdTeam(  team.getID());
+            progresso.setIdTeam(  team.getId());
 
             team.getArrayProgresso().add(0, progresso);
         }
@@ -1093,17 +1114,30 @@ public class Controller
     }
 
 
-
+    /**
+     * Trova un team e restituisce un riferimento ad esso conoscendo l hackathon a cui appartiene e l id del team
+     * @param id id del team da cercare
+     * @param hackathon hackathon a cui appartiene il team
+     * @return un riferimento al team trovato nel caso sia presente
+     * @throws IllegalArgumentException eccezione sollevata nel caso in cui il team non viene trovato
+     */
     public Team findIDTeam(String id, Hackathon hackathon) throws IllegalArgumentException
     {
         for(Team team: hackathon.getListaTeam())
         {
-            if(team.getID().equals(id))
+            if(team.getId().equals(id))
                 return team;
         }
         throw new IllegalArgumentException("ID Team non trovato");
     }
 
+    /**
+     * Trova il team corrispondente ad uno specifico codice Accesso, conoscendo anche l hackathon a cui appartiene
+     * @param codeAccess il codice di accesso del team da cercare
+     * @param hackathon hackathon a cui appartiene il team
+     * @return un riferimento al team nel caso in cui viene trovato
+     * @throws IllegalArgumentException se tale team non viene trovato
+     */
     public Team findCodeAccessTeam(String codeAccess,Hackathon hackathon) throws IllegalArgumentException
     {
         for(Team team: hackathon.getListaTeam())
@@ -1114,6 +1148,10 @@ public class Controller
         throw new IllegalArgumentException("Codice di accesso errato");
     }
 
+    /**
+     * Verifica se tutti i team dell {@link #hackathonCorrente} sono stati valutati (voto del team differente da -1)
+     * @return TRUE se sono stati tutti valutati altrimenti FALSE
+     */
     public boolean areAllTeamValuated(){
 
         for(Team team: hackathonCorrente.getListaTeam())
@@ -1127,6 +1165,10 @@ public class Controller
         return true;
     }
 
+    /**
+     * Cerca un progresso nel {@link #teamCorrente} conoscendone il nome e lo assegan a {@link #progressoCorrente}
+     * @param nomeProgresso il nome del progresso da cercare nel teamCorrente
+     */
     public void identificaProgressoTC(String nomeProgresso){
 
         for(Progresso progresso: teamCorrente.getArrayProgresso()){
@@ -1135,10 +1177,25 @@ public class Controller
         }
     }
 
+    /**
+     *
+     * @return il codice del progresso corrente
+     */
     public String getCodiceProgCorr(){return progressoCorrente.getCodiceProgresso();}
+
+
     public String getNomeProgCorr(){return progressoCorrente.getNome();}
+
+    /**
+     *
+     * @return il commento relativo al progresso corrente
+     */
     public String getCommentoProgCorr(){return progressoCorrente.getCommento();}
 
+    /**
+     * Una funzione che restituisce un ArrayList contenente tutti i nomi dei progressi del team corrente
+     * @return un ArrayList contenente tutti i nomi dei progressi del team corrente
+     */
     public ArrayList<String> getNomiProgressTeamCorr(){
 
         ArrayList<String> nomeProgressi=new ArrayList<>();
@@ -1148,7 +1205,10 @@ public class Controller
     }
 
 
-
+    /**
+     * Riordina la lista dei team dell' hackathon corrente in base al proprio voto (dal più alto al più basso) con
+     * l'algoritmo selection sort
+     */
     public void ordinaTeamVoti(){ //Dal voto migliore (più alto) al peggiore (più basso) dunque decrescente
 
         Team maxTeam;
@@ -1179,13 +1239,16 @@ public class Controller
     }
 
 
-
+    /**
+     * Calcola la posizione del team corrente all'interno della lista dei team dell'hackathon corrente
+     * @return il posizionamento all'interno della lista
+     */
     public int calcolaPosizionamentoTeamCorrente(){
 
         int posiz=0;
 
         for(Team team: hackathonCorrente.getListaTeam()){
-            if (team.getID().equals(teamCorrente.getID()))
+            if (team.getId().equals(teamCorrente.getId()))
             {
                 posiz=hackathonCorrente.getListaTeam().indexOf(team)+1;
                 break;
@@ -1194,7 +1257,11 @@ public class Controller
         return posiz;
     }
 
-
+    /**
+     * Verifica che il nome inserito in input non sia uguale al nome degli altri progressi del team corrente
+     * @param nomeProgresso nome da verificare non sia uguale
+     * @return FALSE se è presente un altro nome uguale, se non ve ne sono allora ritorna TRUE
+     */
     public boolean isNomeProgressoOriginale(String nomeProgresso){
 
         for(Progresso progresso: teamCorrente.getArrayProgresso()){
@@ -1208,11 +1275,16 @@ public class Controller
 
 
 
+    //OPERAZIONI HACKATHON
+
+
     /**
-     * OPERAZIONI HACKATHON
+     * Estrae gli hackathon dal DB e li aggiunge alla piattaforma, questo creando un ArrayList per ogni attributo della classe Hackathon
+     * inserirli come argomento della funzione {@link HackathonDAOImplement#getAllHackathonDB(ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList, ArrayList)}
+     * in modo da ottenere degli ArrayList pieni a cui allo stesso indice di ogni Arraylist il valore presente fa riferimento allo
+     * stesso Hackathon.
+     * @throws SQLException eccezione sollevata nel caso in cui si verifichino problemi con il DB
      */
-
-
     public void getAllHackathonDB()throws SQLException{
 
         ArrayList<String> id=new ArrayList<>();
@@ -1244,42 +1316,100 @@ public class Controller
 
     }
 
+    /**
+     * Trova l hackathon conoscendone l ID e lo assegna all'hackathon corrente;
+     * @param idHackathon l'ID dell'hackathon da cercare
+     */
     public void identificaHackathon(String idHackathon){
          hackathonCorrente=findHackId(idHackathon);
 
     }
+
+    /**
+     * assegna all hackathon corrente:{@link #hackathonCorrente} il riferimento dell'hackathon in input
+     * @param hackathonCorrente il riferimento che viene assegnato a {@link #hackathonCorrente}
+     */
     public void setHackathonCorrente(Hackathon hackathonCorrente) {this.hackathonCorrente = hackathonCorrente;}
 
+    /**
+     *
+     * @return l ID del hackathon corrente
+     */
+    public String getIdHackCorr(){return hackathonCorrente.getId();}
 
-    public String getIdHackCorr(){return hackathonCorrente.getID();}
+    /**
+     *
+     * @return il nome del hackathon corrente
+     */
     public String getNomeHackCorr(){return hackathonCorrente.getNome();}
+
+    /**
+     *
+     * @return la traccia del problema relativo al hackathon corrente
+     */
     public String getProblemaHackCorr(){return hackathonCorrente.getProblema();}
 
 
-
+    /**
+     * Verifica se la lista dei giudici dell'Hackathon corrente è vuota
+     * @return TRUE se è vuota, FALSE altrimenti
+     */
     public boolean isListaGiudHackCorrEmpty(){
 
         return hackathonCorrente.getListaGiudici().isEmpty();
     }
 
-    public boolean isTeamSuffHackCorr(){return hackathonCorrente.isTeam_suffic();}
-    public boolean isViewProblemaHackCorr(){ return hackathonCorrente.isView_problema();}
+    /**
+     *
+     * @return TRUE se il numero di team è suffiente per svolgere l hackathon, altrimenti FALSE
+     */
+    public boolean isTeamSuffHackCorr(){return hackathonCorrente.isTeamSuffic();}
+
+    /**
+     *
+     * @return TRUE se il problema è reso visibile ai partecipanti, FALSE in caso contrario
+     */
+    public boolean isViewProblemaHackCorr(){ return hackathonCorrente.isViewProblema();}
+
+    /**
+     *
+     * @return TRUE se l evento è terminato, FALSE in caso contrario
+     */
     public boolean isEventoFinitoHackCorr(){return hackathonCorrente.isEventoFinito();}
+
+    /**
+     *
+     * @return TRUE se la votazione è conclusa, FALSE il contrario
+     */
     public boolean isVotazioneConclusaHackCorr(){return hackathonCorrente.isVotazioneConclusa();}
+
+    /**
+     *
+     * @return TRUE se la classifica è stata pubblicata, FALSE il contrario
+     */
     public boolean isClassificaPubblHackCorr(){return hackathonCorrente.isClassificaPubblicata();}
 
+    /**
+     * Restituisce il riferimento all'hackathon che presenta il codice ID inserito in input
+     * @param id codice ID dell'hackathon da cercare
+     * @return riferimento all'Hackathon trovato
+     * @throws IllegalArgumentException eccezione lanciata se l hackathon non viene trovato
+     */
     public Hackathon findHackId(String id) throws IllegalArgumentException
     {
         for(Hackathon hackathon: piattaforma.getListaHackathon())
         {
-            if(hackathon.getID().equals(id))
+            if(hackathon.getId().equals(id))
                 return hackathon;
         }
         throw new IllegalArgumentException("ID non presente");
     }
 
-
-    public void removeHackathonNoGiudici() throws  SQLException{
+    /**
+     * Rimuove gli hackathon senza giudici dalla piattaforma
+     * @throws SQLException eccezione sollevata da {@link #removeHackathon(Hackathon)} nel caso in cui la rimozione dal DB dia problemi
+     */
+    public void removeHackathonNoGiudici() throws SQLException{
 
         Hackathon hackathon;
         for(int i=0;i<getListaHackathon().size();)
@@ -1303,7 +1433,7 @@ public class Controller
     }
 
     public String idHackTab(int row){
-        return piattaforma.getListaHackathon().get(row).getID();
+        return piattaforma.getListaHackathon().get(row).getId();
     }
 
     public String sedeHackTab(int row){
@@ -1329,7 +1459,7 @@ public class Controller
     }
 
     public String  idGiudTab(int row){
-        return hackathonCorrente.getListaGiudici().get(row).getID();
+        return hackathonCorrente.getListaGiudici().get(row).getId();
     }
     public String  cognGiudTab(int row){
         return hackathonCorrente.getListaGiudici().get(row).getCognome();
@@ -1343,7 +1473,7 @@ public class Controller
 
     //TAB PARTECIPANTI
     public String idPartecTab(int row){
-        return teamCorrente.getArrayPartecipante().get(row).getID();
+        return teamCorrente.getArrayPartecipante().get(row).getId();
     }
 
     public String nomePartecTab(int row){
@@ -1364,7 +1494,7 @@ public class Controller
     }
 
     public String idTeamTab(int row){
-        return hackathonCorrente.getListaTeam().get(row).getID();
+        return hackathonCorrente.getListaTeam().get(row).getId();
     }
 
     public String nomeTeamTab(int row){
@@ -1388,7 +1518,7 @@ public class Controller
 
 
     public String idUtenTab(int row){
-        return piattaforma.getListaUtenReg().get(row).getID();
+        return piattaforma.getListaUtenReg().get(row).getId();
     }
 
     public String nomeUtenTab(int row){

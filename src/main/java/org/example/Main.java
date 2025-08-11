@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.GUI.*;
-import org.example.Model.Hackathon;
-import org.example.Model.ruoli.Team;
+import org.example.gui.*;
+import org.example.model.Hackathon;
+import org.example.model.ruoli.Team;
 
 import java.util.Random;
 
