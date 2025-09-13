@@ -28,7 +28,15 @@ public class GiudiceGUI {
     private JButton caricaValutazioniButton;
     private JLabel noHackLabel;
 
-
+    /**
+     * Costruttore della classe, Imposta le caratteristiche del frame come il titolo "Giudice", posizione centrale
+     * e modalità di chiusura tramite un altro metodo interno {@link #closeOperation(JFrame)};
+     * Vi sono poi altri metodi interni che fanno riferimento all'interazione con la GUI o ad una visione dinamica dei widget,
+     * i quali variano in base agli eventi accaduti.
+     *
+     * @param c Controller
+     * @param orifFrame frame precedente a questo
+     */
     public GiudiceGUI(Controller c, JFrame orifFrame){
 
        frame=new JFrame("Giudice");
@@ -65,7 +73,11 @@ public class GiudiceGUI {
     }
 
 
-
+    /**
+     * Stabilisce il comportamento da attuare alla chiusura del frame, nello specifico si rende visibile il frame precedente
+     * e viengono liberate risorse dalla memoria inerenti al frame attuale
+     * @param origFrame riferimento al frame precedente
+     */
     private void closeOperation(JFrame origFrame){
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -76,7 +88,13 @@ public class GiudiceGUI {
         });
     }
 
-
+    /**
+     * Imposta le caratteristiche della tabella, nello specifico
+     * se l'evento non è terminato mostra solamente la tabella con informazioni sui team (senza votazione),
+     * altrimenti se l'evento è terminato si utilizzerà un altro modello per le tabelle che prevede l'inserimento
+     * di un'altra colonna contenente la votazione del relativo team.
+     * @param c Controller
+     */
     public void setTeamTable(Controller c) {     //Carattere differente in base alla fase( in periodo di votazione mostrerà anche i voti)
 
         if(!c.isEventoFinitoHackCorr() )
@@ -93,12 +111,27 @@ public class GiudiceGUI {
         }
     }
 
+    /**
+     * Imposta le caratteristiche della textArea contenente il problema da dover pubblicare.
+     * Se l'evento è finito la textArea non sarà editabile, altrimenti saranno concesse modifiche al problema
+     * Ogni volta che compare il frame la textArea sara caratterizzata dall' ultima versione della traccia salvata.
+     * @param c Controller
+     */
     public void setProblemaTextArea(Controller c) {
         if(c.isEventoFinitoHackCorr())
             problemaTextArea.setEditable(false);
         problemaTextArea.setText(c.getProblemaHackCorr());
     }
 
+    /**
+     * Caratterizza la funzionalità del bottone per pubblicare il problema, il cui comportamento varia in base a
+     * specifiche condizioni:
+     * Se l'evento non è pronto compare il messaggio:Non puoi ancora pubblicare il problema;
+     * Se il numero di Team non è pari o uguale a 2 compare il messaggio: "Purtroppo non si sono formati abbastanza Team. Quest' hackathon non verrà eseguito";
+     * Se invece non è stata scritta o salvata alcuna traccia: "Nessun problema salvato. Scrivi-->Salva Problema-->Pubblica Problema ";
+     * Altrimenti comparirà un messaggio di conferma per la pubblicazione della traccia
+     * @param c Controller
+     */
     public void setPubblicaProblemaButton(Controller c) {
 
             pubblicaProblemaButton.addActionListener(new ActionListener() {
@@ -139,7 +172,11 @@ public class GiudiceGUI {
 
     }
 
-
+    /**
+     * Si occupa di salvare la traccia una volta scritta nella textArea, con un relativo messaggio di conferma;
+     * se la risposta è positiva allora tale traccia verrà salvata anche nel DB con {@link Controller#salvaProblema(String)}
+     * @param c Controller
+     */
     public void setSalvaProblemaButton(Controller c) {
         salvaProblemaButton.addActionListener(new ActionListener() {
             @Override
@@ -161,6 +198,17 @@ public class GiudiceGUI {
 
     }
 
+    /**
+     * Vengono settate le caratteristiche del pulsante "vediProgressiButton", nello specifico
+     * se l' evento è finito e la votazione non si è conclusa il pulsante non sarà visibile, altrimenti si.
+     * Una volta premuto il pulsante, estrapola una stringa dall' "idTeamField" che contiene l'id del team di cui
+     * si vogliono vedere i progressi e successivamente questa viene inserita come parametro a {@link Controller#identificaTeamHackCorr(String)}
+     * cossicchè il teamCorrente del controller sia quello correlato a tale id e successivamente sarà aperta
+     * {@link GiudiceVediProgressiGUI} che mostrerà i progressi relativi a quel team. Nel caso in cui, invece,
+     * non viene trovato alcun team con quell'id comparirà un messaggio con scritto: "Not Found";
+     *
+     * @param c Controller
+     */
     public void setVediProgressiButton(Controller c) {
 
 
@@ -185,7 +233,17 @@ public class GiudiceGUI {
 
     }
 
-
+    /**
+     * Vengono settate le caratteristiche del pulsante "vediProgressiButton", nello specifico
+     * sarà visibile se l' evento è finito e la votazione non si è conclusa ancora;
+     * inoltre quando viene premuto estrapola una stringa dall' "idTeamField" che contiene l'id del team a cui
+     *  si vuole assegnare un voto e successivamente questa viene inserita come parametro a {@link Controller#identificaTeamHackCorr(String)}
+     *  cossicchè il teamCorrente del controller sia quello correlato a tale id e successivamente sarà aperta la GUI {@link GiudiceVediProgressiGUI}
+     *  che permette l assegnazione di un voto vedendo i progressi e i relativi commenti.
+     *  Nel caso in cui, invece, non viene trovato alcun team con quell'id comparirà un messaggio con scritto: "Not Found";
+     *
+     * @param c Controller
+     */
     private void setAssegnaVoto(Controller c){
 
         assegnaVotiButton.setVisible(c.isEventoFinitoHackCorr() && !c.isVotazioneConclusaHackCorr());
@@ -214,6 +272,20 @@ public class GiudiceGUI {
 
     }
 
+    /**
+     * Imposta le caratteristiche di "caricaValutazioniButton" nello specifico:
+     * Sarà visibile soltanto se l evento è finito e la votazione non si è conclusa.
+     * Quando viene premuto il pulsante verifica che tutti i team siano stati valutati e in caso contrario
+     * mostra il messaggio: "Non tutti i team sono stati valutati. Caricamento annullato".
+     * Invece se tutti i team sono stati valutati, compare un messaggio di conferma, che in caso positivo:
+     * 1) Imposta la flag "votazioneConclusa" dell' hackathon a TRUE e la memorizza nel DB con il metodo
+     * {@link Controller#concludiVotazioni()}.
+     * 2) Viene nascosto il pulsante "caricaValutazioniButton" come anche "assegnaVotiButton"
+     * 3) Viene reso visibile il pulsante "vediProgressiButton"
+     *
+     *
+     * @param c
+     */
     public void setCaricaValutazioniButton(Controller c) {
 
 
@@ -250,6 +322,12 @@ public class GiudiceGUI {
         });
     }
 
+    /**
+     * Metodo per valutare se il numero di Teams è sufficiente per poter svolgere l' hackathon (>=2).
+     * Nel caso in cui i teams siano insufficienti comparirà un messaggio: "L'hackathon non si svolgerà (teams insufficienti)"
+     *
+     * @param c Controller
+     */
     private void controlloTeamSuff(Controller c)
     {
         if(c.isEventoPronto() && !c.isTeamSuffHackCorr()) {

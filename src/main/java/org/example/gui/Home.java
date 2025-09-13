@@ -16,6 +16,27 @@ public class Home
     private JButton accediButton;
     private JButton registratiButton;
 
+    /**
+     * Costruttore della classe {@code Home}.
+     * <p>
+     * Inizializza il frame principale dell'applicazione impostando il contenuto,
+     * le proprietà di base e la visibilità. Alla prima apertura della home
+     * (quando {@code nApriHome == 0}) recupera dal database tutte le informazioni
+     * necessarie tramite il controller, tra cui:
+     * <ul>
+     *   <li>Costanti e identificativi</li>
+     *   <li>Lista degli hackathon</li>
+     *   <li>Team registrati</li>
+     *   <li>Utenti registrati</li>
+     *   <li>Flags della piattaforma</li>
+     *   <li>Dati dell'evento</li>
+     * </ul>
+     * In caso di errore di connessione al database viene mostrato un messaggio
+     * d'errore all'utente e stampato lo stack trace.
+     * </p>
+     *
+     * Inoltre, vengono inizializzati i pulsanti di accesso e registrazione.
+     */
     public Home() {
 
 
@@ -53,6 +74,17 @@ public class Home
 
     }
 
+    /**
+     * Configura il pulsante {@code accediButton} assegnandogli un
+     * {@link java.awt.event.ActionListener}.
+     * <p>
+     * Al click del pulsante viene aperta la finestra di login
+     * ({@link AccediGUI}) e la home corrente viene nascosta.
+     * </p>
+     *
+     * @param c il {@link Controller} utilizzato per gestire le operazioni
+     *           di autenticazione e passare i dati necessari alla GUI di accesso
+     */
     private void setAccediButton(Controller c){
 
         accediButton.addActionListener(new ActionListener() {
@@ -65,6 +97,17 @@ public class Home
 
     }
 
+    /**
+     * Configura il pulsante {@code registratiButton} assegnandogli un
+     * {@link java.awt.event.ActionListener}.
+     * <p>
+     * Al click del pulsante viene aperta la finestra di registrazione
+     * ({@link RegistrazioneGUI}) e la home corrente viene nascosta.
+     * </p>
+     *
+     * @param c il {@link Controller} utilizzato per gestire le operazioni
+     *           di registrazione e passare i dati necessari alla GUI di registrazione
+     */
     private void setRegistratiButton(Controller c){
         registratiButton.addActionListener(new ActionListener() {
             @Override

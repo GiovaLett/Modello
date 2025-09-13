@@ -29,8 +29,17 @@ public class GiudiceVediProgressiGUI {
     private JLabel nomeTeamLabel;
 
 
-
-
+    /**
+     * Costruttore che imposta il frame, il quale è un istanza della classe "JDialog".
+     * Viene impostata una posizione centrale, la dimensione e la modalità di chiusura.
+     * Poi vengono chiamati dei metodi interni alla classe utilizzati per caratterizzare il frame in base al contesto,
+     * intraprendendo 2 aspetti:
+     * 1) Commentare i progressi mentre l hackathon è in corso;
+     * 2) Votare i team una volta terminato l' hackathon
+     * @param c Controller
+     * @param origGUI utilizzato per aggiornare in tempo reale la tabella team del frame precedente quando
+     *                viene inserita una votazione, utilizzando il metodo {@link #setFrameHackFinito(Controller, GiudiceGUI)}
+     */
         public GiudiceVediProgressiGUI(Controller c, GiudiceGUI origGUI)
         {
             frame=new JDialog((Frame) null,c.getNomeTeamCorr(),true);
@@ -67,7 +76,12 @@ public class GiudiceVediProgressiGUI {
 
         }
 
-        public void setProgressiList(Controller c) {
+    /**
+     * Caratterizza la lista dei progressi, aggiungendo tutti i suoi nomi e facendo si che una volta cliccato su
+     * uno di essi compaia il relativo commento e codice
+     * @param c Controller
+     */
+    public void setProgressiList(Controller c) {
             DefaultListModel modello=new DefaultListModel<>();
 
             ArrayList<String> nomiProgressi= c.getNomiProgressTeamCorr();
@@ -104,8 +118,12 @@ public class GiudiceVediProgressiGUI {
         }
 
 
-
-
+    /**
+     * Metodo che imposta le funzionalità del pulsante "salvaButton" utilizzato per salvare un commento inerente a un determinato progresso.
+     * Nel caso non sia stato selezionato alcun progresso comparirà il messaggio: "Seleziona prima una progresso della lista";
+     * Altrimenti compare un messaggio di conferma per il salvataggio del commento.
+     * @param c Controller
+     */
         public void setSalvaButton(Controller c) {
             salvaButton.addActionListener(new ActionListener() {
                 @Override
@@ -137,6 +155,14 @@ public class GiudiceVediProgressiGUI {
 
         }
 
+    /**
+     * Imposta il frame per quando l' hackathon è finito.
+     * Quindi i commenti non saranno più editabili e il bottone che permette il salvataggio del commento viene nascosto.
+     * Viene reso visibile il "JPanel" per la votazione, in cui all'interno presenta il pulsante "assegnaButton" per assegnare
+     * il voto che è stato inserito nel widget "votoField";
+     * @param c Controller
+     * @param origGUI per aggiornare in tempo reale la tabella dei teams del frame precedente quando viene salvato un voto
+     */
         private void setFrameHackFinito(Controller c, GiudiceGUI origGUI){
             commentoTextArea.setEditable(false);
             salvaButton.setVisible(false);
@@ -166,6 +192,11 @@ public class GiudiceVediProgressiGUI {
 
         }
 
+    /**
+     * Nel caso in cui le votazioni si siano concluse, viene reso visibile il "JPanel" votoFinalePanel, il quale mostra il voto
+     * finale che il team ha ottenuto
+     * @param c Controller
+     */
     public void setVotoFinalePanel(Controller c) {
         if(c.isVotazioneConclusaHackCorr())
         {

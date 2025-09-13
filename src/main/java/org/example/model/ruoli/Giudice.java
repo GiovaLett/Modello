@@ -9,7 +9,7 @@ public class Giudice extends UtenteRegistrato
     /**
      * Costruttore di giudice che prende in input: nome, cognome, email, password e ID dell'hackathon a cui appartiene, per
      * assegnarli rispettivamente ai suoi attributi. Inserendo per l'ID del giudice il risultato della funzione che li crea
-     * autonomamente {@link #codiceID()}
+     * autonomamente {@code codiceID()}
      * @param nome del giudice
      * @param cognome del giudice
      * @param email del giudice

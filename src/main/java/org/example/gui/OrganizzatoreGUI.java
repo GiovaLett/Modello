@@ -35,6 +35,32 @@ public class OrganizzatoreGUI {
     private JTextField durataField;
 
 
+    /**
+     * Costruttore della classe {@code OrganizzatoreGUI}.
+     * <p>
+     * Inizializza la finestra grafica dedicata all'organizzatore, mostrando
+     * il nome dell'amministratore corrente e configurando la tabella degli
+     * hackathon gestiti.
+     * </p>
+     * <p>
+     * Vengono inoltre impostati i pulsanti e i pannelli principali per:
+     * <ul>
+     *   <li>rimuovere hackathon;</li>
+     *   <li>aggiungere hackathon;</li>
+     *   <li>aprire le iscrizioni;</li>
+     *   <li>chiudere le iscrizioni;</li>
+     *   <li>entrare in un hackathon selezionato;</li>
+     *   <li>visualizzare/modificare i dati dell'evento.</li>
+     * </ul>
+     * La finestra di origine ({@code origFrame}) viene gestita tramite
+     * {@link #closeOperation(JFrame)}.
+     * </p>
+     *
+     * @param c         il {@link Controller} usato per recuperare i dati
+     *                  dell'organizzatore e degli hackathon
+     * @param origFrame il {@link JFrame} di origine, da chiudere o nascondere
+     *                  quando questa GUI viene aperta
+     */
     public OrganizzatoreGUI(Controller c, JFrame origFrame){
 
         frame=new JFrame();
@@ -59,13 +85,41 @@ public class OrganizzatoreGUI {
 
 
 
-
+    /**
+     * Configura la tabella degli hackathon ({@code hackathonTable})
+     * assegnandole un modello dati personalizzato.
+     * <p>
+     * Il modello utilizzato è un'istanza di {@link ModelloHackTab},
+     * inizializzata con il {@link Controller}, da cui vengono recuperate
+     * le informazioni sugli hackathon gestiti dall'organizzatore corrente.
+     * </p>
+     *
+     * @param c il {@link Controller} utilizzato per fornire i dati degli hackathon
+     */
    private void setHackathonTable(Controller c){
         ModelloHackTab modello=new ModelloHackTab(c);
         hackathonTable.setModel(modello);
    }
 
 
+    /**
+     * Configura il pannello relativo alla data dell'evento ({@code dataEventoPanel}).
+     * <p>
+     * Il pannello viene reso visibile solo se l'evento non è pronto ({@link Controller#isEventoPronto()})
+     * e le iscrizioni non sono aperte ({@link Controller#isOpenIscri()}).
+     * Vengono inoltre inizializzati gli spinner per:
+     * <ul>
+     *   <li>anno ({@link #setAnnoSpinner()});</li>
+     *   <li>mese ({@link #setMeseSpinner()});</li>
+     *   <li>giorno ({@link #setGiornoSpinner(int)}), con giorno iniziale 1;</li>
+     * </ul>
+     * Infine, viene impostato il pulsante per confermare la data dell'evento
+     * tramite {@link #setImpostaDataButton(Controller)}.
+     * </p>
+     *
+     * @param c il {@link Controller} utilizzato per verificare lo stato dell'evento
+     *          e gestire l'impostazione della data
+     */
    private void setDataEventoPanel(Controller c){
 
         dataEventoPanel.setVisible(!c.isEventoPronto() && !c.isOpenIscri());
@@ -75,6 +129,23 @@ public class OrganizzatoreGUI {
        setImpostaDataButton(c);
     }
 
+
+    /**
+     * Configura lo spinner del giorno ({@code giornoSpinner}) in base al mese
+     * selezionato e al giorno salvato.
+     * <p>
+     * Il valore minimo dello spinner è sempre 1. Il valore massimo dipende dal mese:
+     * <ul>
+     *   <li>31 giorni per gennaio, marzo, maggio, luglio, agosto, ottobre, dicembre;</li>
+     *   <li>30 giorni per aprile, giugno, settembre, novembre;</li>
+     *   <li>28 giorni per febbraio (non viene considerato l'anno bisestile).</li>
+     * </ul>
+     * Se il giorno salvato è maggiore del massimo consentito per il mese,
+     * viene impostato al massimo consentito.
+     * </p>
+     *
+     * @param giornoSalvato il giorno da impostare inizialmente nello spinner
+     */
    private void setGiornoSpinner(int giornoSalvato){
 
 
@@ -107,6 +178,16 @@ public class OrganizzatoreGUI {
 
    }
 
+    /**
+     * Configura lo spinner del mese ({@code meseSpinner}) per la selezione
+     * dei mesi dell'anno.
+     * <p>
+     * Il valore iniziale dello spinner è 6 (giugno), con valori possibili da 1 a 12.
+     * Viene aggiunto un listener che, ad ogni cambiamento del mese, aggiorna
+     * lo spinner del giorno ({@link #setGiornoSpinner(int)}) per adattarsi
+     * al numero corretto di giorni del mese selezionato.
+     * </p>
+     */
    private void setMeseSpinner(){
 
         SpinnerNumberModel modello=new SpinnerNumberModel(6,1,12,1);
@@ -124,6 +205,16 @@ public class OrganizzatoreGUI {
         });
    }
 
+    /**
+     * Configura lo spinner dell'anno ({@code annoSpinner}) per la selezione
+     * della data dell'evento.
+     * <p>
+     * Il valore iniziale dello spinner è l'anno corrente ottenuto tramite
+     * {@link java.time.LocalDate#now()}. Il valore minimo è anch'esso l'anno
+     * corrente, mentre non è impostato un valore massimo (può essere selezionato
+     * qualsiasi anno futuro). L'incremento avviene di 1 in 1.
+     * </p>
+     */
    private void setAnnoSpinner(){
 
        LocalDate dataOggi=LocalDate.now();
@@ -132,6 +223,24 @@ public class OrganizzatoreGUI {
        annoSpinner.setModel(modello);
    }
 
+
+    /**
+     * Configura il pulsante {@code impostaDataButton} per impostare la data
+     * dell'evento dell'hackathon.
+     * <p>
+     * Al click del pulsante:
+     * <ul>
+     *   <li>vengono letti i valori selezionati dagli spinner di giorno, mese e anno;</li>
+     *   <li>viene invocato {@link Controller#setDataEvento(int, int, int)} per
+     *       impostare la data dell'evento;</li>
+     *   <li>se l'impostazione ha successo, viene mostrato un messaggio di conferma
+     *       tramite {@link JOptionPane#showMessageDialog};</li>
+     *   <li>in caso di eccezione {@link IllegalArgumentException}, viene mostrato
+     *       un messaggio di errore all'utente.</li>
+     * </ul>
+     *
+     * @param c il {@link Controller} utilizzato per impostare la data dell'evento
+     */
    private void setImpostaDataButton(Controller c){
 
         impostaDataButton.addActionListener(new ActionListener() {
@@ -154,6 +263,26 @@ public class OrganizzatoreGUI {
 
    }
 
+    /**
+     * Configura il pulsante {@code entraButton} per entrare in un hackathon
+     * selezionato dall'organizzatore.
+     * <p>
+     * Al click del pulsante:
+     * <ol>
+     *   <li>viene letto l'ID dell'hackathon dal campo {@code idHackField};</li>
+     *   <li>si tenta di identificare l'hackathon selezionato tramite
+     *       {@link Controller#identificaHackathon(String)};</li>
+     *   <li>in caso di errore (ID non valido), viene mostrato un messaggio
+     *       di errore tramite {@link JOptionPane} e l'operazione viene interrotta;</li>
+     *   <li>se l'hackathon non ha iscrizioni aperte e l'evento non è pronto,
+     *       viene aperta la finestra {@link OrganHackPreIscrizGUI};</li>
+     *   <li>altrimenti, viene aperta la finestra {@link OrganHackGUI};</li>
+     *   <li>la finestra corrente viene nascosta.</li>
+     * </ol>
+     *
+     * @param c il {@link Controller} utilizzato per identificare l'hackathon
+     *          e aprire la GUI appropriata
+     */
    private void setEntraButton(Controller c){
         entraButton.addActionListener(new ActionListener() {
             @Override
@@ -182,7 +311,29 @@ public class OrganizzatoreGUI {
    }
 
 
-
+    /**
+     * Configura il pulsante {@code rimuoviButton} per rimuovere un hackathon
+     * selezionato dall'organizzatore.
+     * <p>
+     * Il pulsante viene reso visibile solo se le iscrizioni non sono aperte
+     * ({@link Controller#isOpenIscri()}) e l'evento non è pronto
+     * ({@link Controller#isEventoPronto()}). Al click del pulsante:
+     * <ol>
+     *   <li>viene letto l'ID dell'hackathon dal campo {@code idHackField};</li>
+     *   <li>si tenta di identificare l'hackathon selezionato tramite
+     *       {@link Controller#identificaHackathon(String)};</li>
+     *   <li>in caso di ID non valido, viene mostrato un messaggio di errore
+     *       tramite {@link JOptionPane} e l'operazione viene interrotta;</li>
+     *   <li>viene mostrata una finestra di conferma per l'eliminazione dell'hackathon;</li>
+     *   <li>se confermato, l'hackathon viene rimosso tramite {@link Controller#removeHackCorr()},
+     *       e viene mostrato un messaggio di conferma;</li>
+     *   <li>eventuali eccezioni {@link SQLException} vengono intercettate e
+     *       segnalate all'utente tramite {@link JOptionPane}.</li>
+     * </ol>
+     *
+     * @param c il {@link Controller} utilizzato per identificare e rimuovere
+     *          l'hackathon selezionato
+     */
     public void setRimuoviButton(Controller c) {
 
 
@@ -216,6 +367,28 @@ public class OrganizzatoreGUI {
         });
     }
 
+    /**
+     * Configura il pulsante {@code aggiungiButton} per aggiungere un nuovo hackathon.
+     * <p>
+     * Il pannello di creazione ({@code creaHackathonPanel}) viene reso visibile solo
+     * se le iscrizioni non sono aperte ({@link Controller#isOpenIscri()}) e l'evento
+     * corrente non è pronto ({@link Controller#isEventoPronto()}).
+     * </p>
+     * <p>
+     * Al click del pulsante:
+     * <ol>
+     *   <li>vengono letti i valori dei campi: nome, sede e durata dell'hackathon;</li>
+     *   <li>se uno dei campi è vuoto, viene mostrato un messaggio di avviso;</li>
+     *   <li>il campo durata viene convertito in intero, con gestione di {@link NumberFormatException};</li>
+     *   <li>viene mostrata una finestra di conferma con i dati inseriti;</li>
+     *   <li>se confermato, l'hackathon viene aggiunto tramite {@link Controller#addHackathon(String, String, int)},
+     *       con gestione di eventuali {@link SQLException};</li>
+     *   <li>viene mostrato un messaggio di conferma e aggiornata la tabella degli hackathon.</li>
+     * </ol>
+     *
+     * @param c il {@link Controller} utilizzato per aggiungere il nuovo hackathon
+     *          e aggiornare la tabella degli hackathon
+     */
     public void setAggiungiButton(Controller c) {
 
 
@@ -261,6 +434,18 @@ public class OrganizzatoreGUI {
         });
     }
 
+    /**
+     * Imposta il comportamento di chiusura della finestra corrente.
+     * <p>
+     * Quando l'utente tenta di chiudere questa finestra:
+     * <ul>
+     *   <li>la finestra di origine ({@code origFrame}) viene resa nuovamente visibile;</li>
+     *   <li>la finestra corrente viene chiusa tramite {@link JFrame#dispose()}.</li>
+     * </ul>
+     *
+     * @param origFrame il {@link JFrame} di origine da rendere visibile al momento
+     *                  della chiusura della finestra corrente
+     */
     private void closeOperation(JFrame origFrame){
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -272,6 +457,30 @@ public class OrganizzatoreGUI {
 
    }
 
+    /**
+     * Configura il pulsante {@code apriIsrizButton} per aprire le iscrizioni
+     * agli hackathon.
+     * <p>
+     * Il pulsante viene reso visibile solo se le iscrizioni non sono già aperte
+     * ({@link Controller#isOpenIscri()}) e l'evento corrente non è pronto
+     * ({@link Controller#isEventoPronto()}).
+     * </p>
+     * <p>
+     * Al click del pulsante:
+     * <ol>
+     *   <li>viene controllato se la data dell'evento è stata impostata; in caso contrario,
+     *       viene mostrato un messaggio di avviso;</li>
+     *   <li>viene mostrata una finestra di conferma con le informazioni sulle conseguenze
+     *       dell'apertura delle iscrizioni, inclusa la data dell'evento;</li>
+     *   <li>se confermato, le iscrizioni vengono aperte tramite
+     *       {@link Controller#apriIscrizioni()}, il pulsante e alcuni pannelli vengono nascosti,
+     *       e la tabella degli hackathon viene aggiornata;</li>
+     *   <li>eventuali {@link SQLException} vengono intercettate e segnalate tramite {@link JOptionPane}.</li>
+     * </ol>
+     *
+     * @param c il {@link Controller} utilizzato per aprire le iscrizioni e aggiornare
+     *          la tabella degli hackathon
+     */
     public void setApriIsrizButton(Controller c) {
 
         apriIsrizButton.setVisible(!c.isOpenIscri() && !c.isEventoPronto());
@@ -308,6 +517,26 @@ public class OrganizzatoreGUI {
         });
     }
 
+
+    /**
+     * Configura il pulsante {@code chiudiIscrizioniButton} per chiudere le iscrizioni
+     * agli hackathon.
+     * <p>
+     * Il pulsante viene reso visibile solo se le iscrizioni sono attualmente aperte
+     * ({@link Controller#isOpenIscri()}).
+     * </p>
+     * <p>
+     * Al click del pulsante:
+     * <ol>
+     *   <li>viene mostrata una finestra di conferma per forzare la chiusura delle
+     *       iscrizioni prima dei 2 giorni dall'evento;</li>
+     *   <li>se confermato, le iscrizioni vengono chiuse tramite
+     *       {@link Controller#chiudiIscrizioni()} e il pulsante viene nascosto;</li>
+     *   <li>eventuali {@link SQLException} vengono intercettate e stampate nello stack trace.</li>
+     * </ol>
+     *
+     * @param c il {@link Controller} utilizzato per chiudere le iscrizioni
+     */
     public void setChiudiIscrizioniButton(Controller c) {
 
         chiudiIscrizioniButton.setVisible(c.isOpenIscri());

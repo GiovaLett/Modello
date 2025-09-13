@@ -15,6 +15,15 @@ public class AccediGUI
     private JButton accediButton;
     private JPanel mainPanel;
 
+    /**
+     * Costruttore della classe che imposta le caratteristiche del frame:
+     * avrà una posizione centrale;
+     * non sarà ridimensionabile;
+     * e sarà inserito un comportamento specifico per il pulsante accediButton
+     * cosi come per l'applicazione di chiusura
+     * @param origFrame È il frame da cui ha avuto origine questo
+     * @param c il Controller
+     */
     AccediGUI(JFrame origFrame, Controller c){
         frame.setContentPane(mainPanel);
         frame.setLocationRelativeTo(null);
@@ -27,7 +36,10 @@ public class AccediGUI
         frame.setVisible(true);
     }
 
-
+    /**
+     * Funzione che permette alla chiusura di questo frame rendere visibile il frame precedente
+     * @param origFrame frame precedente, da cui è stato istanziato questo
+     */
     private void closeOperation(JFrame origFrame){
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -38,6 +50,24 @@ public class AccediGUI
         });
     }
 
+    /**
+     * Attribuisce un comportamento specifico ad "accediButton", nello specifico:
+     * acquisisce le stringhe inserite all'interno di "emailField" e "passwordField",
+     * successivamente all'interno di un try viene dichiarata una variabile (n) alla quale viene assegnato il risultato
+     * ottenuto dalla funzione {@link Controller#identificaUtente(String, String)} che presenta come parametri rispettivamente
+     * le stringhe inserite all'interno di "emailField" e "passwordField".
+     * In base al valore acquisito da "n" verranno istanziate differenti GUI:
+     * 0-->OrganizzatoreGUI
+     * 1-->GiudiceGUI
+     * 2-->PartecipanteGUI
+     * 3-->UtenteRegistratoIscrCloseGUI
+     * 4-->UtenteRegistrIscrOpenGUI
+     * E come operazione di default un messaggio in cui non viene riconosciuto l'utente.
+     *
+     * All'interno del catch viene catturata un IllegalArgumentException, e in tale caso viene stampato un messaggio:
+     * "Errore credenziali"
+     * @param c il Controller
+     */
     private void setAccediButton(Controller c){
 
         accediButton.addActionListener(new ActionListener() {
