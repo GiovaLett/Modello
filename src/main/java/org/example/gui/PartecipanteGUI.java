@@ -33,7 +33,10 @@ public class PartecipanteGUI {
 
     private JPanel posizionamentoPanel;
     private JLabel posizLabel;
-
+    private JLabel classificaField;
+    private JPanel listPanel;
+    private JPanel codicePanel;
+    private JScrollPane progressListScroll;
 
 
     /**
@@ -240,7 +243,7 @@ public class PartecipanteGUI {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
-                    if(c.isDurataHCTerminata()){
+                    if( c.isEventoFinitoHackCorr()){
                         JOptionPane.showMessageDialog(frame,"L'hackathon è terminato\n(Impossibile caricare progressi)");
                         return;
                     }

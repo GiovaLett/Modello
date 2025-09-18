@@ -139,6 +139,12 @@ public class Controller
             HackathonDAOImplement hackathonDAOImplement=new HackathonDAOImplement();
                 hackathonDAOImplement.setOpenIscr(false);
                 hackathonDAOImplement.setEventoPronto(true);
+
+                for(Hackathon hackathon: piattaforma.getListaHackathon()){
+                    hackathon.fareHackathonFromNTeams();
+                    hackathonDAOImplement.setTeamSuff( hackathon.isTeamSuffic(), hackathon.getId() );
+                }
+
             }catch (SQLException exc){exc.printStackTrace();}
             return true;
         }
@@ -201,16 +207,13 @@ public class Controller
     {
         UtenteRegistrato nuovoUtente =new UtenteRegistrato(nome,cognome,email,password);
 
-        try {
+
             HackathonDAOImplement hackathonDAOImplement = new HackathonDAOImplement();
             hackathonDAOImplement.addUtenteRegistratoDB(nuovoUtente.getId(), nuovoUtente.getNome(), nuovoUtente.getCognome(), nuovoUtente.getEmail(), nuovoUtente.getPassword());
             piattaforma.addUtenteReg(nuovoUtente);
 
             hackathonDAOImplement.storeNU(UtenteRegistrato.getnU());
-        }catch (SQLException ex){
-            ex.printStackTrace();
-            throw new SQLException();
-        }
+
     }
 
     /**
@@ -363,12 +366,14 @@ public class Controller
         {
             setUtenteCorrente(giudice);
             setHackathonCorrente(  findHackId(giudice.getiDHackatlon() )  );
+            if(!hackathonCorrente.isEventoFinito()){ isDurataHCTerminata();}
             return 1;
         }
 
         else if (utente instanceof Partecipante partecipante)  {
             setUtenteCorrente(partecipante);
             setHackathonCorrente( findHackId(partecipante.getIdHackathon()) );
+            if(!hackathonCorrente.isEventoFinito()){ isDurataHCTerminata();}
             setTeamCorrente( findIDTeam(partecipante.getIdTeam(), hackathonCorrente));
             return 2;
         }

@@ -291,6 +291,7 @@ public class OrganizzatoreGUI {
 
                 try {
                     c.identificaHackathon(idHack);
+                    if(!c.isEventoFinitoHackCorr()){ c.isDurataHCTerminata();}
                 } catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(frame, exception.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                     return;

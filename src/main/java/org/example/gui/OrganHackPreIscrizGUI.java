@@ -26,6 +26,7 @@ public class OrganHackPreIscrizGUI {
     private JPanel rimuovGiudPanel;
     private JButton rimuoviButton;
     private JButton inviaRichiestaPerGiudiceButton;
+    private JPanel utentiTabPanel;
 
 
     /**
