@@ -55,7 +55,7 @@ public class Organizzatore extends UtenteRegistrato
      * @param piattaforma la piattaforma su cui avviene la sostituzione dell'utente con il giudice
      * @param hackathon   l'hackathon a cui associare il nuovo giudice
      */
-    public void SelezionaGiudice(UtenteRegistrato utente, Piattaforma piattaforma, Hackathon hackathon)
+    public void selezionaGiudice(UtenteRegistrato utente, Piattaforma piattaforma, Hackathon hackathon)
     {
         Giudice nuovoGiudice = new Giudice(utente.getNome(), utente.getCognome(), utente.getEmail(), utente.getPassword(), hackathon.getId());
         hackathon.addGiudice(nuovoGiudice);

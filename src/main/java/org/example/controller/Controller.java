@@ -739,7 +739,7 @@ public class Controller
 
         UtenteRegistrato utente= trovaUtenteForGiudice(utenteID);
         if(utenteCorrente instanceof Organizzatore organizzatore)
-            organizzatore.SelezionaGiudice( utente, piattaforma, hackathonCorrente);
+            organizzatore.selezionaGiudice( utente, piattaforma, hackathonCorrente);
 
 
     }
