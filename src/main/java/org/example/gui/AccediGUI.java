@@ -56,14 +56,18 @@ public class AccediGUI
      * successivamente all'interno di un try viene dichiarata una variabile (n) alla quale viene assegnato il risultato
      * ottenuto dalla funzione {@link Controller#identificaUtente(String, String)} che presenta come parametri rispettivamente
      * le stringhe inserite all'interno di "emailField" e "passwordField".
+     * <p>
      * In base al valore acquisito da "n" verranno istanziate differenti GUI:
-     * 0-->OrganizzatoreGUI
-     * 1-->GiudiceGUI
-     * 2-->PartecipanteGUI
-     * 3-->UtenteRegistratoIscrCloseGUI
-     * 4-->UtenteRegistrIscrOpenGUI
+     * <ol start="0">
+     *     <li>OrganizzatoreGUI</li>
+     *     <li>GiudiceGUI</li>
+     *     <li>PartecipanteGUI</li>
+     *     <li>UtenteRegistratoIscrCloseGUI</li>
+     *     <li>UtenteRegistrIscrOpenGUI</li>
+     *   </ol>
+
      * E come operazione di default un messaggio in cui non viene riconosciuto l'utente.
-     *
+     *<p>
      * All'interno del catch viene catturata un IllegalArgumentException, e in tale caso viene stampato un messaggio:
      * "Errore credenziali"
      * @param c il Controller

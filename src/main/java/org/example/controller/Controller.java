@@ -250,9 +250,12 @@ public class Controller
     /**
      *Scarica i valori relativi agli utenti registrati presenti nel data base e
      *in base al valore degli ID Hackathon e ID Team di ognuno li smista:
-     * -ID Hackathon != null e ID Team==null viene istanziato un {@link Giudice};
-     * -ID Hackathon != null e ID Team!=null viene istanziato un {@link Partecipante};
-     * -altrimenti viene istanziato un {@link UtenteRegistrato}
+     * <ul>
+     *     <li>ID Hackathon != null e ID Team==null viene istanziato un {@link Giudice};</li>
+     *     <li>ID Hackathon != null e ID Team!=null viene istanziato un {@link Partecipante};</li>
+     *     <li>Altrimenti viene istanziato un {@link UtenteRegistrato}</li>
+     *   </ul>
+     *
      * @throws SQLException nel caso vi sia un errore con il data base;
      */
     public void getUtentiRegistratiDB()throws SQLException{

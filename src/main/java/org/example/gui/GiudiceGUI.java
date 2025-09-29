@@ -30,7 +30,7 @@ public class GiudiceGUI {
 
     /**
      * Costruttore della classe, Imposta le caratteristiche del frame come il titolo "Giudice", posizione centrale
-     * e modalità di chiusura tramite un altro metodo interno {@link #closeOperation(JFrame)};
+     * e modalità di chiusura tramite un altro metodo interno {@link #closeOperation(JFrame)}.<p>
      * Vi sono poi altri metodi interni che fanno riferimento all'interazione con la GUI o ad una visione dinamica dei widget,
      * i quali variano in base agli eventi accaduti.
      *
@@ -126,10 +126,12 @@ public class GiudiceGUI {
     /**
      * Caratterizza la funzionalità del bottone per pubblicare il problema, il cui comportamento varia in base a
      * specifiche condizioni:
-     * Se l'evento non è pronto compare il messaggio:Non puoi ancora pubblicare il problema;
-     * Se il numero di Team non è pari o uguale a 2 compare il messaggio: "Purtroppo non si sono formati abbastanza Team. Quest' hackathon non verrà eseguito";
-     * Se invece non è stata scritta o salvata alcuna traccia: "Nessun problema salvato. Scrivi-->Salva Problema-->Pubblica Problema ";
-     * Altrimenti comparirà un messaggio di conferma per la pubblicazione della traccia
+     * <ul>
+     *    <li>Se l'evento non è pronto compare il messaggio:Non puoi ancora pubblicare il problema;</li>
+     *     <li>Se il numero di Team non è pari o uguale a 2 compare il messaggio: "Purtroppo non si sono formati abbastanza Team. Quest' hackathon non verrà eseguito";</li>
+     *     <li>Se invece non è stata scritta o salvata alcuna traccia: "Nessun problema salvato. Scrivi-->Salva Problema-->Pubblica Problema ";</li>
+     *   </ul>
+     *Altrimenti comparirà un messaggio di conferma per la pubblicazione della traccia
      * @param c Controller
      */
     public void setPubblicaProblemaButton(Controller c) {
@@ -274,14 +276,22 @@ public class GiudiceGUI {
 
     /**
      * Imposta le caratteristiche di "caricaValutazioniButton" nello specifico:
-     * Sarà visibile soltanto se l evento è finito e la votazione non si è conclusa.
-     * Quando viene premuto il pulsante verifica che tutti i team siano stati valutati e in caso contrario
-     * mostra il messaggio: "Non tutti i team sono stati valutati. Caricamento annullato".
-     * Invece se tutti i team sono stati valutati, compare un messaggio di conferma, che in caso positivo:
-     * 1) Imposta la flag "votazioneConclusa" dell' hackathon a TRUE e la memorizza nel DB con il metodo
-     * {@link Controller#concludiVotazioni()}.
-     * 2) Viene nascosto il pulsante "caricaValutazioniButton" come anche "assegnaVotiButton"
-     * 3) Viene reso visibile il pulsante "vediProgressiButton"
+     * <ul>
+     *     <li>Sarà visibile soltanto se l evento è finito e la votazione non si è conclusa.</li>
+     *     <li>Quando viene premuto il pulsante verifica che tutti i team siano stati valutati e in caso contrario
+     *      * mostra il messaggio: "Non tutti i team sono stati valutati. Caricamento annullato".</li>
+     *     <li>Invece se tutti i team sono stati valutati, compare un messaggio di conferma, che in caso positivo:
+     *       <ol>
+     *        <li>Imposta la flag "votazioneConclusa" dell' hackathon a TRUE e la memorizza nel DB con il metodo
+     *           {@link Controller#concludiVotazioni()}.</li>
+     *        <li>Viene nascosto il pulsante "caricaValutazioniButton" come anche "assegnaVotiButton"</li>
+     *        <li>Viene reso visibile il pulsante "vediProgressiButton"</li>
+     *      </ol>
+     *     </li>
+     * </ul>
+     *
+     *
+     *
      *
      *
      * @param c

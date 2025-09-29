@@ -34,8 +34,12 @@ public class GiudiceVediProgressiGUI {
      * Viene impostata una posizione centrale, la dimensione e la modalità di chiusura.
      * Poi vengono chiamati dei metodi interni alla classe utilizzati per caratterizzare il frame in base al contesto,
      * intraprendendo 2 aspetti:
-     * 1) Commentare i progressi mentre l hackathon è in corso;
-     * 2) Votare i team una volta terminato l' hackathon
+     * <ol>
+     *     <li>Commentare i progressi mentre l hackathon è in corso;</li>
+     *    <li>Votare i team una volta terminato l' hackathon</li>
+     *
+     *   </ol>
+     *
      * @param c Controller
      * @param origGUI utilizzato per aggiornare in tempo reale la tabella team del frame precedente quando
      *                viene inserita una votazione, utilizzando il metodo {@link #setFrameHackFinito(Controller, GiudiceGUI)}

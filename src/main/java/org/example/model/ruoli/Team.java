@@ -218,8 +218,12 @@ public class Team {
     /**
      * Genera un codice di accesso univoco per il team.
      * Il codice ha lunghezza 7 e segue il formato:
-     * - lettere maiuscole nelle posizioni 0, 1, 5, 6
-     * - numeri nelle posizioni 2, 3, 4
+     * <ul>
+     *     <li>lettere maiuscole nelle posizioni 0, 1, 5, 6</li>
+     *     <li>numeri nelle posizioni 2, 3, 4</li>
+     *
+     * </ul>
+     *
      *
      * @return una {@link String} rappresentante il codice di accesso generato
      */
