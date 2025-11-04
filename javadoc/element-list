@@ -1,0 +1,8 @@
+org.example
+org.example.connessione_db
+org.example.controller
+org.example.dao
+org.example.gui
+org.example.implementazione_postgres_dao
+org.example.model
+org.example.model.ruoli
